@@ -4,13 +4,14 @@ import Card from '@mui/material/Card';
 
 const Beauty = () => {
     return (
-        <div className="container">
-            <Card>
-                <Button color="primary" variant="contained" href={`/`}>Homeに遷移</Button>
-            </Card>
-            Beauty
-        </div>
+        <>
+            <div className="container">
+                <Button color="primary" variant="contained" href={`/`}>
+                    Home に遷移
+                </Button>
+            </div>
+        </>
     );
-}
+};
 
 export default Beauty;

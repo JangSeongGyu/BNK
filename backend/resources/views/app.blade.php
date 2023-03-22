@@ -5,9 +5,9 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <title>Laravel Vite</title>
-        @vite(['resources/css/app.css', 'resources/js/app.jsx'])
+        @vite(['resources/css/app.css', 'resources/js/index.jsx'])
     </head>
     <body>
-        <div id="app"></div>
+        <div id="root"></div>
     </body>
 </html>

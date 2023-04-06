@@ -1,31 +1,35 @@
 import React from 'react';
-import { Box, List, ListItem, ListItemText } from '@mui/material';
+import { Box, Tab, Tabs } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 const FunctionList = () => {
+    const page = { 0: '/import', 1: '/importa' };
+    const [value, setValue] = React.useState(0);
+
+    const navigate = useNavigate();
+    const handleChange = (event, newValue) => {
+        setValue(newValue);
+        navigate(`/beauty${page[newValue]}`);
+    };
     return (
         <Box
             sx={{
-                width: (Theme) => Theme.spacing(30),
-                bgcolor: 'primary.light',
-                boxShadow: 1,
-                borderRadius: 2,
-                border: 1,
-                borderColor: 'primary.borderColor',
-                my: 3,
-                mx: 2,
+                width: (Theme) => Theme.spacing(60),
             }}
         >
-            <List component="nav" aria-label="mailbox folders">
-                <ListItem button divider>
-                    <ListItemText primary="データ取込" />
-                </ListItem>
-                <ListItem button divider>
-                    <ListItemText primary="出荷指定" />
-                </ListItem>
-                <ListItem button divider>
-                    <ListItemText primary="帳票出力" />
-                </ListItem>
-            </List>
+            <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                <Tabs
+                    value={value}
+                    onChange={handleChange}
+                    indicatorColor="secondary"
+                    textColor="inherit"
+                    variant="fullWidth"
+                >
+                    <Tab label="データ取込" />
+                    <Tab label="出荷手配" />
+                    <Tab label="帳票出力" />
+                </Tabs>
+            </Box>
         </Box>
     );
 };

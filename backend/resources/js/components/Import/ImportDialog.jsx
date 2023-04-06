@@ -100,8 +100,25 @@ const ImportDialog = forwardRef((props, ref) => {
         // }
     }, []);
 
+    const arrayPush = (array, value) => {
+        array.push(value);
+        return array;
+    };
+
     const setParent = () => {
-        props.setJson(json);
+        const jsonP = JSON.parse(json);
+        const dict = {};
+        jsonP.forEach((obj) => {
+            Object.keys(obj).forEach((key) => {
+                var array = dict[key]
+                    ? arrayPush(dict[key], obj[key])
+                    : arrayPush([], obj[key]);
+                dict[key] = array;
+            });
+        });
+        setFile('');
+        setJson('');
+        props.setJson(dict);
     };
 
     const {

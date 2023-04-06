@@ -5,6 +5,7 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
+import FunctionList from '../components/FunctionList';
 
 const Header = () => {
     return (
@@ -23,6 +24,7 @@ const Header = () => {
                         Rakuten業務SYS
                     </Typography>
                 </Toolbar>
+                <FunctionList />
             </AppBar>
         </Box>
     );

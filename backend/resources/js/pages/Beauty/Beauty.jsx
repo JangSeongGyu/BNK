@@ -10,14 +10,14 @@ const Beauty = () => {
             <Box sx={{ display: 'block' }}>
                 <Box
                     sx={{
-                        width: {
-                            xs: 400,
-                            sm: 700,
-                            md: 1000,
-                            lg: 1200,
-                            xl: 1600,
-                        },
-                        height: (Theme) => Theme.spacing(105),
+                        // width: {
+                        //     xs: 400,
+                        //     sm: 700,
+                        //     md: 1000,
+                        //     lg: 1200,
+                        //     xl: 1600,
+                        // },
+                        height: (Theme) => Theme.spacing(95),
                         my: 3,
                         mx: 2,
                     }}

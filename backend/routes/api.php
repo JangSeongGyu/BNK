@@ -16,5 +16,6 @@ use \App\Http\Controllers\Beauty\ImportController;
 */
 
 Route::middleware(['middleware' => 'api'])->group(function () {
-    Route::put('/orders', [ImportController::class, 'putWKOrders']);
+    Route::get('/wkorders', [ImportController::class, 'getWKOrders']);
+    Route::put('/wkorders', [ImportController::class, 'putWKOrders']);
 });

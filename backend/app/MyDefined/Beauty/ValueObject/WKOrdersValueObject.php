@@ -35,9 +35,9 @@ final class WKOrdersValueObject
         $instance = new WKOrdersValueObject();
         try{
             $instance->rb_uniqueID = $input['楽天ビューティ: ID'];
-            $instance->rb_shopID = $input['【RB】RB会員ID'];
+            $instance->rb_shopID = $input['【RB】店舗ID'];
             $instance->rb_memberID = $input['【RB】RB会員ID'];
-            $instance->rb_shopType = $input['【RB】店舗ID'];
+            $instance->rb_shopType = $input['【RB】業種'];
             $instance->rb_applyDate = $input['【RB】申込日'];
             $instance->shopName = $input['楽天ビューティ: Shop'];
             $instance->shopZip = $input['申込者：所在地 郵便番号'];

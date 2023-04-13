@@ -8,17 +8,27 @@ use Illuminate\Support\Facades\DB;
 use PDO;
 
 final class WKOrdersRepository implements WKOrdersRepoInterface{
+    public function getWKOrders()
+    {
+        $wkOrm = DB::select('SELECT * from VT_入稿 ORDER BY ID');
+        if (!$wkOrm) {
+            $wkOrm = [null];
+        }
+        return WKOrdersEntity::reconstructGetWKFromRepository($wkOrm);
+    }
     public function putWKOrders(
         WKOrdersEntity $WKOrdersEntity
     ){  
         $keys = array();
         $values = array();
         foreach(get_object_vars($WKOrdersEntity) as $key => $valueArray){
-            foreach($valueArray as $index => $value){
-                $valueArray[$index] = str_replace("''", "Null", "'".$value."'");
+            if($valueArray){
+                foreach($valueArray as $index => $value){
+                    $valueArray[$index] = str_replace("''", "Null", "'".$value."'");
+                }
+                $keys[] = $key;
+                $values[] = $valueArray;
             }
-            $keys[] = $key;
-            $values[] = $valueArray;
         }
         $columns = implode(',', $keys);
         $rows = array_map(null, ...$values);
@@ -51,7 +61,6 @@ final class WKOrdersRepository implements WKOrdersRepoInterface{
                 if($msgCD == 'E0000'){
                     throw new \Exception($msgParam1 . $msgParam2 . $msgParam3, 500);
                 }
-                return;  
             });
             DB::commit();
         }

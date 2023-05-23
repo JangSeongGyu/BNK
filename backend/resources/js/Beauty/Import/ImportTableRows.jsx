@@ -11,6 +11,7 @@ import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import EditIcon from '@mui/icons-material/Edit';
 import Input from '@mui/material/Input';
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
@@ -24,46 +25,90 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
-    [`&.${tableCellClasses.head}`]: {
-        backgroundColor: theme.palette.common.black,
-        color: theme.palette.common.white,
-    },
-    [`&.${tableCellClasses.body}`]: {
-        fontSize: 12,
-    },
+    fontSize: 14,
+    backgroundColor: 'red',
+    fontColor: 'white',
+    whiteSpace: 'nowrap',
+}));
+const StickyTableCell = styled(TableCell)(({ theme }) => ({
+    fontSize: 10,
+    position: 'sticky',
+    left: 0,
+    backgroundColor: 'white',
+    whiteSpace: 'nowrap',
+}));
+const InnerTableCell = styled(TableCell)(({ theme }) => ({
+    fontSize: 15,
+    backgroundColor: 'white',
+    paddingBottom: 0,
+    paddingTop: 0,
+    border: 0,
 }));
 
+const READONLY = ['ID', '全住所', 'デポコード', 'エラーメッセージ'];
 const ImportTableRows = (props) => {
     const { row, index } = props;
-    const [open, setOpen] = useState(false);
+
+    const [subInfoOpen, setSubInfoOpen] = useState(false);
+    const [editOpen, setEditOpen] = useState(false);
+
+    const openEditForm = (index) => {
+        console.log(index);
+    };
     return (
         <>
             <StyledTableRow key={index}>
-                <StyledTableCell>
-                    <IconButton size="small" onClick={() => setOpen(!open)}>
-                        {open ? (
+                <StickyTableCell>
+                    <IconButton
+                        size="small"
+                        onClick={() => setSubInfoOpen(!subInfoOpen)}
+                    >
+                        {subInfoOpen ? (
                             <KeyboardArrowUpIcon />
                         ) : (
                             <KeyboardArrowDownIcon />
                         )}
                     </IconButton>
-                </StyledTableCell>
+                    {row['エラーメッセージ'] !== '' ? (
+                        <IconButton
+                            size="small"
+                            onClick={() => openEditForm(index)}
+                        >
+                            <EditIcon />
+                        </IconButton>
+                    ) : (
+                        false
+                    )}
+                </StickyTableCell>
                 {Object.keys(row).map(function (key, i) {
                     if (key != 'sub') {
-                        return (
-                            <StyledTableCell component="th" scope="row" key={i}>
-                                {row[key]}
-                            </StyledTableCell>
-                        );
+                        if (row['エラーメッセージ'] == '') {
+                            return (
+                                <StyledTableCell key={i}>
+                                    {row[key]}
+                                </StyledTableCell>
+                            );
+                        } else {
+                            if (READONLY.indexOf(key) !== -1) {
+                                return (
+                                    <StyledTableCell key={i}>
+                                        {row[key]}
+                                    </StyledTableCell>
+                                );
+                            } else {
+                                return (
+                                    <StyledTableCell key={i}>
+                                        {row[key]}
+                                    </StyledTableCell>
+                                );
+                            }
+                        }
                     }
                 })}
             </StyledTableRow>
-            <TableRow>
-                <TableCell
-                    style={{ paddingBottom: 0, paddingTop: 0 }}
-                    colSpan={6}
-                >
-                    <Collapse in={open} timeout="auto" unmountOnExit>
+            <StyledTableRow>
+                <InnerTableCell colSpan={3}>
+                    <Collapse in={subInfoOpen} timeout="auto" unmountOnExit>
                         <Box sx={{ margin: 1 }}>
                             <Typography
                                 variant="h6"
@@ -72,33 +117,33 @@ const ImportTableRows = (props) => {
                             >
                                 Sub Information
                             </Typography>
-                            <Table size="small" aria-label="purchases">
+                            <Table size="small">
                                 <TableBody>
                                     {Object.keys(row.sub).map(function (
                                         key1,
                                         i
                                     ) {
                                         return (
-                                            <StyledTableRow key={i}>
+                                            <TableRow key={i}>
                                                 {Object.keys(row.sub[key1]).map(
                                                     function (key2, j) {
                                                         return (
                                                             // prettier-ignore
-                                                            <StyledTableCell component="th" scope="row" key={j}>
+                                                            <StyledTableCell key={j}>
                                                                 {row.sub[key1][key2]}
                                                             </StyledTableCell>
                                                         );
                                                     }
                                                 )}
-                                            </StyledTableRow>
+                                            </TableRow>
                                         );
                                     })}
                                 </TableBody>
                             </Table>
                         </Box>
                     </Collapse>
-                </TableCell>
-            </TableRow>
+                </InnerTableCell>
+            </StyledTableRow>
         </>
     );
 };

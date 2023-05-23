@@ -9,26 +9,36 @@ import TableRow from '@mui/material/TableRow';
 import ImportTableRows from './ImportTableRows';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
-    [`&.${tableCellClasses.head}`]: {
-        backgroundColor: theme.palette.common.black,
-        color: theme.palette.common.white,
-        fontSize: 13,
-    },
-    [`&.${tableCellClasses.body}`]: {
-        fontSize: 14,
-    },
+    backgroundColor: theme.palette.common.black,
+    color: theme.palette.common.white,
+    whiteSpace: 'nowrap',
+    zIndex: 1,
+    fontSize: 15,
+}));
+const StickyTableCell = styled(TableCell)(({ theme }) => ({
+    backgroundColor: theme.palette.common.black,
+    position: 'sticky',
+    left: 0,
+    zIndex: 2,
+    fontSize: 12,
 }));
 
 const ImportTable = (props) => {
     const { header, rows } = props;
-    // const
     return (
         <>
-            <TableContainer sx={{ maxHeight: 700 }}>
-                <Table stickyHeader aria-label="customized table">
-                    <TableHead>
+            <TableContainer sx={{ maxHeight: 700, maxWidth: '100%' }}>
+                <Table
+                    stickyHeader
+                    aria-label="customized table"
+                    // size="small"
+                    style={{
+                        minWidth: '160%',
+                    }}
+                >
+                    <TableHead style={{ width: '100%', minWidth: '80%' }}>
                         <TableRow>
-                            <StyledTableCell></StyledTableCell>
+                            <StickyTableCell />
                             {header.map(function (item, index) {
                                 if (item != 'sub') {
                                     return (
@@ -45,7 +55,11 @@ const ImportTable = (props) => {
                     </TableHead>
                     <TableBody>
                         {rows.map((row, index) => (
-                            <ImportTableRows row={row} key={index} />
+                            <ImportTableRows
+                                row={row}
+                                index={index}
+                                key={index}
+                            />
                         ))}
                     </TableBody>
                 </Table>

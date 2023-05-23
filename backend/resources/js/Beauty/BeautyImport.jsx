@@ -1,8 +1,8 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, createContext } from 'react';
 import Button from '@mui/material/Button';
-import WaitCircle from '../../components/WaitCircle';
-import ImportDialog from '../../components/Import/ImportDialog';
-import ImportTable from '../../components/Import/ImportTable';
+import WaitCircle from '../components/WaitCircle';
+import ImportDialog from './Import/ImportDialog';
+import ImportTable from './Import/ImportTable';
 import axios from 'axios';
 
 const BeautyImport = () => {

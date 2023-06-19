@@ -21,7 +21,7 @@ final class WKOrdersEntity{
     // public $shopPhone;
     public $getData;
 
-    private function __constract()
+    private function __construct()
     {
 
     }

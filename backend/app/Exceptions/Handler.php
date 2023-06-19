@@ -4,6 +4,8 @@ namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
+use Illuminate\Http\Response;
+use Illuminate\Contracts\Support\Responsable;
 
 class Handler extends ExceptionHandler
 {
@@ -37,14 +39,42 @@ class Handler extends ExceptionHandler
     ];
 
     /**
-     * Register the exception handling callbacks for the application.
+     * Report or log an exception.
      *
+     * @param  \Throwable  $exception
      * @return void
      */
-    public function register()
+    public function report(Throwable $exception)
     {
-        $this->reportable(function (Throwable $e) {
-            //
-        });
+        parent::report($exception);
+    }
+
+    /**
+     * Render an exception into an HTTP response.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Throwable  $exception
+     * @return \Illuminate\Http\Response
+     */
+    public function render($request, Throwable $exception)
+    {
+        // Responsableインターフェースを継承したクラスはここでレスポンスを返す
+        if ($exception instanceof Responsable) {
+            return $exception->toResponse($request);
+        }
+
+        // HTTP系例外が発生した場合
+        if ($this->isHttpException($exception)) {
+            return $this->toResponse($request, $exception->getMessage(), $exception->getCode());
+        }
+
+        // それ以外の場合は Internal Server Error とする
+        return $this->toResponse($request, 'Internal Server Error', Response::HTTP_INTERNAL_SERVER_ERROR);
+    }
+
+    protected function toResponse($request, string $message, int $statusCode)
+    {
+         return (new BaseErrorResponseException($message, $statusCode))
+            ->toResponse($request);
     }
 }

@@ -10,7 +10,7 @@ use PDO;
 final class WKOrdersRepository implements WKOrdersRepoInterface{
     public function getWKOrders()
     {
-        $wkOrm = DB::select('SELECT * from VT_入稿 ORDER BY ID');
+        $wkOrm = DB::connection('beauty')->select('SELECT * from VT_入稿 ORDER BY ID');
         if (!$wkOrm) {
             $wkOrm = [null];
         }

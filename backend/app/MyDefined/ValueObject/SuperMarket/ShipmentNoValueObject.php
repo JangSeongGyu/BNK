@@ -17,7 +17,7 @@ final class ShipmentNoValueObject extends ValueObject
         return $instance;
     }
 
-    public function validate(string $shipmentNo)
+    private function validate(string $shipmentNo)
     {
         if(!preg_match('SM[0-9]{8}-[0-9]{4}', $shipmentNo)){
             throw new InvalidValueErrorResponseException('出荷番号: ' . $shipmentNo);

@@ -18,7 +18,7 @@ class OrderNoValueObject extends ValueObject
         return $instance;
     }
 
-    public function validate(string $orderNo)
+    private function validate(string $orderNo)
     {
         if(!preg_match('B[0-9]{8}', $orderNo)){
             throw new InvalidValueErrorResponseException('受注番号: ' . $orderNo);

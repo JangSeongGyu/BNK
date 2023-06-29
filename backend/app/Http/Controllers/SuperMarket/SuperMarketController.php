@@ -6,25 +6,35 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
 
 use App\Http\Requests\SuperMarket\UpdateInquiryNoFormRequest;
+use App\Http\Requests\SuperMarket\CreateMonthlyNumberFormRequest;
 
 use App\MyDefined\ValueObject\General\DateValueObject;
 use App\MyDefined\ValueObject\General\SagawaInquiryNoValueObject;
 use App\MyDefined\ValueObject\SuperMarket\ShipmentNoValueObject;
 use App\MyDefined\ValueObject\SuperMarket\CheckInquiryNoValueObject;
+use App\MyDefined\ValueObject\General\YearMonthValueObject;
+use App\MyDefined\ValueObject\General\OrderNoValueObject;
 
 use App\MyDefined\UseCase\SuperMarket\CreateOrderDataUseCase;
 use App\MyDefined\UseCase\SuperMarket\UpdateShipmentUseCase;
 use App\MyDefined\UseCase\SuperMarket\GetBizlogiUseCase;
+use App\MyDefined\UseCase\SuperMarket\GetDTFUseCase;
+use App\MyDefined\UseCase\SuperMarket\GetLabelUseCase;
+use App\MyDefined\UseCase\SuperMarket\GetJobTicketUseCase;
+use App\MyDefined\UseCase\SuperMarket\GetTotalPickUseCase;
 use App\MyDefined\UseCase\SuperMarket\UpdateInquiryNoUseCase;
 use App\MyDefined\UseCase\SuperMarket\UpdateTsubushiUseCase;
 use App\MyDefined\UseCase\SuperMarket\UpdateFirstPackingUseCase;
 use App\MyDefined\UseCase\SuperMarket\UpdateSecondPackingUseCase;
+use App\MyDefined\UseCase\SuperMarket\CreateMonthlyNumberUseCase;
+use App\MyDefined\UseCase\SuperMarket\GetMonthlyDataUseCase;
+use App\MyDefined\UseCase\SuperMarket\GetAllDataUseCase;
 
 /**
- * 楽天スーパーメイン処理コントローラー
+ * 楽天スーパーコントローラー
  */
 
-class MainController extends Controller
+class SuperMarketController extends Controller
 {
     /**
      * [POST]注文データインポート
@@ -66,6 +76,63 @@ class MainController extends Controller
         $DateVO = DateValueObject::create($shipmentDate);
         $bizlogiData = $GetBizlogiUseCase->execute($DateVO);
         return new JsonResponse($bizlogiData);
+    }
+
+    /**
+     * [GET]DTF連携データ出力
+     * @param GetDTFUseCase $GetDTFUseCase
+     */
+
+    public function getDTF(
+        GetDTFUseCase $GetDTFUseCase,
+        $shipmentDate
+    ){
+        $DateVO = DateValueObject::create($shipmentDate);
+        $dtfData = $GetDTFUseCase->execute($DateVO);
+        return new JsonResponse($dtfData);
+    }
+
+    /**
+     * [GET]梱包ラベル用データ出力
+     * @param GetLabelUseCase $GetLabelUseCase
+     */
+
+    public function getLabel(
+        GetLabelUseCase $GetLabelUseCase,
+        $shipmentDate
+    ){
+        $DateVO = DateValueObject::create($shipmentDate);
+        $labelData = $GetLabelUseCase->execute($DateVO);
+        return new JsonResponse($labelData);
+    }
+
+    /**
+     * [GET]山出し用データ出力
+     * @param GetTotalPickUseCase $GetTotalPickUseCase
+     */
+
+    public function getTotalPick(
+        GetTotalPickUseCase $GetTotalPickUseCase,
+        $shipmentDate
+    ){
+        $DateVO = DateValueObject::create($shipmentDate);
+        $totalPickData = $GetTotalPickUseCase->execute($DateVO);
+        return new JsonResponse($totalPickData);
+    }
+
+    
+    /**
+     * [GET]JOBチケット用データ出力
+     * @param GetJobTicketUseCase $GetJobTicketUseCase
+     */
+
+    public function getJobTicket(
+        GetJobTicketUseCase $GetJobTicketUseCase,
+        $shipmentDate
+    ){
+        $DateVO = DateValueObject::create($shipmentDate);
+        $jobTicketData = $GetJobTicketUseCase->execute($DateVO);
+        return new JsonResponse($jobTicketData);
     }
 
     /**
@@ -133,5 +200,49 @@ class MainController extends Controller
         $InquiryNoVO = CheckInquiryNoValueObject::create($barcode);
         $UpdateSecondPackingUseCase->execute($DateVO, $InquiryNoVO);
         return new JsonResponse();
+    }
+
+    /**
+     * [POST]月次番号登録
+     *
+     * @param CreateMonthlyNumberUseCase $CreateMonthlyNumberUseCase
+     */
+
+    public function createMonthlyNumber(
+        CreateMonthlyNumberFormRequest $request,
+        CreateMonthlyNumberUseCase $CreateMonthlyNumberUseCase
+    ){
+        $YearMonthVO = YearMonthValueObject::create($request['year_month']);
+        $OrderNoVO = OrderNoValueObject::create($request['order_no']);
+        $CreateMonthlyNumberUseCase->execute($YearMonthVO, $OrderNoVO);
+        return new JsonResponse();
+    }
+
+    /**
+     * [GET]月次集計
+     *
+     * @param GetMonthlyDataUseCase $GetMonthlyDataUseCase
+     */
+
+    public function getMonthlyData(
+        GetMonthlyDataUseCase $GetMonthlyDataUseCase,
+        $yearMonth
+    ){
+        $YearMonthVO = YearMonthValueObject::create($yearMonth);
+        $monthlyData = $GetMonthlyDataUseCase->execute($YearMonthVO);
+        return new JsonResponse($monthlyData);
+    }
+
+    /**
+     * [GET]月次集計
+     *
+     * @param GetMonthlyDataUseCase $GetMonthlyDataUseCase
+     */
+
+    public function getAllData(
+        GetAllDataUseCase $GetAllDataUseCase,
+    ){
+        $allData = $GetAllDataUseCase->execute();
+        return new JsonResponse($allData);
     }
 }

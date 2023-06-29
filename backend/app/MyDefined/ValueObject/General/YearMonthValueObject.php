@@ -7,18 +7,22 @@ use App\Exceptions\InvalidValueErrorResponseException;
 
 class YearMonthValueObject extends ValueObject
 {
+    public $startDate;
+    public $endDate;
+
     /**
      * @param string $yearMonth
      */
     public static function create(string $yearMonth): YearMonthValueObject
     {
         $instance = new YearMonthValueObject();
-        $instance->validate($yearMonth);
-        $instance->value = $yearMonth;
+        $instance->value = $instance->validate($yearMonth);
+        $instance->startDate = date('Y-m-d',strtotime($instance->value .' first day of this month'));
+        $instance->endDate = date('Y-m-d',strtotime($instance->value .' last day of this month'));
         return $instance;
     }
 
-    public function validate(string $yearMonth)
+    private function validate(string $yearMonth)
     {
         if(!preg_match('[0-9]{4}[-/][0-9]{2}', $yearMonth)){
             throw new InvalidValueErrorResponseException('年月: ' . $yearMonth);
@@ -32,7 +36,7 @@ class YearMonthValueObject extends ValueObject
         if(!checkdate($month, 1, $year)){
             throw new InvalidValueErrorResponseException('年月: ' . $yearMonth);
         }
-        return;
+        return $yearMonth;
     }
 
 }

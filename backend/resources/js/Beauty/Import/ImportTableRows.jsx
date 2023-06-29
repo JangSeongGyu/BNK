@@ -26,7 +26,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     fontSize: 14,
-    backgroundColor: 'red',
+    // backgroundColor: 'red',
     fontColor: 'white',
     whiteSpace: 'nowrap',
 }));

@@ -2,13 +2,12 @@
 
 namespace App\MyDefined\UseCase\SuperMarket;
 
-use App\MyDefined\ValueObject\General\DateValueObject;
 use App\MyDefined\Repository\SuperMarket\GetRepoInterface;
 
 /**
- * [SuperMarket]指定出荷日でBizlogi取込用データ取得
+ * [SuperMarket]全データ取得
  */
-final class GetBizlogiUseCase
+final class GetAllDataUseCase
 {
     /**
      * リポジトリインターフェースをプロパティに設定
@@ -27,10 +26,10 @@ final class GetBizlogiUseCase
 
     /**
      * メイン処理
-     * 1．Bizlogi取込用データ取得
+     * 1．全データ取得
      */
-    public function execute(DateValueObject $DateVO){
-        $result = $this->getRepository->getBizlogi($DateVO);
+    public function execute(){
+        $result = $this->getRepository->getAllData();
         return $result;
     }
 }

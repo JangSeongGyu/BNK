@@ -18,7 +18,7 @@ final class CheckInquiryNoValueObject extends SagawaInquiryNoValueObject
         return $instance;
     }
 
-    public function validate(string $inquiryNo)
+    private function validate(string $inquiryNo)
     {
         if(!strlen($inquiryNo) == 15){
             throw new InvalidValueErrorResponseException('問い合わせ番号: ' . $inquiryNo);

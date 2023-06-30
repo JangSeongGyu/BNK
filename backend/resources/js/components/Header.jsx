@@ -7,7 +7,8 @@ import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import FunctionList from '../components/FunctionList';
 
-const Header = () => {
+const Header = (props) => {
+    const { title } = props;
     return (
         <Box sx={{ flexGrow: 1 }}>
             <AppBar position="static">
@@ -21,10 +22,10 @@ const Header = () => {
                         <MenuIcon />
                     </IconButton>
                     <Typography variant="h6" color="inherit" component="div">
-                        Rakuten業務SYS
+                        Rakuten業務SYS {title}
                     </Typography>
                 </Toolbar>
-                <FunctionList />
+                {/* <FunctionList /> */}
             </AppBar>
         </Box>
     );

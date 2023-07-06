@@ -7,14 +7,17 @@ use App\Exceptions\InvalidValueErrorResponseException;
 
 class SagawaInquiryNoValueObject extends ValueObject
 {
+    private function __construct()
+    {
+
+    }
     /**
      * @param string $inquiryNo
      */
     public static function create(string $inquiryNo): SagawaInquiryNoValueObject
     {
         $instance = new SagawaInquiryNoValueObject();
-        $instance->validate($inquiryNo);
-        $instance->value = $inquiryNo;
+        $instance->value = $instance->validate($inquiryNo);
         return $instance;
     }
 

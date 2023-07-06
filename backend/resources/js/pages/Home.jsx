@@ -9,9 +9,9 @@ const Home = () => {
             <Button
                 sx={{ backgroundColor: 'primary.main', m: 2 }}
                 variant="contained"
-                href={`/beauty`}
+                href={`/supermarket`}
             >
-                楽天Beauty
+                楽天SuperMarket
             </Button>
         </>
     );

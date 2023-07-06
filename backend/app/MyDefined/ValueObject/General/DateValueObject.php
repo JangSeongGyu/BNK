@@ -7,6 +7,10 @@ use App\Exceptions\InvalidValueErrorResponseException;
 
 class DateValueObject extends ValueObject
 {
+    private function __construct()
+    {
+
+    }
     /**
      * @param string $date
      */
@@ -14,13 +18,12 @@ class DateValueObject extends ValueObject
     {
         $instance = new DateValueObject();
         $instance->value = $instance->validate($date);
-        $instance->value = $date;
         return $instance;
     }
 
     private function validate(string $date)
     {
-        if(!preg_match('[0-9]{4}[-/][0-9]{2}[-/][0-9]{2}', $date)){
+        if(!preg_match('/[0-9]{4}[-\/][0-9]{2}[-\/][0-9]{2}/', $date)){
             throw new InvalidValueErrorResponseException('日付: ' . $date);
         }
         else{

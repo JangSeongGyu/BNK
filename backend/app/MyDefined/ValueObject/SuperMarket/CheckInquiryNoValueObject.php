@@ -7,6 +7,10 @@ use App\Exceptions\InvalidValueErrorResponseException;
 
 final class CheckInquiryNoValueObject extends SagawaInquiryNoValueObject
 {
+    private function __construct()
+    {
+
+    }
     /**
      * @param string $inquiryNo
      */
@@ -14,7 +18,6 @@ final class CheckInquiryNoValueObject extends SagawaInquiryNoValueObject
     {
         $instance = new CheckInquiryNoValueObject();
         $instance->validate($inquiryNo);
-        $instance->value = $inquiryNo;
         return $instance;
     }
 

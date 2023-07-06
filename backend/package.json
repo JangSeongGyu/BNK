@@ -20,12 +20,18 @@
         "@emotion/react": "^11.10.6",
         "@emotion/styled": "^11.10.6",
         "@fontsource/roboto": "^4.5.8",
+        "@fullcalendar/core": "^6.1.8",
+        "@fullcalendar/daygrid": "^6.1.8",
+        "@fullcalendar/interaction": "^6.1.8",
+        "@fullcalendar/react": "^6.1.8",
         "@mui/icons-material": "^5.11.11",
         "@mui/material": "^5.11.13",
         "papaparse": "^5.4.0",
         "react-dropzone": "^14.2.3",
         "react-papaparse": "^4.1.0",
         "react-router-dom": "^6.9.0",
+        "react-tippy": "^1.4.0",
+        "tippy.js": "^6.3.7",
         "xlsx": "^0.18.5"
     }
 }

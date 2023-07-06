@@ -14,20 +14,24 @@ const FunctionList = () => {
     return (
         <Box
             sx={{
-                width: (Theme) => Theme.spacing(60),
+                width: (Theme) => Theme.spacing(30),
             }}
         >
-            <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+            <Box
+                sx={{
+                    borderBottom: 1,
+                    borderColor: 'divider',
+                }}
+            >
                 <Tabs
                     value={value}
                     onChange={handleChange}
                     indicatorColor="secondary"
                     textColor="inherit"
-                    variant="fullWidth"
+                    orientation="vertical"
                 >
-                    <Tab label="データ取込" />
-                    <Tab label="出荷手配" />
-                    <Tab label="帳票出力" />
+                    <Tab label="カレンダー" />
+                    <Tab label="マスタ" />
                 </Tabs>
             </Box>
         </Box>

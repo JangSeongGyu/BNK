@@ -28,7 +28,6 @@ const FunctionList = () => {
                     onChange={handleChange}
                     indicatorColor="secondary"
                     textColor="inherit"
-                    orientation="vertical"
                 >
                     <Tab label="カレンダー" />
                     <Tab label="マスタ" />

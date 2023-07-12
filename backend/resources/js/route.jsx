@@ -4,6 +4,7 @@ import Home from './pages/Home';
 import SuperMarket from './pages/SuperMarket';
 import Beauty from './Beauty/Beauty';
 import BeautyImport from './Beauty/BeautyImport';
+import SPChecking from './pages/SPChecking';
 
 const Router = () => {
     return (
@@ -11,6 +12,11 @@ const Router = () => {
             <Routes>
                 <Route path={`home`} element={<Home />} />
                 <Route exact path={`/supermarket`} element={<SuperMarket />} />
+                <Route
+                    exact
+                    path={`/supermarket/checking/:selectDate`}
+                    element={<SPChecking />}
+                />
                 <Route exact path={`/beauty`} element={<Beauty />}>
                     <Route index element={<BeautyImport />} />
                     <Route path={`import`} element={<BeautyImport />} />

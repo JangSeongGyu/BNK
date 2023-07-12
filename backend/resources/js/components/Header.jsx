@@ -8,7 +8,8 @@ import MenuIcon from '@mui/icons-material/Menu';
 import FunctionList from '../components/FunctionList';
 
 const Header = (props) => {
-    const { title } = props;
+    const title = props.title;
+    const disableList = props.disableList;
     return (
         <Box sx={{ flexGrow: 1 }}>
             <AppBar position="static">
@@ -25,7 +26,7 @@ const Header = (props) => {
                         Rakuten業務SYS {title}
                     </Typography>
                 </Toolbar>
-                {/* <FunctionList /> */}
+                {disableList != 'false' && <FunctionList />}
             </AppBar>
         </Box>
     );

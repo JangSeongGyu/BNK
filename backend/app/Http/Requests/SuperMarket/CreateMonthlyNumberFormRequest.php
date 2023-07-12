@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\SuperMarket;
+namespace App\Http\Requests\Taxi;
 
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;

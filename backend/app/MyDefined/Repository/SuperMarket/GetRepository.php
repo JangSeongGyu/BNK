@@ -9,13 +9,25 @@ use App\MyDefined\ValueObject\General\YearMonthValueObject;
 use App\Exceptions\NotExistsErrorResponseException;
 
 use Illuminate\Support\Facades\DB;
-use PDO;
 
 final class GetRepository implements GetRepoInterface{
+    public function getBacklogData()
+    {
+        $rows = DB::connection('supermarket')
+        ->table('TT_出荷指示')
+        ->select("*")
+        ->whereNull('出荷日')
+        ->get();
+        if($rows == []){
+            throw new NotExistsErrorResponseException();
+        }
+        return $rows;
+    }
 
     public function getBizlogi(DateValueObject $DateVO)
     {
-        $rows = DB::connection('supermarket')->select("EXEC dbo.sp_GetBizlogi '$DateVO->value'"); 
+        $rows = DB::connection('supermarket')
+        ->select("EXEC dbo.sp_GetBizlogi '$DateVO->value'"); 
         if($rows == []){
             throw new NotExistsErrorResponseException();
         }
@@ -27,34 +39,52 @@ final class GetRepository implements GetRepoInterface{
         $rows = DB::connection('supermarket')
         ->table('TT_出荷指示')
         ->select("*")
-        ->where('出荷日', '=', $DateVO->value); 
+        ->where('出荷日', '=', $DateVO->value)
+        ->get();
         if($rows == []){
             throw new NotExistsErrorResponseException();
         }
         return $rows;
     }
 
-    public function getCheckingProgress1st(DateValueObject $DateVO)
+    public function getAllDataByBetween(DateValueObject $StartDateVO, DateValueObject $EndDateVO)
     {
-        $rows = DB::connection('supermarket')->select("EXEC dbo.sp_GetCheckingProgress1st '$DateVO->value'"); 
+        $rows = DB::connection('supermarket')
+        ->table('TT_出荷指示')
+        ->select("*")
+        ->whereBetween('出荷日', [$StartDateVO->value, $EndDateVO->value])
+        ->get();
         if($rows == []){
             throw new NotExistsErrorResponseException();
         }
         return $rows;
     }
 
-    public function getCheckingItem(DateValueObject $DateVO, CheckInquiryNoValueObject $InquiryNoVO)
+
+    public function getShipmentCountByBetween(DateValueObject $StartDateVO, DateValueObject $EndDateVO)
     {
-        $rows = DB::connection('supermarket')->select("EXEC dbo.sp_GetCheckingItem '$DateVO->value' '$InquiryNoVO->value'"); 
+        $rows = DB::connection('supermarket')
+        ->table('TT_出荷指示')
+        ->select('出荷日')
+        ->selectRaw('COUNT(*) AS 件数')
+        ->whereBetween('出荷日', [$StartDateVO->value, $EndDateVO->value])
+        ->groupBy('出荷日')
+        ->get();
         if($rows == []){
             throw new NotExistsErrorResponseException();
         }
         return $rows;
     }
 
-    public function getCheckingProgress2nd(DateValueObject $DateVO)
+    public function getAllDataByInquiryNo(DateValueObject $DateVO, CheckInquiryNoValueObject $InquiryNoVO)
     {
-        $rows = DB::connection('supermarket')->select("EXEC dbo.sp_GetCheckingProgress2nd '$DateVO->value'"); 
+        $rows = DB::connection('supermarket')
+        ->table('TT_出荷指示')
+        ->select("*")
+        ->where('出荷日', '=', $DateVO->value)
+        ->where('問い合わせ番号', '=', $InquiryNoVO->inquiryNo)
+        ->where('同梱連番', '=', $InquiryNoVO->includeNo)
+        ->get();
         if($rows == []){
             throw new NotExistsErrorResponseException();
         }
@@ -65,8 +95,8 @@ final class GetRepository implements GetRepoInterface{
     {
         $rows = DB::connection('supermarket')
         ->table('TM_月次番号')
-        ->select("*"); 
-
+        ->select("*")
+        ->get();
         if($rows == []){
             throw new NotExistsErrorResponseException();
         }
@@ -78,7 +108,8 @@ final class GetRepository implements GetRepoInterface{
         $rows = DB::connection('supermarket')
         ->table('TT_出荷指示')
         ->select("*")
-        ->whereBetween('納品予定日', [$YearMonthVO->startDate, $YearMonthVO->endDate]);
+        ->whereBetween('納品予定日', [$YearMonthVO->startDate, $YearMonthVO->endDate])
+        ->get();
         if($rows == []){
             throw new NotExistsErrorResponseException();
         }
@@ -89,7 +120,8 @@ final class GetRepository implements GetRepoInterface{
     {
         $rows = DB::connection('supermarket')
         ->table('TT_出荷指示')
-        ->select("*");
+        ->select("*")
+        ->get();
         if($rows == []){
             throw new NotExistsErrorResponseException();
         }

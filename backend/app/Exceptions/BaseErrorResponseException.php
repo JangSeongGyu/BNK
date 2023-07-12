@@ -103,7 +103,9 @@ class BaseErrorResponseException extends RuntimeException implements Responsable
     {
         return new JsonResponse(
             $this->getBasicResponse(),
-            $this->getStatusCode()
+            $this->getStatusCode(),
+            [],
+            JSON_UNESCAPED_UNICODE
         );
     }
 

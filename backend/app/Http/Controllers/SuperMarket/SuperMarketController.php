@@ -17,13 +17,18 @@ use App\MyDefined\ValueObject\General\OrderNoValueObject;
 
 use App\MyDefined\UseCase\SuperMarket\CreateOrderDataUseCase;
 use App\MyDefined\UseCase\SuperMarket\UpdateShipmentUseCase;
+use App\MyDefined\UseCase\SuperMarket\GetBacklogDataUseCase;
 use App\MyDefined\UseCase\SuperMarket\GetBizlogiUseCase;
+use App\MyDefined\UseCase\SuperMarket\GetDailyShipmentDataUseCase;
+use App\MyDefined\UseCase\SuperMarket\GetBetweenShipmentDataUseCase;
+use App\MyDefined\UseCase\SuperMarket\GetBetweenShipmentCountUseCase;
 use App\MyDefined\UseCase\SuperMarket\GetDTFUseCase;
 use App\MyDefined\UseCase\SuperMarket\GetLabelUseCase;
 use App\MyDefined\UseCase\SuperMarket\GetJobTicketUseCase;
 use App\MyDefined\UseCase\SuperMarket\GetTotalPickUseCase;
 use App\MyDefined\UseCase\SuperMarket\UpdateInquiryNoUseCase;
 use App\MyDefined\UseCase\SuperMarket\UpdateTsubushiUseCase;
+use App\MyDefined\UseCase\SuperMarket\GetDataByInquiryNoUseCase;
 use App\MyDefined\UseCase\SuperMarket\UpdateFirstPackingUseCase;
 use App\MyDefined\UseCase\SuperMarket\UpdateSecondPackingUseCase;
 use App\MyDefined\UseCase\SuperMarket\CreateMonthlyNumberUseCase;
@@ -50,6 +55,19 @@ class SuperMarketController extends Controller
     }
 
     /**
+     * [GET]未処理データ取得
+     *
+     * @param GetBacklogDataUseCase $GetBacklogDataUseCase
+     */
+
+    public function getBacklogData(
+        GetBacklogDataUseCase $GetBacklogDataUseCase,
+    ){
+        $backlogData = $GetBacklogDataUseCase->execute();
+        return new JsonResponse($backlogData, 200, [], JSON_UNESCAPED_UNICODE);
+    }
+
+    /**
      * [PUT]出荷日設定
      *
      * @param UpdateShipmentUseCase $UpdateShipmentUseCase
@@ -65,6 +83,52 @@ class SuperMarketController extends Controller
     }
 
     /**
+     * [GET]出荷日別データ出力
+     * @param GetDailyShipmentDataUseCase $GetDailyShipmentDataUseCase
+     */
+
+    public function getDailyShipmentData(
+        GetDailyShipmentDataUseCase $GetDailyShipmentDataUseCase,
+        $shipmentDate
+    ){
+        $DateVO = DateValueObject::create($shipmentDate);
+        $dailyData = $GetDailyShipmentDataUseCase->execute($DateVO);
+        return new JsonResponse($dailyData, 200, [], JSON_UNESCAPED_UNICODE);
+    }
+
+    /**
+     * [GET]期間別データ出力
+     * @param GetBetweenShipmentDataUseCase $GetBetweenShipmentDataUseCase
+     */
+
+    public function getBetweenShipmentData(
+        GetBetweenShipmentDataUseCase $GetBetweenShipmentDataUseCase,
+        $startDate,
+        $endDate
+    ){
+        $StartDateVO = DateValueObject::create($startDate);
+        $EndDateVO = DateValueObject::create($endDate);
+        $dailyData = $GetBetweenShipmentDataUseCase->execute($StartDateVO, $EndDateVO);
+        return new JsonResponse($dailyData, 200, [], JSON_UNESCAPED_UNICODE);
+    }
+
+    /**
+     * [GET]期間別出荷件数出力
+     * @param GetBetweenShipmentCountUseCase $GetBetweenShipmentCountUseCase
+     */
+
+    public function getBetweenShipmentCount(
+        GetBetweenShipmentCountUseCase $GetBetweenShipmentCountUseCase,
+        $startDate,
+        $endDate
+    ){
+        $StartDateVO = DateValueObject::create($startDate);
+        $EndDateVO = DateValueObject::create($endDate);
+        $countData = $GetBetweenShipmentCountUseCase->execute($StartDateVO, $EndDateVO);
+        return new JsonResponse($countData, 200, [], JSON_UNESCAPED_UNICODE);
+    }
+
+    /**
      * [GET]Bizlogiインポート用データ出力
      * @param GetBizlogiUseCase $GetBizlogiUseCase
      */
@@ -75,7 +139,7 @@ class SuperMarketController extends Controller
     ){
         $DateVO = DateValueObject::create($shipmentDate);
         $bizlogiData = $GetBizlogiUseCase->execute($DateVO);
-        return new JsonResponse($bizlogiData);
+        return new JsonResponse($bizlogiData, 200, [], JSON_UNESCAPED_UNICODE);
     }
 
     /**
@@ -89,7 +153,7 @@ class SuperMarketController extends Controller
     ){
         $DateVO = DateValueObject::create($shipmentDate);
         $dtfData = $GetDTFUseCase->execute($DateVO);
-        return new JsonResponse($dtfData);
+        return new JsonResponse($dtfData, 200, [], JSON_UNESCAPED_UNICODE);
     }
 
     /**
@@ -103,7 +167,7 @@ class SuperMarketController extends Controller
     ){
         $DateVO = DateValueObject::create($shipmentDate);
         $labelData = $GetLabelUseCase->execute($DateVO);
-        return new JsonResponse($labelData);
+        return new JsonResponse($labelData, 200, [], JSON_UNESCAPED_UNICODE);
     }
 
     /**
@@ -117,7 +181,7 @@ class SuperMarketController extends Controller
     ){
         $DateVO = DateValueObject::create($shipmentDate);
         $totalPickData = $GetTotalPickUseCase->execute($DateVO);
-        return new JsonResponse($totalPickData);
+        return new JsonResponse($totalPickData, 200, [], JSON_UNESCAPED_UNICODE);
     }
 
     
@@ -132,7 +196,7 @@ class SuperMarketController extends Controller
     ){
         $DateVO = DateValueObject::create($shipmentDate);
         $jobTicketData = $GetJobTicketUseCase->execute($DateVO);
-        return new JsonResponse($jobTicketData);
+        return new JsonResponse($jobTicketData, 200, [], JSON_UNESCAPED_UNICODE);
     }
 
     /**
@@ -166,6 +230,22 @@ class SuperMarketController extends Controller
         $DateVO = DateValueObject::create($shipmentDate);
         $UpdateTsubushiUseCase->execute($DateVO);
         return new JsonResponse();
+    }
+
+    /**
+     * [GET]問合せ番号別データ出力
+     * @param GetDataByInquiryNoUseCase $GetDataByInquiryNoUseCase
+     */
+
+    public function getDataByInquiryNo(
+        GetDataByInquiryNoUseCase $GetDataByInquiryNoUseCase,
+        $shipmentDate,
+        $inquiryNo
+    ){
+        $DateVO = DateValueObject::create($shipmentDate);
+        $InquiryNoVO = CheckInquiryNoValueObject::create($inquiryNo);
+        $data = $GetDataByInquiryNoUseCase->execute($DateVO, $InquiryNoVO);
+        return new JsonResponse($data, 200, [], JSON_UNESCAPED_UNICODE);
     }
 
     /**
@@ -230,19 +310,19 @@ class SuperMarketController extends Controller
     ){
         $YearMonthVO = YearMonthValueObject::create($yearMonth);
         $monthlyData = $GetMonthlyDataUseCase->execute($YearMonthVO);
-        return new JsonResponse($monthlyData);
+        return new JsonResponse($monthlyData, 200, [], JSON_UNESCAPED_UNICODE);
     }
 
     /**
-     * [GET]月次集計
+     * [GET]全データ取得
      *
-     * @param GetMonthlyDataUseCase $GetMonthlyDataUseCase
+     * @param GetAllDataUseCase $GetAllDataUseCase
      */
 
     public function getAllData(
         GetAllDataUseCase $GetAllDataUseCase,
     ){
         $allData = $GetAllDataUseCase->execute();
-        return new JsonResponse($allData);
+        return new JsonResponse($allData, 200, [], JSON_UNESCAPED_UNICODE);
     }
 }

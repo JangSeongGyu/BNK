@@ -7,6 +7,10 @@ use App\Exceptions\InvalidValueErrorResponseException;
 
 final class CheckInquiryNoValueObject extends SagawaInquiryNoValueObject
 {
+    public $inquiryNo;
+    public $includeNoWithZero;
+    public $includeNo;
+
     private function __construct()
     {
 
@@ -17,7 +21,10 @@ final class CheckInquiryNoValueObject extends SagawaInquiryNoValueObject
     public static function create(string $inquiryNo): CheckInquiryNoValueObject
     {
         $instance = new CheckInquiryNoValueObject();
-        $instance->validate($inquiryNo);
+        $instance->value = $instance->validate($inquiryNo);
+        $instance->inquiryNo = substr($inquiryNo, 0, -3);
+        $instance->includeNoWithZero = substr($inquiryNo, -3);
+        $instance->includeNo = str_replace('0', '', $instance->includeNoWithZero);
         return $instance;
     }
 
@@ -26,7 +33,10 @@ final class CheckInquiryNoValueObject extends SagawaInquiryNoValueObject
         if(!strlen($inquiryNo) == 15){
             throw new InvalidValueErrorResponseException('問い合わせ番号: ' . $inquiryNo);
         }
-        return;
+        if(!is_numeric($inquiryNo)){
+            throw new InvalidValueErrorResponseException('問い合わせ番号: ' . $inquiryNo);
+        }
+        return $inquiryNo;
     }
 }
 ?>

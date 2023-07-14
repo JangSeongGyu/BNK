@@ -4,12 +4,13 @@ import SuperMarketDesign from '../Design/SuperMarketDesign';
 
 const BorderOption = SuperMarketDesign('BorderOption');
 const BtnOption = SuperMarketDesign('BtnOption');
+const calendarBoxTypo = SuperMarketDesign('calendarBoxTypo');
 
 const SelectDateCard = (props) => {
     const selectDate = props.selectDate;
     return (
         <Box mt={1} width={'100%'} sx={BorderOption}>
-            <Typography sx={{ fontSize: 20 }}>
+            <Typography sx={calendarBoxTypo}>
                 出荷日 <br />
             </Typography>
             <Box
@@ -19,10 +20,10 @@ const SelectDateCard = (props) => {
                     alignItems: 'center',
                 }}
             >
-                <Typography sx={{ fontWeight: 'bold', fontSize: 32, mr: 2 }}>
+                <Typography sx={{ color: '', fontSize: 40 }}>
                     {selectDate}
                 </Typography>
-                <Button sx={{ border: 1, height: 40 }}>明細</Button>
+                {/* <Button sx={{ border: 1, height: 40 }}>明細</Button> */}
             </Box>
         </Box>
     );

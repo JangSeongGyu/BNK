@@ -9,15 +9,15 @@ import tippy from 'tippy.js';
 import axios from 'axios';
 import SuperMarketDesign from '../Design/SuperMarketDesign';
 
-const CalenderList = (props) => {
+const CalendarList = (props) => {
     const [selectDate, SetSelectDate] = useState('');
     const [eventDatas, SetEventDatas] = useState([]);
-    const [monthlyDatas, setMonthlyDatas] = useState([]);
-    const [clickType, SetClickType] = useState('');
+    // const [monthlyDatas, setMonthlyDatas] = useState([]);
     const [cssStr, SetCssStr] = useState('');
     const [currentDate, SetCurrentDate] = useState(props.Today);
     const calref = useRef(null);
-    var cssOption = '';
+    const [eventDates, SetEventDates] = useState({});
+    let test = {};
     const StyleWrapper = styled.div`
         margin: 0 10px;
         width: 100%;
@@ -40,6 +40,7 @@ const CalenderList = (props) => {
             cursor: pointer;
         }
     `;
+
     // Monthly_Data & Data_Grouping
     useEffect(() => {
         updateCalendar();
@@ -49,21 +50,34 @@ const CalenderList = (props) => {
         var startDate = CreateDate(calref.current.calendar.view.activeStart);
         var endDate = CreateDate(calref.current.calendar.view.activeEnd);
         SetCurrentDate(CreateDate(calref.current.calendar.getDate()));
-        console.log(startDate, endDate);
 
+        console.log(startDate, endDate);
         axios
             .get(
                 import.meta.env.VITE_DOMAIN +
-                    '/api/supermarket/betweendata/' +
+                    '/api/supermarket/betweencount/' +
                     startDate +
                     '/' +
                     endDate
             )
             .then((res) => {
                 console.log(res.data);
-                setMonthlyDatas(GroupingDate(res.data));
+                SetEventList(res.data);
+                test = res.data;
             })
             .catch();
+    };
+
+    const SetEventList = (datas) => {
+        let strData = [];
+        datas.forEach((data) => {
+            strData.push({
+                date: data.出荷日,
+                title: '出荷 : ' + data.件数 + '件',
+            });
+            SetEventDates((prevState) => ({ ...prevState, [data.出荷日]: 1 }));
+        });
+        SetEventDatas(strData);
     };
 
     const CreateDate = (data) => {
@@ -77,72 +91,43 @@ const CalenderList = (props) => {
         return `${startYear}-${startMonth}-${startDay}`;
     };
 
+    const CheckDate = (date) => {
+        let res = false;
+        eventDatas.forEach((data) => {
+            if (data.date == date) res = true;
+        });
+        return res;
+    };
+
     // Get Select Date Data
     useEffect(() => {
         if (selectDate != '') {
-            var dailyData = [];
-            if (monthlyDatas[selectDate]) dailyData = monthlyDatas[selectDate];
-
-            console.log('dailyData', dailyData);
-            props.CallSelectDate({
-                selectDate: selectDate,
-                dailyData: dailyData,
-                // clickType: clickType,
-            });
+            if (CheckDate(selectDate)) {
+                console.log('isData');
+                props.CallSelectDate({
+                    selectDate: selectDate,
+                    isData: true,
+                });
+            } else {
+                props.CallSelectDate({
+                    selectDate: selectDate,
+                    isData: false,
+                });
+            }
         }
     }, [selectDate]);
 
-    //Grouping Date
-    const GroupingDate = (datas) => {
-        var result = {};
-        let strData = [];
-        console.log(datas);
-
-        // Grouping
-        datas.forEach((data) => {
-            var nowDate = data.出荷日;
-            if (!result[nowDate]) {
-                result[nowDate] = [];
-            }
-            result[nowDate].push(data);
-        });
-
-        //  Create EVENT
-        Object.keys(result).forEach((k) => {
-            strData.push({
-                date: k,
-                title: '出荷 : ' + result[k].length + '件',
-            });
-        });
-        console.log(strData);
-        SetEventDatas(strData);
-        console.log('eventDatas', eventDatas);
-        return result;
-    };
-
     const handleDateClick = (dateClickInfo) => {
         SetSelectDate(dateClickInfo.dateStr);
-        console.log('dateClickInfo: ', dateClickInfo); // 選択した範囲の情報をconsoleに出力
-        // SetClickType('Date');
+        if (!CheckDate(dateClickInfo.dateStr)) props.handleOpen();
         SetCssStr(`
             outline: 2px solid red;
             outline-offset: -2px;
             cursor: pointer;
         `);
-        // alert('Date: ' + dateClickInfo.dateStr);
     };
 
-    const handleEventClick = (eventClickInfo) => {
-        // console.log('eventClickInfo:', eventClickInfo.event.startStr); // 選択した範囲の情報をconsoleに出力
-        // SetSelectDate(eventClickInfo.event.startStr);
-        // SetClickType('Event');
-        // SetCssStr(`
-        // .fc-event-main {
-        //     outline: 2px solid red;
-        //     outline-offset: -2px;
-        //     cursor: pointer;
-        // }`);
-    };
+    const handleEventClick = (eventClickInfo) => {};
 
     return (
         <Box
@@ -191,4 +176,4 @@ const CalenderList = (props) => {
         </Box>
     );
 };
-export default CalenderList;
+export default CalendarList;

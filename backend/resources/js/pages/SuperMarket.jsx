@@ -1,15 +1,12 @@
 import React, { useEffect, useState, useRef } from 'react';
-import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
-
-import 'tippy.js/dist/tippy.css';
 import Header from '../components/Header';
 import axios from 'axios';
-import FunctionList from '../components/FunctionList';
-import { Grid, Modal, Typography } from '@mui/material';
-import CalenderList from '../components/CalenderList';
+import CalendarList from '../components/CalendarList';
 import MarketSideList from '../components/MarketSideList';
-import MarketSideDateList from '../components/MarketSideDateList';
+import MarketShipmentDialog from '../components/MarketShipmentDialog';
+import { Dialog, Divider, Typography } from '@mui/material';
+import { grey, pink, red } from '@mui/material/colors';
 
 const SuperMarket = () => {
     const [selectDate, SetSelectDate] = useState('');
@@ -17,6 +14,7 @@ const SuperMarket = () => {
     const [logDatas, SetLogDatas] = useState('');
     const [dailyData, SetDailyData] = useState([]);
     const [clickType, SetClickType] = useState('');
+    const [isData, SetIsData] = useState(false);
 
     useEffect(() => {
         axios
@@ -36,36 +34,61 @@ const SuperMarket = () => {
         )}`;
     };
 
+    const handleClose = () => {
+        console.log('close');
+        SetOpen(false);
+    };
+    const handleOpen = () => {
+        console.log('open');
+        SetOpen(true);
+    };
+
     // Get Calender -> selectDate & dailyData
     const CallSelectDate = (data) => {
-        console.log(data);
         SetSelectDate(data.selectDate);
-        SetDailyData(data.dailyData);
-        // SetClickType(data.clickType);
+        SetIsData(data.isData);
     };
 
     return (
         <>
             <Header title="スーパーマーケット" />
-            <Box sx={{ fontSize: 28 }}>
-                全体:000 未処理件数:
+            <Box
+                sx={{
+                    fontSize: 28,
+                    backgroundColor: grey[200],
+                    color: 'black',
+                    textAlign: 'center',
+                }}
+            >
+                未処理件数:
                 {logDatas.length}
             </Box>
+            <Divider />
             <Box sx={{ display: 'flex' }}>
                 <Box sx={{ width: '60%' }}>
-                    <CalenderList
+                    <CalendarList
                         Today={thisMonth}
                         CallSelectDate={CallSelectDate}
+                        handleOpen={handleOpen}
                     />
                 </Box>
                 <Box sx={{ width: '40%' }}>
-                    <MarketSideList
-                        selectDate={selectDate}
-                        dailyData={dailyData}
-                        logDatas={logDatas}
-                    />
+                    {isData && (
+                        <MarketSideList
+                            selectDate={selectDate}
+                            isData={isData}
+                            logDatas={logDatas}
+                        />
+                    )}
                 </Box>
             </Box>
+            <Dialog onClose={handleClose} open={open}>
+                <MarketShipmentDialog
+                    handleClose={handleClose}
+                    logDatas={logDatas.length}
+                    selectDate={selectDate}
+                />
+            </Dialog>
         </>
     );
 };

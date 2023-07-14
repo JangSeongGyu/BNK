@@ -10,11 +10,13 @@ import axios from 'axios';
 import ToasterComp from '../components/ToasterComp';
 import toast, { Toaster } from 'react-hot-toast';
 
+const BorderOption = SuperMarketDesign('BorderOption');
+const insListOption = SuperMarketDesign('insListOption');
+const insOutputOption = SuperMarketDesign('insOutputOption');
+const insListResultOption = SuperMarketDesign('insListResultOption');
+const BtnOption = SuperMarketDesign('BtnOption');
+
 const SPChecking = () => {
-    const BorderOption = SuperMarketDesign('BorderOption');
-    const insListOption = SuperMarketDesign('insListOption');
-    const insOutputOption = SuperMarketDesign('insOutputOption');
-    const insListResultOption = SuperMarketDesign('insListResultOption');
     const insListResultTypoOption = SuperMarketDesign(
         'insListResultTypoOption'
     );
@@ -46,6 +48,9 @@ const SPChecking = () => {
         SetInputData({ TF0: '', TF1: '', TF2: '' });
         SetMsgBox({ MB0: '未完了', MB1: '未完了', MB2: '未完了' });
         focusing(0);
+        SetSceneName('');
+        SetDetailNo('');
+        SetAddress('');
     };
 
     useEffect(() => {
@@ -74,9 +79,11 @@ const SPChecking = () => {
         inputRef.current[number].disabled = false;
         inputRef.current[number].focus();
     };
+    const UpdateData = () => {
+        axios.put(import.meta.env.VITE_DOMAIN + '/api/supermarket/?');
+    };
 
     const GetNumberData = () => {
-        let result = true;
         axios
             .get(
                 import.meta.env.VITE_DOMAIN +
@@ -88,15 +95,17 @@ const SPChecking = () => {
             .then((res) => {
                 console.log(res.data.length);
                 if (res.data.length == 0) {
-                    result = false;
+                    ResultError('データがありません。');
                 } else {
                     SetSceneName(res.data[0].シーン名);
                     SetDetailNo(res.data[0].注文明細No);
                     SetAddress(res.data[0].納品先住所);
+                    ResultOK();
                 }
+            })
+            .catch((e) => {
+                ResultError('??');
             });
-
-        return result;
     };
 
     const is_number = (text) => {
@@ -123,15 +132,13 @@ const SPChecking = () => {
                     dataClear();
                 } else ResultError('数量を入力してください');
             } else if (taskCnt == 1) {
-                if (inputData['TF0'].substring(0, 12) == inputData['TF1']) {
+                if (inputData['TF0'] == inputData['TF1']) {
                     ResultOK();
                 } else {
                     ResultError('問い合わせ番号が違います。');
                 }
             } else {
-                // console.log(GetNumberData());
-                if (GetNumberData() == true) ResultOK();
-                else ResultError('データがありません。');
+                GetNumberData();
             }
         }
     };
@@ -170,15 +177,31 @@ const SPChecking = () => {
             <Box>
                 <Box
                     width={'100%'}
-                    py={2}
+                    py={1}
                     px={4}
                     display={'flex'}
                     alignItems={'baseline'}
                 >
-                    <Typography onClick={callToaster} fontSize={24} mr={5}>
+                    <Typography onClick={callToaster} fontSize={30} mr={5}>
                         検品
                     </Typography>
-                    <Typography>出荷日 : {selectDate}</Typography>
+                    <Box
+                        display={'flex'}
+                        width={'90%'}
+                        height={30}
+                        justifyContent={'space-between'}
+                    >
+                        <>
+                            <Typography fontSize={24}>
+                                出荷日 : {selectDate}
+                            </Typography>
+                        </>
+                        <Box width={'30%'} mt={-1}>
+                            <Button onClick={() => dataClear()} sx={BtnOption}>
+                                クリア
+                            </Button>
+                        </Box>
+                    </Box>
                 </Box>
 
                 <Divider variant="middle" />
@@ -188,15 +211,15 @@ const SPChecking = () => {
                         <Typography>注文明細No</Typography>
                         <Box sx={insOutputOption}>{detailNo}</Box>
                     </Box>
-                    <Box minWidth={200} width={'15%'}>
+                    <Box minWidth={200} width={'20%'}>
                         <Typography>宛名</Typography>
                         <Box sx={insOutputOption}>{sceneName}</Box>
                     </Box>
-                    <Box minWidth={500} width={'40%'}>
+                    <Box minWidth={500} width={'45%'}>
                         <Typography>納品先住所</Typography>
                         <Box sx={insOutputOption}>{address}</Box>
                     </Box>
-                    <Box minWidth={150} width={'20%'}>
+                    <Box minWidth={150} width={'10%'}>
                         <Typography>作業進捗</Typography>
                         <Box
                             justifyContent={'center'}
@@ -218,19 +241,6 @@ const SPChecking = () => {
                 </Box>
 
                 <Divider variant="middle" />
-
-                <Button
-                    onClick={() => dataClear()}
-                    sx={{
-                        border: 1,
-                        ml: 4,
-                        mt: 2,
-                        width: '25%',
-                        alignItems: 'baseline',
-                    }}
-                >
-                    クリア
-                </Button>
 
                 <Box mx={4} mt={2} display={'flex'}>
                     {/* バーコードリスト 1 */}

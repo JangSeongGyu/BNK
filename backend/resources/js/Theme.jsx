@@ -16,6 +16,11 @@ const Theme = createTheme({
             contrastText: '#000',
         },
     },
+    fonts: {
+        body: '"メイリオ", Meiryo, "ＭＳ Ｐゴシック", "MS PGothic", sans-serif',
+        heading: '"Segoe UI", Roboto, sans-sefig',
+        monospace: 'Menlo, monospace',
+    },
 });
 
 export default Theme;

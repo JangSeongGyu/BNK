@@ -13,15 +13,16 @@ const BtnOption = SuperMarketDesign('BtnOption');
 const MarketSideList = (props) => {
     const selectDate = props.selectDate;
 
-    const [dailyData, SetDailyData] = useState([]);
+    const isData = props.isData;
+    // const [dailyData, SetDailyData] = useState([]);
     const [logDatas, SetLogDatas] = useState(props.logDatas);
 
-    useEffect(() => {
-        SetDailyData(props.dailyData);
-    }, [props.dailyData]);
+    // useEffect(() => {
+    //     SetDailyData(props.dailyData);
+    // }, [props.dailyData]);
 
     const SideList = () => {
-        if (dailyData.length > 0)
+        if (isData)
             return (
                 <>
                     <SelectDateCard selectDate={selectDate} />

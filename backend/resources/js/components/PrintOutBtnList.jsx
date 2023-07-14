@@ -4,6 +4,7 @@ import SuperMarketDesign from '../Design/SuperMarketDesign';
 import { red } from '@mui/material/colors';
 import ReactToPrint from 'react-to-print';
 import LabelLayout from './LabelLayout';
+import YamaLayout from './YamaLayout';
 
 const BorderOption = SuperMarketDesign('BorderOption');
 const BtnOption = SuperMarketDesign('BtnOption');
@@ -11,8 +12,8 @@ const calendarBoxTypo = SuperMarketDesign('calendarBoxTypo');
 
 const PrintOutBtnList = (props) => {
     const selectDate = props.selectDate;
-    const componentRef = useRef();
-
+    const LabelRef = useRef();
+    const YamaRef = useRef();
     const ButtonClick = (e) => {};
     return (
         <Box mt={1} width={'100%'} sx={BorderOption}>
@@ -26,21 +27,25 @@ const PrintOutBtnList = (props) => {
                 </Box>
                 <Box sx={{ display: 'flex', gap: 1, mt: 1 }}>
                     <Button sx={BtnOption}>JOBチケット</Button>
-
                     <ReactToPrint
                         trigger={() => (
                             <Button sx={BtnOption}>梱包ラベル</Button>
                         )}
-                        content={() => componentRef.current}
+                        content={() => LabelRef.current}
+                    />{' '}
+                    <ReactToPrint
+                        trigger={() => (
+                            <Button sx={BtnOption}>山出しリスト</Button>
+                        )}
+                        content={() => YamaRef.current}
                     />
-
-                    <Button sx={BtnOption}>山出しリスト</Button>
                 </Box>
             </Box>
 
             {/* Printing Page  */}
             <Box position={'absolute'} sx={{ visibility: 'hidden' }}>
-                <LabelLayout ref={componentRef} />
+                <LabelLayout ref={LabelRef} />
+                <YamaLayout ref={YamaRef} />
             </Box>
         </Box>
     );

@@ -7,6 +7,8 @@ import MarketSideList from '../components/MarketSideList';
 import MarketShipmentDialog from '../components/MarketShipmentDialog';
 import { Dialog, Divider, Typography } from '@mui/material';
 import { grey, pink, red } from '@mui/material/colors';
+import ToasterComp from '../components/ToasterComp';
+import { toast } from 'react-hot-toast';
 
 const SuperMarket = () => {
     const [selectDate, SetSelectDate] = useState('');
@@ -20,10 +22,9 @@ const SuperMarket = () => {
         axios
             .get(import.meta.env.VITE_DOMAIN + '/api/supermarket/backlogdata/')
             .then((res) => {
-                // console.log(res.data);
                 SetLogDatas(res.data);
             })
-            .catch();
+            .catch((e) => {});
     }, []);
 
     const thisMonth = () => {
@@ -51,11 +52,12 @@ const SuperMarket = () => {
 
     return (
         <>
+            <ToasterComp />
             <Header title="スーパーマーケット" />
             <Box
                 sx={{
                     fontSize: 28,
-                    backgroundColor: grey[200],
+                    height: '4%',
                     color: 'black',
                     textAlign: 'center',
                 }}
@@ -63,16 +65,15 @@ const SuperMarket = () => {
                 未処理件数:
                 {logDatas.length}
             </Box>
-            <Divider />
-            <Box sx={{ display: 'flex' }}>
-                <Box sx={{ width: '60%' }}>
+            <Box height={'80%'} sx={{ display: 'flex' }}>
+                <Box height={'100%'} sx={{ width: '60%' }}>
                     <CalendarList
                         Today={thisMonth}
                         CallSelectDate={CallSelectDate}
                         handleOpen={handleOpen}
                     />
                 </Box>
-                <Box sx={{ width: '40%' }}>
+                <Box mt={2} sx={{ width: '40%' }}>
                     {isData && (
                         <MarketSideList
                             selectDate={selectDate}

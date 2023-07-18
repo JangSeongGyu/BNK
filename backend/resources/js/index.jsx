@@ -4,11 +4,12 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { ThemeProvider } from '@mui/material/styles';
 import App from './App';
 import Theme from './Theme';
+import axios from 'axios';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
-// const ENV_PATH = path.join(__dirname, '.env');
-// require('dotenv').config('../../../.env');
+// axios.defaults.baseURL = 'http://192.168.150.196:8080';
+// axios.defaults.withCredentials = true;
 
 root.render(
     <ThemeProvider theme={Theme}>

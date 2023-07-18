@@ -2,8 +2,8 @@ import React, { useEffect, useState, useRef, forwardRef } from 'react';
 import { Grid, Typography, Box } from '@mui/material';
 import { blue, grey, red } from '@mui/material/colors';
 
-const MainWidth = 1080;
-const MainHeight = MainWidth * 1.4142;
+const MainWidth = 1058;
+const MainHeight = 1497;
 
 const MainCardOption = () => {
     return {
@@ -71,7 +71,7 @@ const YamaLayout = forwardRef((props, ref) => {
                         出荷日：{selectDate}
                     </Typography>
                 </Box>
-                <Grid
+                {/* <Grid
                     borderBottom={1}
                     borderTop={1}
                     borderColor={grey[400]}
@@ -107,7 +107,7 @@ const YamaLayout = forwardRef((props, ref) => {
                     >
                         数量
                     </Grid>
-                </Grid>
+                </Grid> */}
             </>
         );
     };
@@ -151,7 +151,14 @@ const YamaLayout = forwardRef((props, ref) => {
     // 送り先　BOTTOM　Layout
     const Card = (number) => {
         return (
-            <Box backgroundColor={grey[200]} display={'flex'} width={'100%'}>
+            <Box
+                borderRight={1}
+                borderLeft={1}
+                borderColor={grey[400]}
+                backgroundColor={grey[200]}
+                display={'flex'}
+                width={'100%'}
+            >
                 <Grid
                     alignItems={'center'}
                     borderBottom={1}
@@ -196,6 +203,8 @@ const YamaLayout = forwardRef((props, ref) => {
         return (
             <Grid
                 borderBottom={1}
+                borderRight={1}
+                borderLeft={1}
                 borderColor={grey[400]}
                 height={40}
                 alignItems={'center'}
@@ -208,15 +217,15 @@ const YamaLayout = forwardRef((props, ref) => {
                 <Grid sx={SceneCardOption} textAlign={'center'} item xs={2}>
                     ショップコード
                 </Grid>
-                <Grid sx={SceneCardOption} item xs={2}>
-                    シーンコード
-                </Grid>
-                <Grid sx={SceneCardOption} item xs={5}>
+                <Grid sx={SceneCardOption} item xs={7}>
                     シーン名
                 </Grid>
-                <Grid sx={SceneCardOption} textAlign={'center'} item xs={2}>
-                    数量
-                </Grid>
+                <Grid
+                    sx={SceneCardOption}
+                    textAlign={'center'}
+                    item
+                    xs={2}
+                ></Grid>
             </Grid>
         );
     };
@@ -296,22 +305,45 @@ const YamaLayout = forwardRef((props, ref) => {
 
     const Cards = () => {
         let html = [];
-        let length = 5;
         let selectDate = '2023-07-20';
+        let heightCnt = 340;
+        let list = [
+            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2,
+            2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+        ];
+        let length = list.length;
 
         html.push(CardHeader(selectDate));
-        for (let i = 1; i <= length; i++) {
-            html.push(Card(i));
-            for (let j = 1; j <= i; j++) html.push(SceneCard());
-        }
         html.push(LastCard(length));
+        for (let i = 0; i < length; i++) {
+            let plus = 86 + list[i] * 40;
+            console.log(MainHeight, heightCnt, plus);
+            if (heightCnt + plus > MainHeight - 100) {
+                html.push(
+                    <Box
+                        borderBottom={1}
+                        pb={4}
+                        borderColor={grey[400]}
+                        height={MainHeight - heightCnt}
+                    ></Box>
+                );
+                heightCnt = 0;
+            }
+
+            html.push(Card(i));
+            for (let j = 1; j <= list[i]; j++) html.push(SceneCard());
+
+            heightCnt += plus;
+        }
 
         return html;
     };
 
     return (
-        <Box width={MainWidth} height={MainHeight} ref={ref}>
-            <Cards />
+        <Box p={4} width={MainWidth} height={MainHeight} ref={ref}>
+            <Box>
+                <Cards />
+            </Box>
         </Box>
     );
 });

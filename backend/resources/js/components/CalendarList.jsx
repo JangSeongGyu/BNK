@@ -8,6 +8,7 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import tippy from 'tippy.js';
 import axios from 'axios';
 import SuperMarketDesign from '../Design/SuperMarketDesign';
+import { red } from '@mui/material/colors';
 
 const CalendarList = (props) => {
     const [selectDate, SetSelectDate] = useState('');
@@ -134,6 +135,7 @@ const CalendarList = (props) => {
             sx={{
                 width: '100%',
                 display: 'flex',
+                height: '100%',
                 marginTop: 2,
             }}
         >
@@ -145,12 +147,11 @@ const CalendarList = (props) => {
                     initialDate={currentDate}
                     locales={[jaLocale]}
                     locale="ja"
-                    contentHeight={'500px'}
+                    height={'100%'}
+                    // contentHeight={'auto'}
                     businessHours={{ daysOfWeek: [1, 2, 3, 4, 5] }}
-                    // eventDidMount={eventWithTooltip}
                     events={eventDatas}
                     dateClick={handleDateClick}
-                    // eventClick={handleEventClick}
                     customButtons={{
                         prevBtn: {
                             click: function () {

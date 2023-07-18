@@ -32,7 +32,7 @@ const SuperMarketDesign = (data) => {
             return {
                 minWidth: 300,
                 borderRadius: 3,
-                height: 400,
+                height: '100%',
                 boxShadow: 3,
                 width: '50%',
                 borderColor: red[500],

@@ -13,8 +13,8 @@ const ToasterComp = (props) => {
                 className: '',
                 duration: 5000,
                 style: {
-                    background: 'black',
-                    color: 'white',
+                    background: 'white',
+                    color: 'black',
                     width: 500,
                     height: 70,
                 },

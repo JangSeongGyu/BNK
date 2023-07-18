@@ -5,12 +5,17 @@ import SuperMarketDesign from '../Design/SuperMarketDesign';
 import axios from 'axios';
 import { green, red } from '@mui/material/colors';
 
+import ToasterComp from '../components/ToasterComp';
+
+import toast, { Toaster } from 'react-hot-toast';
+
 const MarketOutSideList = (props) => {
     const selectDate = props.selectDate;
     const logDatas = props.logDatas;
     const BorderOption = SuperMarketDesign('BorderOption');
 
     const ShipmentClick = () => {
+        toast.success('出荷処理中です。');
         axios
             .put(
                 import.meta.env.VITE_DOMAIN +
@@ -18,12 +23,17 @@ const MarketOutSideList = (props) => {
                     selectDate
             )
             .then((res) => {
-                console.log(res.data);
+                toast.success('出荷処理しました。');
+                props.handleClose();
+            })
+            .catch((e) => {
+                toast.error('出荷処理に失敗しました。');
             });
     };
 
     return (
         <Box width={500} height={150} p={2}>
+            <ToasterComp />
             <Box
                 height={'100%'}
                 display={'flex'}

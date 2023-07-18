@@ -95,7 +95,11 @@ const SPChecking = () => {
             .then((res) => {
                 console.log(res.data.length);
                 if (res.data.length == 0) {
-                    ResultError('データがありません。');
+                    let str = `入力番号:${inputData['TF0']}
+                        データがありません。`;
+
+                    ResultError(str);
+                    inputData['TF0'] = '';
                 } else {
                     SetSceneName(res.data[0].シーン名);
                     SetDetailNo(res.data[0].注文明細No);
@@ -104,7 +108,8 @@ const SPChecking = () => {
                 }
             })
             .catch((e) => {
-                ResultError('??');
+                ResultError(`入力番号:${inputData['TF0']}
+                データの形式が違います。`);
             });
     };
 
@@ -119,11 +124,16 @@ const SPChecking = () => {
     const handleKeyPress = (e) => {
         const event = e;
         const str = 'TF' + taskCnt;
+        const str2 = 'MB' + taskCnt;
         if (event.key === 'Enter') {
             if (inputData[str] == '' || inputData[str] == null) {
                 ResultError('入力してください');
                 return;
             }
+            SetMsgBox((prevState) => ({
+                ...prevState,
+                [str2]: 'サーバ接続中…',
+            }));
 
             if (taskCnt == 2) {
                 if (is_number(inputData['TF2'])) {
@@ -135,7 +145,9 @@ const SPChecking = () => {
                 if (inputData['TF0'] == inputData['TF1']) {
                     ResultOK();
                 } else {
-                    ResultError('問い合わせ番号が違います。');
+                    ResultError(`入力番号:${inputData['TF1']}
+                    問い合わせ番号が違います。`);
+                    inputData['TF1'] = '';
                 }
             } else {
                 GetNumberData();
@@ -174,28 +186,25 @@ const SPChecking = () => {
         <>
             <ToasterComp />
             <Header title="スーパーマーケット" disableList="false" />
-            <Box>
+            <Box height={'90%'}>
                 <Box
                     width={'100%'}
-                    py={1}
                     px={4}
+                    height={'8%'}
                     display={'flex'}
-                    alignItems={'baseline'}
+                    alignItems={'center'}
                 >
-                    <Typography onClick={callToaster} fontSize={30} mr={5}>
-                        検品
-                    </Typography>
+                    <Typography fontSize={24}>検品</Typography>
                     <Box
                         display={'flex'}
                         width={'90%'}
                         height={30}
                         justifyContent={'space-between'}
                     >
-                        <>
-                            <Typography fontSize={24}>
-                                出荷日 : {selectDate}
-                            </Typography>
-                        </>
+                        <Typography fontSize={24} pl={4}>
+                            出荷日 : {selectDate}
+                        </Typography>
+
                         <Box width={'30%'} mt={-1}>
                             <Button onClick={() => dataClear()} sx={BtnOption}>
                                 クリア
@@ -206,7 +215,7 @@ const SPChecking = () => {
 
                 <Divider variant="middle" />
                 {/* MIDDLE LIST */}
-                <Box gap={2} mx={4} my={2} display={'flex'}>
+                <Box height={'10%'} gap={2} mx={4} my={2} display={'flex'}>
                     <Box minWidth={200} width={'15%'}>
                         <Typography>注文明細No</Typography>
                         <Box sx={insOutputOption}>{detailNo}</Box>
@@ -242,7 +251,7 @@ const SPChecking = () => {
 
                 <Divider variant="middle" />
 
-                <Box mx={4} mt={2} display={'flex'}>
+                <Box height={'65%'} mx={4} mt={2} display={'flex'}>
                     {/* バーコードリスト 1 */}
                     <Box sx={insListOption} border={taskCnt == 0 ? 3 : 0}>
                         <Box my={2} fontSize={20} textAlign={'center'}>
@@ -261,8 +270,12 @@ const SPChecking = () => {
                             ref={(ref) => boxRef.current.push(ref)}
                             sx={insListResultOption}
                             backgroundColor={grey[400]}
+                            height={100}
                         >
-                            <Typography sx={insListResultTypoOption}>
+                            <Typography
+                                whiteSpace={'pre-line'}
+                                sx={insListResultTypoOption}
+                            >
                                 {MsgBox['MB0']}
                             </Typography>
                         </Box>
@@ -287,7 +300,10 @@ const SPChecking = () => {
                             sx={insListResultOption}
                             backgroundColor={grey[400]}
                         >
-                            <Typography sx={insListResultTypoOption}>
+                            <Typography
+                                whiteSpace={'pre-line'}
+                                sx={insListResultTypoOption}
+                            >
                                 {MsgBox['MB1']}
                             </Typography>
                         </Box>

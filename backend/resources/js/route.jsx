@@ -7,6 +7,7 @@ import BeautyImport from './Beauty/BeautyImport';
 import SPChecking from './pages/SPChecking';
 import QRLayout from './components/LabelLayout';
 import YamaLayout from './components/YamaLayout';
+import JobTicketLayout from './components/JobTicketLayout';
 
 const Router = () => {
     return (
@@ -19,7 +20,11 @@ const Router = () => {
                     path={`/supermarket/checking/:selectDate`}
                     element={<SPChecking />}
                 />
-                <Route exact path={`/test`} element={<YamaLayout />}></Route>
+                <Route
+                    exact
+                    path={`/test`}
+                    element={<JobTicketLayout />}
+                ></Route>
 
                 <Route exact path={`/beauty`} element={<Beauty />}>
                     <Route index element={<BeautyImport />} />

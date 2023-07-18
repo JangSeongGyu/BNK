@@ -5,8 +5,6 @@ import SuperMarketDesign from '../Design/SuperMarketDesign';
 import axios from 'axios';
 import { green, red } from '@mui/material/colors';
 
-import ToasterComp from '../components/ToasterComp';
-
 import toast, { Toaster } from 'react-hot-toast';
 
 const MarketOutSideList = (props) => {
@@ -14,8 +12,10 @@ const MarketOutSideList = (props) => {
     const logDatas = props.logDatas;
     const BorderOption = SuperMarketDesign('BorderOption');
 
+    const BtnOption = SuperMarketDesign('BtnOption');
+
     const ShipmentClick = () => {
-        toast.success('出荷処理中です。');
+        const toastid = toast.loading('サーバ接続中...');
         axios
             .put(
                 import.meta.env.VITE_DOMAIN +
@@ -23,17 +23,16 @@ const MarketOutSideList = (props) => {
                     selectDate
             )
             .then((res) => {
-                toast.success('出荷処理しました。');
+                toast.success('出荷処理しました。', { id: toastid });
                 props.handleClose();
             })
             .catch((e) => {
-                toast.error('出荷処理に失敗しました。');
+                toast.error('出荷処理に失敗しました。', { id: toastid });
             });
     };
 
     return (
         <Box width={500} height={150} p={2}>
-            <ToasterComp />
             <Box
                 height={'100%'}
                 display={'flex'}
@@ -56,23 +55,19 @@ const MarketOutSideList = (props) => {
                         onClick={() => ShipmentClick()}
                         // border={1}
                         sx={{
-                            width: '50%',
+                            width: '100%',
                             border: 1,
                             color: green[700],
                             backgroundColor: 'white',
+                            '&:hover': {
+                                backgroundColor: green[700],
+                                color: 'white',
+                            },
                         }}
                     >
                         出荷処理
                     </Button>
-                    <Button
-                        sx={{
-                            width: '50%',
-                            border: 1,
-                            color: red[700],
-                            backgroundColor: 'white',
-                        }}
-                        onClick={() => props.handleClose()}
-                    >
+                    <Button sx={BtnOption} onClick={() => props.handleClose()}>
                         戻る
                     </Button>
                 </Box>

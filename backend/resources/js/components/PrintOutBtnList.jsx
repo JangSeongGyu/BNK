@@ -20,7 +20,7 @@ const PrintOutBtnList = (props) => {
     return (
         <Box mt={1} width={'100%'} sx={BorderOption}>
             <Typography sx={calendarBoxTypo}>帳票出力</Typography>
-            <Box>
+            <Box mt={1}>
                 {/* <Typography>出荷数量:{dailyData.length}</Typography> */}
                 <Box sx={{ display: 'flex', gap: 1, mb: 1 }}>
                     <Button onClick={(e) => ButtonClick(e)} sx={BtnOption}>
@@ -32,7 +32,7 @@ const PrintOutBtnList = (props) => {
                         trigger={() => (
                             <Button sx={BtnOption}>JOBチケット</Button>
                         )}
-                        // pageStyle="@page { size: A4 landscape; margin: 0; }"
+                        pageStyle="@page { size: A4 landscape; margin: 0; }"
                         content={() => JobRef.current}
                     />
                     <ReactToPrint
@@ -51,7 +51,7 @@ const PrintOutBtnList = (props) => {
             </Box>
 
             {/* Printing Page  */}
-            <Box sx={{ overflow: 'hidden', height: 0 }}>
+            <Box display={'none'}>
                 <LabelLayout ref={LabelRef} />
                 <YamaLayout ref={YamaRef} />
                 <JobTicketLayout ref={JobRef} />

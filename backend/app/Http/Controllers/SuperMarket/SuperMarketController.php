@@ -262,6 +262,7 @@ class SuperMarketController extends Controller
         $DateVO = DateValueObject::create($shipmentDate);
         $InquiryNoVO = CheckInquiryNoValueObject::create($barcode);
         $UpdateFirstPackingUseCase->execute($DateVO, $InquiryNoVO);
+        
         return new JsonResponse();
     }
 

@@ -9,6 +9,7 @@ import tippy from 'tippy.js';
 import axios from 'axios';
 import SuperMarketDesign from '../Design/SuperMarketDesign';
 import { red } from '@mui/material/colors';
+import { toast } from 'react-hot-toast';
 
 const CalendarList = (props) => {
     const [selectDate, SetSelectDate] = useState('');
@@ -48,6 +49,7 @@ const CalendarList = (props) => {
     }, []);
 
     const updateCalendar = () => {
+        const toastid = toast.loading('キャレンダー情報更新中...');
         var startDate = CreateDate(calref.current.calendar.view.activeStart);
         var endDate = CreateDate(calref.current.calendar.view.activeEnd);
         SetCurrentDate(CreateDate(calref.current.calendar.getDate()));
@@ -62,11 +64,12 @@ const CalendarList = (props) => {
                     endDate
             )
             .then((res) => {
+                toast.success('キャレンダー情報更新完了。', { id: toastid });
                 console.log(res.data);
                 SetEventList(res.data);
                 test = res.data;
             })
-            .catch();
+            .catch(toast.success('キャレンダー情報エラー。', { id: toastid }));
     };
 
     const SetEventList = (datas) => {

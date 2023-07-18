@@ -1,18 +1,18 @@
-import { red, grey, pink } from '@mui/material/colors';
+import { red, grey, pink, yellow } from '@mui/material/colors';
 
 const SuperMarketDesign = (data) => {
     switch (data) {
         case 'BorderOption':
             return {
                 border: 1,
+                boxShadow: 1,
                 p: 1,
-                backgroundColor: 'white',
                 borderRadius: 2,
             };
         case 'calendarBoxTypo':
             return {
                 fontSize: 24,
-                color: pink[500],
+                fontWeight: 'bold',
             };
         case 'BtnOption':
             return {
@@ -25,25 +25,25 @@ const SuperMarketDesign = (data) => {
                 '&:hover': {
                     backgroundColor: pink[500],
                     color: 'white',
-                    // boxShadow: 'none',
                 },
             };
         case 'insListOption':
             return {
-                minWidth: 300,
-                borderRadius: 3,
+                minWidth: 350,
+                borderRadius: 2,
                 height: '100%',
-                boxShadow: 3,
-                width: '50%',
-                borderColor: red[500],
-                backgroundColor: grey[100],
+                boxShadow: 5,
+                width: '100%',
+                backgroundColor: 'white',
                 display: 'flex',
                 flexDirection: 'column',
+                alignItems: 'center',
             };
         case 'insListResultOption':
             return {
-                height: '30%',
+                height: '40%',
                 marginTop: 'auto',
+                width: '100%',
                 display: 'flex',
                 borderRadius: 2,
                 backgroundColor: grey[300],
@@ -69,7 +69,7 @@ const SuperMarketDesign = (data) => {
             return {
                 variant: 'filled',
                 backgroundColor: 'white',
-                width: '100%',
+                width: '90%',
             };
 
         default:

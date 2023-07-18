@@ -16,7 +16,7 @@ const InspectionList = (props) => {
     return (
         <Box my={1} width={'100%'} sx={BorderOption}>
             <Typography sx={calendarBoxTypo}>検品</Typography>
-            <Box sx={{ mb: 1 }}>
+            <Box mt={1} mb={1}>
                 <Button sx={BtnOption} onClick={() => BtnClick()}>
                     一次検品
                 </Button>

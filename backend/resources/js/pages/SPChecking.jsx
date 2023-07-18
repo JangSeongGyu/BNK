@@ -7,7 +7,6 @@ import { green, grey, pink, red } from '@mui/material/colors';
 import { useParams } from 'react-router-dom';
 import barcode from '../images/barcode.png';
 import axios from 'axios';
-import ToasterComp from '../components/ToasterComp';
 import toast, { Toaster } from 'react-hot-toast';
 
 const BorderOption = SuperMarketDesign('BorderOption');
@@ -33,6 +32,7 @@ const SPChecking = () => {
     const [WorkCount, SetWorkCount] = useState(0);
     const boxRef = useRef(new Array());
     const inputRef = useRef(new Array());
+    const btnRef = useRef();
     const { selectDate } = useParams();
     const [sceneName, SetSceneName] = useState('');
     const [detailNo, SetDetailNo] = useState('');
@@ -40,6 +40,7 @@ const SPChecking = () => {
 
     const maxTask = 3;
     const dataClear = () => {
+        console.log('clear');
         for (let i = 0; i < maxTask; i++) {
             boxRef.current[i].style.backgroundColor = grey[300];
             inputRef.current[i].disabled = true;
@@ -54,6 +55,21 @@ const SPChecking = () => {
     };
 
     useEffect(() => {
+        getWorkCount();
+        inputLock();
+        focusing(0);
+    }, []);
+
+    const inputLock = () => {
+        for (let i = 0; i < maxTask; i++) {
+            inputRef.current[i].disabled = true;
+        }
+    };
+
+    const getWorkCount = () => {
+        let cnt = 0;
+        const toastid = toast.loading('作業進捗更新中...');
+        SetWorkCount(0);
         axios
             .get(
                 import.meta.env.VITE_DOMAIN +
@@ -61,26 +77,32 @@ const SPChecking = () => {
                     selectDate
             )
             .then((res) => {
+                toast.success('作業進捗更新できました。', { id: toastid });
                 SetMaxWorkCount(res.data.length);
                 res.data.forEach((data) => {
                     console.log(data);
-                    if (data.一次梱包フラグ == 1 || data.二次梱包フラグ == 1)
-                        SetWorkCount(WorkCount + 1);
+                    if (data.一次梱包フラグ == 1 || data.二次梱包フラグ == 1) {
+                        cnt++;
+                    }
                 });
+                console.log(WorkCount);
+
+                SetWorkCount(cnt);
+                if (cnt == res.data.length) {
+                    inputLock();
+                    console.log(btnRef);
+                    btnRef.current.hidden = 'true';
+                }
+            })
+            .catch((e) => {
+                toast.error('作業進捗更新できました。', { id: toastid });
             });
-        for (let i = 0; i < maxTask; i++) {
-            inputRef.current[i].disabled = true;
-        }
-        focusing(0);
-    }, []);
+    };
 
     const focusing = (number) => {
         console.log(inputRef);
         inputRef.current[number].disabled = false;
         inputRef.current[number].focus();
-    };
-    const UpdateData = () => {
-        axios.put(import.meta.env.VITE_DOMAIN + '/api/supermarket/?');
     };
 
     const GetNumberData = () => {
@@ -101,10 +123,14 @@ const SPChecking = () => {
                     ResultError(str);
                     inputData['TF0'] = '';
                 } else {
-                    SetSceneName(res.data[0].シーン名);
-                    SetDetailNo(res.data[0].注文明細No);
-                    SetAddress(res.data[0].納品先住所);
-                    ResultOK();
+                    if (res.data[0].一次梱包フラグ == 1)
+                        ResultError('梱包した問い合わせ番号です。');
+                    else {
+                        SetSceneName(res.data[0].シーン名);
+                        SetDetailNo(res.data[0].注文明細No);
+                        SetAddress(res.data[0].納品先住所);
+                        ResultOK();
+                    }
                 }
             })
             .catch((e) => {
@@ -137,9 +163,23 @@ const SPChecking = () => {
 
             if (taskCnt == 2) {
                 if (is_number(inputData['TF2'])) {
-                    SetWorkCount(WorkCount + 1);
-                    callToaster('検品処理完了しました。');
-                    dataClear();
+                    const toastid = toast.loading('出荷処理中...');
+                    axios
+                        .put(
+                            import.meta.env.VITE_DOMAIN +
+                                `/api/supermarket/firstpacking/${selectDate}/${inputData['TF0']}`
+                        )
+                        .then((res) => {
+                            toast.success('検品処理完了しました。', {
+                                id: toastid,
+                            });
+                            getWorkCount();
+                            dataClear();
+                        })
+                        .catch((e) => {
+                            ResultError();
+                            toast.error('error', { id: toastid });
+                        });
                 } else ResultError('数量を入力してください');
             } else if (taskCnt == 1) {
                 if (inputData['TF0'] == inputData['TF1']) {
@@ -149,7 +189,7 @@ const SPChecking = () => {
                     問い合わせ番号が違います。`);
                     inputData['TF1'] = '';
                 }
-            } else {
+            } else if (taskCnt == 0) {
                 GetNumberData();
             }
         }
@@ -170,10 +210,6 @@ const SPChecking = () => {
         boxRef.current[taskCnt].style.backgroundColor = red[200];
     };
 
-    const callToaster = (text) => {
-        toast.success(text);
-    };
-
     const TextFieldHandler = (e) => {
         var name = e.target.id;
         SetInputData((prevState) => ({
@@ -184,7 +220,6 @@ const SPChecking = () => {
 
     return (
         <>
-            <ToasterComp />
             <Header title="スーパーマーケット" disableList="false" />
             <Box height={'90%'}>
                 <Box
@@ -194,18 +229,23 @@ const SPChecking = () => {
                     display={'flex'}
                     alignItems={'center'}
                 >
-                    <Typography fontSize={24}>検品</Typography>
+                    <Typography
+                        onClick={() => SetTaskCnt(taskCnt + 1)}
+                        fontSize={24}
+                    >
+                        検品
+                    </Typography>
                     <Box
                         display={'flex'}
                         width={'90%'}
-                        height={30}
+                        alignItems={'center'}
                         justifyContent={'space-between'}
                     >
-                        <Typography fontSize={24} pl={4}>
+                        <Typography fontSize={24} ml={4}>
                             出荷日 : {selectDate}
                         </Typography>
 
-                        <Box width={'30%'} mt={-1}>
+                        <Box ref={btnRef} width={'30%'} mt={-1}>
                             <Button onClick={() => dataClear()} sx={BtnOption}>
                                 クリア
                             </Button>
@@ -220,7 +260,7 @@ const SPChecking = () => {
                         <Typography>注文明細No</Typography>
                         <Box sx={insOutputOption}>{detailNo}</Box>
                     </Box>
-                    <Box minWidth={200} width={'20%'}>
+                    <Box minWidth={250} width={'25%'}>
                         <Typography>宛名</Typography>
                         <Box sx={insOutputOption}>{sceneName}</Box>
                     </Box>
@@ -250,88 +290,113 @@ const SPChecking = () => {
                 </Box>
 
                 <Divider variant="middle" />
-
-                <Box height={'65%'} mx={4} mt={2} display={'flex'}>
-                    {/* バーコードリスト 1 */}
-                    <Box sx={insListOption} border={taskCnt == 0 ? 3 : 0}>
-                        <Box my={2} fontSize={20} textAlign={'center'}>
-                            バーコード
-                        </Box>
-                        <TextField
-                            value={inputData['TF0']}
-                            onChange={TextFieldHandler}
-                            inputProps={{ onKeyPress: handleKeyPress }}
-                            inputRef={(ref) => inputRef.current.push(ref)}
-                            id="TF0"
-                            label="問い合わせNo"
-                            sx={insTFOption}
-                        />
+                <Box
+                    height={'80%'}
+                    width={'100%'}
+                    alignItems={'center'}
+                    display={'flex'}
+                    justifyContent={'center'}
+                    backgroundColor={grey[100]}
+                >
+                    <Box
+                        height={'80%'}
+                        width={'90%'}
+                        mx={4}
+                        mt={2}
+                        display={'flex'}
+                    >
+                        {/* バーコードリスト 1 */}
                         <Box
-                            ref={(ref) => boxRef.current.push(ref)}
-                            sx={insListResultOption}
-                            backgroundColor={grey[400]}
-                            height={100}
+                            sx={insListOption}
+                            border={2}
+                            borderColor={taskCnt == 0 ? red[500] : grey[500]}
                         >
-                            <Typography
-                                whiteSpace={'pre-line'}
-                                sx={insListResultTypoOption}
+                            <Box my={2} fontSize={20} textAlign={'center'}>
+                                バーコード
+                            </Box>
+                            <TextField
+                                value={inputData['TF0']}
+                                onChange={TextFieldHandler}
+                                inputProps={{ onKeyPress: handleKeyPress }}
+                                inputRef={(ref) => inputRef.current.push(ref)}
+                                id="TF0"
+                                label="問い合わせNo"
+                                sx={insTFOption}
+                            />
+                            <Box
+                                ref={(ref) => boxRef.current.push(ref)}
+                                sx={insListResultOption}
+                                backgroundColor={grey[400]}
+                                height={100}
                             >
-                                {MsgBox['MB0']}
-                            </Typography>
+                                <Typography
+                                    whiteSpace={'pre-line'}
+                                    sx={insListResultTypoOption}
+                                >
+                                    {MsgBox['MB0']}
+                                </Typography>
+                            </Box>
                         </Box>
-                    </Box>
-                    <ForwardIcon sx={{ fontSize: 100, mt: 20 }} />
-                    {/* バーコードリスト 2 */}
-                    <Box sx={insListOption} border={taskCnt == 1 ? 3 : 0}>
-                        <Box my={2} fontSize={20} textAlign={'center'}>
-                            バーコード２
-                        </Box>
-                        <TextField
-                            value={inputData['TF1']}
-                            onChange={TextFieldHandler}
-                            inputProps={{ onKeyPress: handleKeyPress }}
-                            inputRef={(ref) => inputRef.current.push(ref)}
-                            id="TF1"
-                            label="問い合わせNo"
-                            sx={insTFOption}
-                        />
+                        <ForwardIcon sx={{ fontSize: 100, height: '100%' }} />
+                        {/* バーコードリスト 2 */}
                         <Box
-                            ref={(ref) => boxRef.current.push(ref)}
-                            sx={insListResultOption}
-                            backgroundColor={grey[400]}
+                            sx={insListOption}
+                            border={2}
+                            borderColor={taskCnt == 1 ? red[500] : grey[500]}
                         >
-                            <Typography
-                                whiteSpace={'pre-line'}
-                                sx={insListResultTypoOption}
+                            <Box my={2} fontSize={20} textAlign={'center'}>
+                                バーコード２
+                            </Box>
+                            <TextField
+                                value={inputData['TF1']}
+                                onChange={TextFieldHandler}
+                                inputProps={{ onKeyPress: handleKeyPress }}
+                                inputRef={(ref) => inputRef.current.push(ref)}
+                                id="TF1"
+                                label="問い合わせNo"
+                                sx={insTFOption}
+                            />
+                            <Box
+                                ref={(ref) => boxRef.current.push(ref)}
+                                sx={insListResultOption}
+                                backgroundColor={grey[400]}
                             >
-                                {MsgBox['MB1']}
-                            </Typography>
+                                <Typography
+                                    whiteSpace={'pre-line'}
+                                    sx={insListResultTypoOption}
+                                >
+                                    {MsgBox['MB1']}
+                                </Typography>
+                            </Box>
                         </Box>
-                    </Box>
-                    <ForwardIcon sx={{ fontSize: 100, mt: 20 }} />
-
-                    {/* 数量入力 */}
-                    <Box sx={insListOption} border={taskCnt == 2 ? 3 : 0}>
-                        <Box my={2} fontSize={20} textAlign={'center'}>
-                            数量入力
-                        </Box>
-
-                        <TextField
-                            label="数量入力"
-                            onChange={TextFieldHandler}
-                            inputProps={{ onKeyPress: handleKeyPress }}
-                            inputRef={(ref) => inputRef.current.push(ref)}
-                            value={inputData['TF2']}
-                            id="TF2"
-                            sx={insTFOption}
-                        />
+                        <ForwardIcon sx={{ fontSize: 100, height: '100%' }} />
+                        {/* 数量入力 */}
                         <Box
-                            ref={(ref) => boxRef.current.push(ref)}
-                            sx={insListResultOption}
+                            sx={insListOption}
+                            border={2}
+                            borderColor={taskCnt == 2 ? red[500] : grey[500]}
                         >
-                            <Typography sx={insListResultTypoOption}>
-                                {MsgBox['MB2']}
-                            </Typography>
+                            <Box my={2} fontSize={20} textAlign={'center'}>
+                                数量入力
+                            </Box>
+
+                            <TextField
+                                label="数量入力"
+                                onChange={TextFieldHandler}
+                                inputProps={{ onKeyPress: handleKeyPress }}
+                                inputRef={(ref) => inputRef.current.push(ref)}
+                                value={inputData['TF2']}
+                                id="TF2"
+                                sx={insTFOption}
+                            />
+                            <Box
+                                ref={(ref) => boxRef.current.push(ref)}
+                                sx={insListResultOption}
+                            >
+                                <Typography sx={insListResultTypoOption}>
+                                    {MsgBox['MB2']}
+                                </Typography>
+                            </Box>
                         </Box>
                     </Box>
                 </Box>

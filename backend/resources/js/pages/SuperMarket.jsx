@@ -7,7 +7,7 @@ import MarketSideList from '../components/MarketSideList';
 import MarketShipmentDialog from '../components/MarketShipmentDialog';
 import { Dialog, Divider, Typography } from '@mui/material';
 import { grey, pink, red } from '@mui/material/colors';
-import ToasterComp from '../components/ToasterComp';
+
 import { toast } from 'react-hot-toast';
 
 const SuperMarket = () => {
@@ -52,7 +52,6 @@ const SuperMarket = () => {
 
     return (
         <>
-            <ToasterComp />
             <Header title="スーパーマーケット" />
             <Box
                 sx={{

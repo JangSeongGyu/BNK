@@ -36,6 +36,7 @@ final class UpdateFirstPackingUseCase
      * 2. 指定出荷日で一次梱包フラグUpdate
      */
     public function execute(DateValueObject $DateVO, CheckInquiryNoValueObject $InquiryNoVO){
+        
         $UserEntity = UserEntity::reconstructFromUseCase();
         $FirstPackingEntity = UpdateFirstPackingEntity::reconstructFromUseCase($DateVO, $InquiryNoVO);
         $this->updateRepository->UpdateFirstPacking($UserEntity, $FirstPackingEntity);

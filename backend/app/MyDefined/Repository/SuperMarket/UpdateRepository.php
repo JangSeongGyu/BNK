@@ -109,14 +109,14 @@ final class UpdateRepository implements UpdateRepoInterface{
         $pdo = DB::connection('supermarket')->getpdo();
 
         // 指定出荷日でUpdate
-        $transaction = $pdo->prepare("{CALL dbo.sp_UpdateSecondPacking(?,?,?,?,?,?)}"); 
+        $transaction = $pdo->prepare("{CALL dbo.sp_UpdateSecondPacking(?,?,?,?,?,?,?)}"); 
         $transaction->bindParam(1, $msgCD, PDO::PARAM_STR|PDO::PARAM_INPUT_OUTPUT, 50);
         $transaction->bindParam(2, $msgParam1, PDO::PARAM_STR|PDO::PARAM_INPUT_OUTPUT, 2500);
         $transaction->bindParam(3, $msgParam2, PDO::PARAM_STR|PDO::PARAM_INPUT_OUTPUT, 2500);
         $transaction->bindParam(4, $msgParam3, PDO::PARAM_STR|PDO::PARAM_INPUT_OUTPUT, 2500);
         $transaction->bindParam(5, $UserEntity->name, PDO::PARAM_STR);
         $transaction->bindParam(6, $SecondPackingEntity->shipmentDate, PDO::PARAM_STR);
-        $transaction->bindParam(6, $SecondPackingEntity->inputBarcode, PDO::PARAM_STR);
+        $transaction->bindParam(7, $SecondPackingEntity->inputBarcode, PDO::PARAM_STR);
         $transaction->execute();
         
         if(!$msgCD){

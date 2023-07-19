@@ -34,7 +34,7 @@ Route::middleware(['middleware' => 'api'])->group(function () {
         Route::put('/tsubushi/{date}', [SuperMarketController::class, 'updateTsubushi'])->name('updateTsubushi');
         Route::get('/dailydata/{date}/{inquiryno}', [SuperMarketController::class, 'getDataByInquiryNo'])->name('getDataByInquiryNo');
         Route::put('/firstpacking/{date}/{barcode}', [SuperMarketController::class, 'updateFirstPacking'])->name('updateFirstPacking');
-        Route::put('/secondpacking/{date}', [SuperMarketController::class, 'updateSecondPacking'])->name('updateSecondPacking');
+        Route::put('/secondpacking/{date}/{barcode}', [SuperMarketController::class, 'updateSecondPacking'])->name('updateSecondPacking');
         Route::post('/monthlynumber', [SuperMarketController::class, 'createMonthlyNumber'])->name('createMonthlyNumber');
         Route::get('/monthlydata/{yearmonth}', [SuperMarketController::class, 'getMonthlyData'])->name('getMonthlyData');
         Route::get('/alldata', [SuperMarketController::class, 'getAllData'])->name('getAllData');

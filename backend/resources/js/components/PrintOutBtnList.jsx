@@ -52,9 +52,9 @@ const PrintOutBtnList = (props) => {
 
             {/* Printing Page  */}
             <Box display={'none'}>
-                <LabelLayout ref={LabelRef} />
-                <YamaLayout ref={YamaRef} />
-                <JobTicketLayout ref={JobRef} />
+                <LabelLayout selectDate={selectDate} ref={LabelRef} />
+                <YamaLayout selectDate={selectDate} ref={YamaRef} />
+                <JobTicketLayout selectDate={selectDate} ref={JobRef} />
             </Box>
         </Box>
     );

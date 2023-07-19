@@ -8,6 +8,8 @@ import SPChecking from './pages/SPChecking';
 import QRLayout from './components/LabelLayout';
 import YamaLayout from './components/YamaLayout';
 import JobTicketLayout from './components/JobTicketLayout';
+import LabelLayout from './components/LabelLayout';
+import SPChecking2 from './pages/SPChecking2';
 
 const Router = () => {
     return (
@@ -19,6 +21,11 @@ const Router = () => {
                     exact
                     path={`/supermarket/checking/:selectDate`}
                     element={<SPChecking />}
+                />
+                <Route
+                    exact
+                    path={`/supermarket/checking2/:selectDate`}
+                    element={<SPChecking2 />}
                 />
                 <Route
                     exact

@@ -10,18 +10,24 @@ const InspectionList = (props) => {
     const calendarBoxTypo = SuperMarketDesign('calendarBoxTypo');
 
     let navigate = useNavigate();
-    const BtnClick = () => {
+    const CheckingBtnClick = () => {
         navigate('checking/' + selectDate);
+    };
+
+    const Checking2BtnClick = () => {
+        navigate('checking2/' + selectDate);
     };
     return (
         <Box my={1} width={'100%'} sx={BorderOption}>
             <Typography sx={calendarBoxTypo}>検品</Typography>
             <Box mt={1} mb={1}>
-                <Button sx={BtnOption} onClick={() => BtnClick()}>
+                <Button sx={BtnOption} onClick={() => CheckingBtnClick()}>
                     一次検品
                 </Button>
             </Box>
-            <Button sx={BtnOption}>二次検品</Button>
+            <Button sx={BtnOption} onClick={() => Checking2BtnClick()}>
+                二次検品
+            </Button>
         </Box>
     );
 };

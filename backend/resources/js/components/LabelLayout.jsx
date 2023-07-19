@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef, forwardRef } from 'react';
 import { Grid, Modal, Typography, Box, Button, CardMedia } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import barcode from '../images/barcode.png';
+import axios from 'axios';
 
 const leftwidth = '40%';
 const rightwidth = '100%';
@@ -54,19 +55,47 @@ const RightTypoOption = () => {
         wordBreak: 'break-word',
         fontWeight: 'bold',
         fontFamily: 'MS PGothic',
-        backGroundColor: grey[200],
     };
 };
 
-const Cards = () => {
-    let html = [];
-    let cardList = [];
-    let i = 0;
-    let count = 5;
-    for (i = 0; i < count; i++) {
-        cardList.push(LabelCard(i));
+const LabelLayout = forwardRef((props, ref) => {
+    const selectDate = props.selectDate;
+    const [labelData, SetLabelData] = useState([]);
 
-        if ((i + 1) % 6 == 0 && i != 0) {
+    const Cards = () => {
+        let html = [];
+        let cardList = [];
+        let i = 0;
+        let count = labelData.length;
+        for (i = 0; i < count; i++) {
+            cardList.push(LabelCard(i));
+
+            if ((i + 1) % 6 == 0 && i != 0) {
+                html.push(
+                    <Box
+                        display={'flex'}
+                        flexWrap={'wrap'}
+                        gap={10}
+                        width={MainWidth}
+                        height={MainHeight}
+                        justifyContent={'center'}
+                        alignItems={'center'}
+                        py={10}
+                        px={-1}
+                    >
+                        {cardList}
+                    </Box>
+                );
+                cardList = [];
+            }
+        }
+
+        // 余白処理
+        if (count % 6 != 0)
+            for (i = 0; i < 6 - (count % 6); i++) {
+                cardList.push(<Box width={420} height={343}></Box>);
+            }
+        if (cardList.length > 0)
             html.push(
                 <Box
                     display={'flex'}
@@ -82,121 +111,115 @@ const Cards = () => {
                     {cardList}
                 </Box>
             );
-            cardList = [];
-        }
-    }
-    if (count % 6 != 0)
-        for (i = 0; i < 6 - (count % 6); i++) {
-            cardList.push(<Box width={420} height={343}></Box>);
-        }
-    if (cardList.length > 0)
-        html.push(
-            <Box
-                display={'flex'}
-                flexWrap={'wrap'}
-                gap={10}
-                width={MainWidth}
-                height={MainHeight}
-                justifyContent={'center'}
-                alignItems={'center'}
-                py={10}
-                px={-1}
-            >
-                {cardList}
+        return html;
+    };
+
+    const LabelCard = (number) => {
+        let currentData = labelData[number];
+        let paddingNumber = currentData.同梱連番.toString().padStart(3, '0');
+
+        console.log(paddingNumber);
+        return (
+            <Box width={420} height={343} border={3}>
+                <Box sx={MainBoxOption} height={'21.5%'}>
+                    <Box sx={LeftBoxOption}>
+                        <Typography sx={LeftTypoOption}>店舗名</Typography>
+                    </Box>
+                    <Box sx={RightBoxOption}>
+                        <Typography
+                            fontSize={20}
+                            lineHeight={1.1}
+                            sx={RightTypoOption}
+                        >
+                            {currentData.シーン名}
+                            <br />
+                            {currentData.店舗名}
+                        </Typography>
+                    </Box>
+                </Box>
+                <Box sx={MainBoxOption} height={'11.5%'}>
+                    <Box sx={LeftBoxOption}>
+                        <Typography sx={LeftTypoOption}>店舗コード</Typography>
+                    </Box>
+                    <Box sx={RightBoxOption}>
+                        <Typography fontSize={28} sx={RightTypoOption}>
+                            {currentData.ショップコード}
+                        </Typography>
+                    </Box>
+                </Box>
+                <Box sx={MainBoxOption} height={'20.2%'}>
+                    <Box sx={LeftBoxOption}>
+                        <Typography sx={LeftTypoOption}>品名</Typography>
+                    </Box>
+                    <Box sx={RightBoxOption}>
+                        <Typography fontSize={24} sx={RightTypoOption}>
+                            楽天ペイ　スーパーQR
+                        </Typography>
+                    </Box>
+                </Box>
+                <Box sx={MainBoxOption} height={'11.5%'}>
+                    <Box sx={LeftBoxOption}>
+                        <Typography sx={LeftTypoOption}>数量</Typography>
+                    </Box>
+                    <Box sx={RightBoxOption}>
+                        <Typography fontSize={24} sx={RightTypoOption}>
+                            {currentData.数量}
+                        </Typography>
+                    </Box>
+                </Box>
+                <Box pl={1} height={'35.3%'}>
+                    <Box>
+                        <Box
+                            fontFamily={'CODE39'}
+                            pr={1}
+                            mt={2}
+                            fontSize={32}
+                            width={'100%'}
+                            backGroundColor={grey[200]}
+                            textAlign={'center'}
+                        >
+                            *{currentData.問い合わせ番号}
+                            {paddingNumber}*
+                        </Box>
+                        <Box
+                            pr={2}
+                            fontSize={27}
+                            width={'100%'}
+                            backGroundColor={grey[200]}
+                            fontWeight={'bold'}
+                            textAlign={'center'}
+                            fontFamily={'MS PGothic'}
+                        >
+                            {currentData.問い合わせ番号}
+                            {paddingNumber}
+                        </Box>
+                    </Box>
+                    <Box
+                        mt={-1.2}
+                        mr={0.2}
+                        fontSize={20}
+                        fontWeight={'bold'}
+                        textAlign={'right'}
+                    >
+                        {number}
+                    </Box>
+                </Box>
             </Box>
         );
-    return html;
-};
+    };
+    useEffect(() => {
+        axios
+            .get(
+                import.meta.env.VITE_DOMAIN +
+                    '/api/supermarket/label/' +
+                    selectDate
+            )
+            .then((res) => {
+                console.log(res.data);
+                SetLabelData(res.data);
+            });
+    }, []);
 
-const LabelCard = (number) => {
-    return (
-        <Box width={420} height={343} border={3}>
-            <Box sx={MainBoxOption} height={'21.5%'}>
-                <Box sx={LeftBoxOption}>
-                    <Typography sx={LeftTypoOption}>店舗名</Typography>
-                </Box>
-                <Box sx={RightBoxOption}>
-                    <Typography
-                        fontSize={20}
-                        lineHeight={1.1}
-                        sx={RightTypoOption}
-                    >
-                        楽天ペイメント株式会社 <br />
-                        楽天ペイ事業本部 アクティマーケットプレイス
-                    </Typography>
-                </Box>
-            </Box>
-            <Box sx={MainBoxOption} height={'11.5%'}>
-                <Box sx={LeftBoxOption}>
-                    <Typography sx={LeftTypoOption}>店舗コード</Typography>
-                </Box>
-                <Box sx={RightBoxOption}>
-                    <Typography fontSize={28} sx={RightTypoOption}>
-                        5006803222680
-                    </Typography>
-                </Box>
-            </Box>
-            <Box sx={MainBoxOption} height={'20.2%'}>
-                <Box sx={LeftBoxOption}>
-                    <Typography sx={LeftTypoOption}>品名</Typography>
-                </Box>
-                <Box sx={RightBoxOption}>
-                    <Typography fontSize={24} sx={RightTypoOption}>
-                        楽天ペイ　スーパーQR
-                    </Typography>
-                </Box>
-            </Box>
-            <Box sx={MainBoxOption} height={'11.5%'}>
-                <Box sx={LeftBoxOption}>
-                    <Typography sx={LeftTypoOption}>数量</Typography>
-                </Box>
-                <Box sx={RightBoxOption}>
-                    <Typography fontSize={24} sx={RightTypoOption}>
-                        7
-                    </Typography>
-                </Box>
-            </Box>
-            <Box pl={1} height={'35.3%'}>
-                <Box>
-                    <Box
-                        fontFamily={'CODE39'}
-                        pr={1}
-                        mt={2}
-                        fontSize={32}
-                        width={'100%'}
-                        backGroundColor={grey[200]}
-                        textAlign={'center'}
-                    >
-                        {' '}
-                        *565792577836003*
-                    </Box>
-                    <Box
-                        pr={2}
-                        fontSize={27}
-                        width={'100%'}
-                        backGroundColor={grey[200]}
-                        fontWeight={'bold'}
-                        textAlign={'center'}
-                        fontFamily={'MS PGothic'}
-                    >
-                        565792577836003
-                    </Box>
-                </Box>
-                <Box
-                    mt={-1.2}
-                    mr={0.2}
-                    fontSize={20}
-                    fontWeight={'bold'}
-                    textAlign={'right'}
-                >
-                    {number}
-                </Box>
-            </Box>
-        </Box>
-    );
-};
-
-const LabelLayout = forwardRef((props, ref) => {
     return (
         <Box ref={ref}>
             <Cards />

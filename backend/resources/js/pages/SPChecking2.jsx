@@ -5,7 +5,6 @@ import SuperMarketDesign from '../Design/SuperMarketDesign';
 import ForwardIcon from '@mui/icons-material/Forward';
 import { green, grey, pink, red } from '@mui/material/colors';
 import { useParams } from 'react-router-dom';
-import barcode from '../images/barcode.png';
 import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
 
@@ -15,7 +14,7 @@ const insOutputOption = SuperMarketDesign('insOutputOption');
 const insListResultOption = SuperMarketDesign('insListResultOption');
 const BtnOption = SuperMarketDesign('BtnOption');
 
-const SPChecking = () => {
+const SPChecking2 = () => {
     const insListResultTypoOption = SuperMarketDesign(
         'insListResultTypoOption'
     );
@@ -81,7 +80,7 @@ const SPChecking = () => {
                 SetMaxWorkCount(res.data.length);
                 res.data.forEach((data) => {
                     console.log(data);
-                    if (data.一次梱包フラグ == 1 || data.二次梱包フラグ == 1) {
+                    if (data.二次梱包フラグ == 1) {
                         cnt++;
                     }
                 });
@@ -90,6 +89,7 @@ const SPChecking = () => {
                 SetWorkCount(cnt);
                 if (cnt == res.data.length) {
                     inputLock();
+
                     SetTaskCnt(5);
                     console.log(btnRef);
                     btnRef.current.hidden = 'true';
@@ -124,7 +124,7 @@ const SPChecking = () => {
                     ResultError(str);
                     inputData['TF0'] = '';
                 } else {
-                    if (res.data[0].一次梱包フラグ == 1)
+                    if (res.data[0].二次梱包フラグ == 1)
                         ResultError('梱包した問い合わせ番号です。');
                     else {
                         SetSceneName(res.data[0].シーン名);
@@ -168,7 +168,7 @@ const SPChecking = () => {
                     axios
                         .put(
                             import.meta.env.VITE_DOMAIN +
-                                `/api/supermarket/firstpacking/${selectDate}/${inputData['TF0']}`
+                                `/api/supermarket/secondpacking/${selectDate}/${inputData['TF0']}`
                         )
                         .then((res) => {
                             toast.success('検品処理完了しました。', {
@@ -234,7 +234,7 @@ const SPChecking = () => {
                         onClick={() => SetTaskCnt(taskCnt + 1)}
                         fontSize={24}
                     >
-                        検品
+                        2次検品
                     </Typography>
                     <Box
                         display={'flex'}
@@ -405,4 +405,4 @@ const SPChecking = () => {
         </>
     );
 };
-export default SPChecking;
+export default SPChecking2;

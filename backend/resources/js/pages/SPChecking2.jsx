@@ -14,7 +14,7 @@ const insOutputOption = SuperMarketDesign('insOutputOption');
 const insListResultOption = SuperMarketDesign('insListResultOption');
 const BtnOption = SuperMarketDesign('BtnOption');
 
-const SPChecking2 = () => {
+const SPChecking2 = (props) => {
     const insListResultTypoOption = SuperMarketDesign(
         'insListResultTypoOption'
     );
@@ -25,6 +25,7 @@ const SPChecking2 = () => {
         MB1: '未完了',
         MB2: '未完了',
     });
+    const pageType = props.pageType;
     const [inputData, SetInputData] = useState({});
     const [taskCnt, SetTaskCnt] = useState(0);
     const [maxWorkCount, SetMaxWorkCount] = useState(0);
@@ -37,7 +38,7 @@ const SPChecking2 = () => {
     const [detailNo, SetDetailNo] = useState('');
     const [address, SetAddress] = useState('');
 
-    const maxTask = 3;
+    const maxTask = 2;
     const dataClear = () => {
         console.log('clear');
         for (let i = 0; i < maxTask; i++) {
@@ -45,7 +46,7 @@ const SPChecking2 = () => {
             inputRef.current[i].disabled = true;
         }
         SetTaskCnt(0);
-        SetInputData({ TF0: '', TF1: '', TF2: '' });
+        SetInputData({ TF0: '', TF1: '' });
         SetMsgBox({ MB0: '未完了', MB1: '未完了', MB2: '未完了' });
         focusing(0);
         SetSceneName('');
@@ -72,24 +73,20 @@ const SPChecking2 = () => {
         axios
             .get(
                 import.meta.env.VITE_DOMAIN +
-                    '/api/supermarket/dailydata/' +
+                    `/api/${pageType}/dailydata/` +
                     selectDate
             )
             .then((res) => {
                 toast.success('作業進捗更新できました。', { id: toastid });
                 SetMaxWorkCount(res.data.length);
                 res.data.forEach((data) => {
-                    console.log(data);
-                    if (data.二次梱包フラグ == 1) {
-                        cnt++;
-                    }
+                    if (data.二次梱包フラグ == 1) cnt++;
                 });
                 console.log(WorkCount);
 
                 SetWorkCount(cnt);
                 if (cnt == res.data.length) {
                     inputLock();
-
                     SetTaskCnt(5);
                     console.log(btnRef);
                     btnRef.current.hidden = 'true';
@@ -110,10 +107,7 @@ const SPChecking2 = () => {
         axios
             .get(
                 import.meta.env.VITE_DOMAIN +
-                    '/api/supermarket/dailydata/' +
-                    selectDate +
-                    '/' +
-                    inputData['TF0']
+                    `/api/${pageType}/dailydata/${selectDate}/${inputData['TF0']}`
             )
             .then((res) => {
                 console.log(res.data.length);
@@ -162,13 +156,14 @@ const SPChecking2 = () => {
                 [str2]: 'サーバ接続中…',
             }));
 
-            if (taskCnt == 2) {
-                if (is_number(inputData['TF2'])) {
+            if (taskCnt == 0) GetNumberData();
+            else if (taskCnt == 1) {
+                if (inputData['TF0'] == inputData['TF1']) {
                     const toastid = toast.loading('出荷処理中...');
                     axios
                         .put(
                             import.meta.env.VITE_DOMAIN +
-                                `/api/supermarket/secondpacking/${selectDate}/${inputData['TF0']}`
+                                `/api/${pageType}/secondpacking/${selectDate}/${inputData['TF0']}`
                         )
                         .then((res) => {
                             toast.success('検品処理完了しました。', {
@@ -178,20 +173,14 @@ const SPChecking2 = () => {
                             dataClear();
                         })
                         .catch((e) => {
-                            ResultError();
+                            ResultError('サーバエラー');
                             toast.error('error', { id: toastid });
                         });
-                } else ResultError('数量を入力してください');
-            } else if (taskCnt == 1) {
-                if (inputData['TF0'] == inputData['TF1']) {
-                    ResultOK();
                 } else {
                     ResultError(`入力番号:${inputData['TF1']}
                     問い合わせ番号が違います。`);
                     inputData['TF1'] = '';
                 }
-            } else if (taskCnt == 0) {
-                GetNumberData();
             }
         }
     };
@@ -367,35 +356,6 @@ const SPChecking2 = () => {
                                     sx={insListResultTypoOption}
                                 >
                                     {MsgBox['MB1']}
-                                </Typography>
-                            </Box>
-                        </Box>
-                        <ForwardIcon sx={{ fontSize: 100, height: '100%' }} />
-                        {/* 数量入力 */}
-                        <Box
-                            sx={insListOption}
-                            border={2}
-                            borderColor={taskCnt == 2 ? red[500] : grey[500]}
-                        >
-                            <Box my={2} fontSize={20} textAlign={'center'}>
-                                数量入力
-                            </Box>
-
-                            <TextField
-                                label="数量入力"
-                                onChange={TextFieldHandler}
-                                inputProps={{ onKeyPress: handleKeyPress }}
-                                inputRef={(ref) => inputRef.current.push(ref)}
-                                value={inputData['TF2']}
-                                id="TF2"
-                                sx={insTFOption}
-                            />
-                            <Box
-                                ref={(ref) => boxRef.current.push(ref)}
-                                sx={insListResultOption}
-                            >
-                                <Typography sx={insListResultTypoOption}>
-                                    {MsgBox['MB2']}
                                 </Typography>
                             </Box>
                         </Box>

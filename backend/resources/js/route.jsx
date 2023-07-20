@@ -19,13 +19,13 @@ const Router = () => {
                 <Route exact path={`/supermarket`} element={<SuperMarket />} />
                 <Route
                     exact
-                    path={`/supermarket/checking/:selectDate`}
-                    element={<SPChecking />}
+                    path={`/supermarket/checking/:selectDate/`}
+                    element={<SPChecking pageType="supermarket" />}
                 />
                 <Route
                     exact
-                    path={`/supermarket/checking2/:selectDate`}
-                    element={<SPChecking2 />}
+                    path={`/supermarket/checking2/:selectDate/`}
+                    element={<SPChecking2 pageType="supermarket" />}
                 />
                 <Route
                     exact

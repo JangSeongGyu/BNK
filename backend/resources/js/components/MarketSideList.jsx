@@ -12,11 +12,9 @@ const BtnOption = SuperMarketDesign('BtnOption');
 
 const MarketSideList = (props) => {
     const selectDate = props.selectDate;
-
+    const pageType = props.pageType;
     const isData = props.isData;
     // const [dailyData, SetDailyData] = useState([]);
-    const [logDatas, SetLogDatas] = useState(props.logDatas);
-
     // useEffect(() => {
     //     SetDailyData(props.dailyData);
     // }, [props.dailyData]);
@@ -25,24 +23,23 @@ const MarketSideList = (props) => {
         if (isData)
             return (
                 <>
-                    <SelectDateCard selectDate={selectDate} />
-                    <BizlogiBtnList selectDate={selectDate} />
-                    <PrintOutBtnList selectDate={selectDate} />
-                    <InspectionList selectDate={selectDate} />
+                    <SelectDateCard
+                        pageType={pageType}
+                        selectDate={selectDate}
+                    />
+                    <BizlogiBtnList
+                        pageType={pageType}
+                        selectDate={selectDate}
+                    />
+                    <PrintOutBtnList
+                        pageType={pageType}
+                        selectDate={selectDate}
+                    />
+                    <InspectionList
+                        pageType={pageType}
+                        selectDate={selectDate}
+                    />
                 </>
-            );
-        else
-            return (
-                <Box
-                    sx={BorderOption}
-                    height={100}
-                    fontSize={30}
-                    display={'flex'}
-                    justifyContent={'center'}
-                    alignItems={'center'}
-                >
-                    <>出荷データがありません。</>
-                </Box>
             );
     };
 

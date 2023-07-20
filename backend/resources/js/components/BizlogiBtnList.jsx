@@ -12,58 +12,61 @@ const calendarBoxTypo = SuperMarketDesign('calendarBoxTypo');
 const BizlogiBtnList = (props) => {
     const selectDate = props.selectDate;
     const BtnRef = useRef();
-    const exportData = () => {
-        const toastid = toast.loading('サーバと接続中....');
-        callexportData(toastid);
+    const pageType = props.pageType;
+
+    const BtnClick = () => {
+        CallData();
     };
 
-    const callexportData = (toastid) => {
+    const ExportData = (resData, toastid) => {
+        let hcsv = '';
+
+        let keys = Object.keys(resData[0]);
+        console.log('keys ', keys);
+        keys.forEach((key) => {
+            hcsv = hcsv + '"' + key + '",';
+        });
+        hcsv = hcsv.substring(0, hcsv.length - 1) + '\n';
+
+        resData.forEach((data) => {
+            let vcsv = '';
+            keys.forEach((key) => {
+                if (data[key] != null) vcsv = vcsv + '"' + data[key] + '",';
+                else vcsv = vcsv + '"",';
+            });
+            vcsv = vcsv.substring(0, vcsv.length - 1) + '\n';
+            hcsv = hcsv + vcsv;
+        });
+
+        console.log(hcsv);
+        const element = document.createElement('a');
+        const file = new Blob([hcsv], {
+            type: 'text/plain;charset=utf-8',
+        });
+        element.href = URL.createObjectURL(file);
+        element.download = 'bizlogi_' + selectDate + '.csv';
+        document.body.appendChild(element);
+        element.click();
+        toast.success('エクスポートします。', { id: toastid });
+    };
+
+    const CallData = () => {
+        let toastid = toast.loading('エクスポート中です。');
         axios
             .get(
                 import.meta.env.VITE_DOMAIN +
-                    '/api/supermarket/bizlogi/' +
+                    `/api/${pageType}/bizlogi/` +
                     selectDate
             )
             .then((res) => {
-                toast.success('エクスポートします。', { id: toastid });
                 console.log(res.data);
-                let hcsv = '';
-
-                let keys = Object.keys(res.data[0]);
-                keys.forEach((key) => {
-                    hcsv = hcsv + '"' + key + '",';
-                });
-                hcsv = hcsv.substring(0, hcsv.length - 1) + '\n';
-
-                res.data.forEach((data) => {
-                    let vcsv = '';
-                    keys.forEach((key) => {
-                        if (data[key] != null)
-                            vcsv = vcsv + '"' + data[key] + '",';
-                        else vcsv = vcsv + '"",';
-                    });
-                    vcsv = vcsv.substring(0, vcsv.length - 1) + '\n';
-                    hcsv = hcsv + vcsv;
-                });
-
-                console.log(hcsv);
-                const element = document.createElement('a');
-                const file = new Blob([hcsv], {
-                    type: 'text/plain;charset=utf-8',
-                });
-                element.href = URL.createObjectURL(file);
-                element.download = 'bizlogi_' + selectDate + '.csv';
-                document.body.appendChild(element);
-                element.click();
+                ExportData(res.data, toastid);
             })
             .catch((e) => {
-                toastError('エクスポートデータがありません。', toastid);
-                console.log(e);
+                toast.error('エクスポートデータがありません。', {
+                    id: toastid,
+                });
             });
-    };
-
-    const toastError = (text, toastid) => {
-        toast.error(text, { id: toastid });
     };
 
     return (
@@ -75,7 +78,7 @@ const BizlogiBtnList = (props) => {
                 display={'flex'}
                 justifyContent={'space-between'}
             >
-                <Button onClick={() => exportData()} sx={BtnOption}>
+                <Button onClick={() => BtnClick()} sx={BtnOption}>
                     Bizlogiエクスポート
                 </Button>
                 <Button sx={BtnOption}>Bizlogiインポート</Button>

@@ -5,17 +5,18 @@ import { red } from '@mui/material/colors';
 
 const InspectionList = (props) => {
     var selectDate = props.selectDate;
+    const pageType = props.pageType;
     const BorderOption = SuperMarketDesign('BorderOption');
     const BtnOption = SuperMarketDesign('BtnOption');
     const calendarBoxTypo = SuperMarketDesign('calendarBoxTypo');
 
     let navigate = useNavigate();
     const CheckingBtnClick = () => {
-        navigate('checking/' + selectDate);
+        navigate('checking/' + selectDate + '/');
     };
 
     const Checking2BtnClick = () => {
-        navigate('checking2/' + selectDate);
+        navigate('checking2/' + selectDate + '/');
     };
     return (
         <Box my={1} width={'100%'} sx={BorderOption}>

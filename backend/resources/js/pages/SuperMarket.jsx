@@ -22,7 +22,8 @@ const SuperMarket = () => {
         axios
             .get(import.meta.env.VITE_DOMAIN + '/api/supermarket/backlogdata/')
             .then((res) => {
-                SetLogDatas(res.data);
+                // SetLogDatas(res.data);
+                SetLogDatas('');
             })
             .catch((e) => {});
     }, []);
@@ -40,8 +41,8 @@ const SuperMarket = () => {
         SetOpen(false);
     };
     const handleOpen = () => {
-        console.log('open');
-        SetOpen(true);
+        if (logDatas.length == 0) toast.error('出荷する案件がありません。');
+        else SetOpen(true);
     };
 
     // Get Calender -> selectDate & dailyData
@@ -67,14 +68,16 @@ const SuperMarket = () => {
             <Box height={'80%'} sx={{ display: 'flex' }}>
                 <Box height={'100%'} sx={{ width: '60%' }}>
                     <CalendarList
+                        pageType={'supermarket'}
                         Today={thisMonth}
                         CallSelectDate={CallSelectDate}
                         handleOpen={handleOpen}
                     />
                 </Box>
-                <Box mt={2} sx={{ width: '40%' }}>
+                <Box mt={1} sx={{ width: '40%' }}>
                     {isData && (
                         <MarketSideList
+                            pageType={'supermarket'}
                             selectDate={selectDate}
                             isData={isData}
                             logDatas={logDatas}
@@ -84,6 +87,7 @@ const SuperMarket = () => {
             </Box>
             <Dialog onClose={handleClose} open={open}>
                 <MarketShipmentDialog
+                    pageType={'supermarket'}
                     handleClose={handleClose}
                     logDatas={logDatas.length}
                     selectDate={selectDate}

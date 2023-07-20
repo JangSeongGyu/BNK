@@ -8,6 +8,7 @@ const calendarBoxTypo = SuperMarketDesign('calendarBoxTypo');
 
 const SelectDateCard = (props) => {
     const selectDate = props.selectDate;
+    const pageType = props.pageType;
     return (
         <Box mt={1} width={'100%'} sx={BorderOption}>
             <Typography sx={calendarBoxTypo}>

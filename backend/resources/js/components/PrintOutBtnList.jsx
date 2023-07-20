@@ -13,6 +13,7 @@ const calendarBoxTypo = SuperMarketDesign('calendarBoxTypo');
 
 const PrintOutBtnList = (props) => {
     const selectDate = props.selectDate;
+    const pageType = props.pageType;
     const LabelRef = useRef();
     const YamaRef = useRef();
     const JobRef = useRef();
@@ -32,7 +33,11 @@ const PrintOutBtnList = (props) => {
                         trigger={() => (
                             <Button sx={BtnOption}>JOBチケット</Button>
                         )}
-                        pageStyle="@page { size: A4 landscape; margin: 0; }"
+                        pageStyle="
+                        @media print {
+                                body {-webkit-print-color-adjust: exact;}
+                                }
+                        @page { size: A4 landscape; margin: 0; }"
                         content={() => JobRef.current}
                     />
                     <ReactToPrint
@@ -52,9 +57,21 @@ const PrintOutBtnList = (props) => {
 
             {/* Printing Page  */}
             <Box display={'none'}>
-                <LabelLayout selectDate={selectDate} ref={LabelRef} />
-                <YamaLayout selectDate={selectDate} ref={YamaRef} />
-                <JobTicketLayout selectDate={selectDate} ref={JobRef} />
+                <LabelLayout
+                    pageType={pageType}
+                    selectDate={selectDate}
+                    ref={LabelRef}
+                />
+                <YamaLayout
+                    pageType={pageType}
+                    selectDate={selectDate}
+                    ref={YamaRef}
+                />
+                <JobTicketLayout
+                    pageType={pageType}
+                    selectDate={selectDate}
+                    ref={JobRef}
+                />
             </Box>
         </Box>
     );

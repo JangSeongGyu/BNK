@@ -12,14 +12,14 @@ import { red } from '@mui/material/colors';
 import { toast } from 'react-hot-toast';
 
 const CalendarList = (props) => {
+    const pageType = props.pageType;
+
     const [selectDate, SetSelectDate] = useState('');
     const [eventDatas, SetEventDatas] = useState([]);
-    // const [monthlyDatas, setMonthlyDatas] = useState([]);
     const [cssStr, SetCssStr] = useState('');
     const [currentDate, SetCurrentDate] = useState(props.Today);
     const calref = useRef(null);
     const [eventDates, SetEventDates] = useState({});
-    let test = {};
     const StyleWrapper = styled.div`
         margin: 0 10px;
         width: 100%;
@@ -45,31 +45,31 @@ const CalendarList = (props) => {
 
     // Monthly_Data & Data_Grouping
     useEffect(() => {
-        updateCalendar();
+        if (pageType != null) updateCalendar();
     }, []);
 
     const updateCalendar = () => {
-        const toastid = toast.loading('キャレンダー情報更新中...');
-        var startDate = CreateDate(calref.current.calendar.view.activeStart);
-        var endDate = CreateDate(calref.current.calendar.view.activeEnd);
+        const toastid = toast.loading('カレンダー情報更新中...');
+        let startDate = CreateDate(calref.current.calendar.view.activeStart);
+        let endDate = CreateDate(calref.current.calendar.view.activeEnd);
         SetCurrentDate(CreateDate(calref.current.calendar.getDate()));
 
         console.log(startDate, endDate);
+
         axios
             .get(
                 import.meta.env.VITE_DOMAIN +
-                    '/api/supermarket/betweencount/' +
-                    startDate +
-                    '/' +
-                    endDate
+                    `/api/${pageType}/betweencount/${startDate}/${endDate}`
             )
             .then((res) => {
-                toast.success('キャレンダー情報更新完了。', { id: toastid });
+                toast.success('カレンダー情報更新完了。', {
+                    id: toastid,
+                });
                 console.log(res.data);
                 SetEventList(res.data);
                 test = res.data;
             })
-            .catch(toast.success('キャレンダー情報エラー。', { id: toastid }));
+            .catch(toast.success('カレンダー情報エラー。', { id: toastid }));
     };
 
     const SetEventList = (datas) => {
@@ -130,8 +130,6 @@ const CalendarList = (props) => {
             cursor: pointer;
         `);
     };
-
-    const handleEventClick = (eventClickInfo) => {};
 
     return (
         <Box

@@ -10,6 +10,7 @@ import toast, { Toaster } from 'react-hot-toast';
 const MarketOutSideList = (props) => {
     const selectDate = props.selectDate;
     const logDatas = props.logDatas;
+    const pageType = props.pageType;
     const BorderOption = SuperMarketDesign('BorderOption');
 
     const BtnOption = SuperMarketDesign('BtnOption');
@@ -19,7 +20,7 @@ const MarketOutSideList = (props) => {
         axios
             .put(
                 import.meta.env.VITE_DOMAIN +
-                    '/api/supermarket/shipment/' +
+                    `/api/${pageType}/shipment/` +
                     selectDate
             )
             .then((res) => {

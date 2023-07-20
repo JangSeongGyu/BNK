@@ -61,6 +61,7 @@ const RightTypoOption = () => {
 const LabelLayout = forwardRef((props, ref) => {
     const selectDate = props.selectDate;
     const [labelData, SetLabelData] = useState([]);
+    const pageType = props.pageType;
 
     const Cards = () => {
         let html = [];
@@ -175,7 +176,6 @@ const LabelLayout = forwardRef((props, ref) => {
                             mt={2}
                             fontSize={32}
                             width={'100%'}
-                            backGroundColor={grey[200]}
                             textAlign={'center'}
                         >
                             *{currentData.問い合わせ番号}
@@ -185,7 +185,6 @@ const LabelLayout = forwardRef((props, ref) => {
                             pr={2}
                             fontSize={27}
                             width={'100%'}
-                            backGroundColor={grey[200]}
                             fontWeight={'bold'}
                             textAlign={'center'}
                             fontFamily={'MS PGothic'}
@@ -211,7 +210,7 @@ const LabelLayout = forwardRef((props, ref) => {
         axios
             .get(
                 import.meta.env.VITE_DOMAIN +
-                    '/api/supermarket/label/' +
+                    `/api/${pageType}/label/` +
                     selectDate
             )
             .then((res) => {

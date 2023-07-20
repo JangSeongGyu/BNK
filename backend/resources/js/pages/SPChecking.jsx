@@ -15,12 +15,13 @@ const insOutputOption = SuperMarketDesign('insOutputOption');
 const insListResultOption = SuperMarketDesign('insListResultOption');
 const BtnOption = SuperMarketDesign('BtnOption');
 
-const SPChecking = () => {
+const SPChecking = (props) => {
     const insListResultTypoOption = SuperMarketDesign(
         'insListResultTypoOption'
     );
     const insTFOption = SuperMarketDesign('insTFOption');
 
+    const pageType = props.pageType;
     const [MsgBox, SetMsgBox] = useState({
         MB0: '未完了',
         MB1: '未完了',
@@ -33,12 +34,10 @@ const SPChecking = () => {
     const boxRef = useRef(new Array());
     const inputRef = useRef(new Array());
     const btnRef = useRef();
-    const { selectDate } = useParams();
-    const [sceneName, SetSceneName] = useState('');
-    const [detailNo, SetDetailNo] = useState('');
-    const [address, SetAddress] = useState('');
-
+    const { selectDate, type } = useParams();
+    const [searchData, SetSearchData] = useState([]);
     const maxTask = 3;
+
     const dataClear = () => {
         console.log('clear');
         for (let i = 0; i < maxTask; i++) {
@@ -49,9 +48,7 @@ const SPChecking = () => {
         SetInputData({ TF0: '', TF1: '', TF2: '' });
         SetMsgBox({ MB0: '未完了', MB1: '未完了', MB2: '未完了' });
         focusing(0);
-        SetSceneName('');
-        SetDetailNo('');
-        SetAddress('');
+        SetSearchData([]);
     };
 
     useEffect(() => {
@@ -73,8 +70,7 @@ const SPChecking = () => {
         axios
             .get(
                 import.meta.env.VITE_DOMAIN +
-                    '/api/supermarket/dailydata/' +
-                    selectDate
+                    `/api/${pageType}/dailydata/${selectDate}`
             )
             .then((res) => {
                 toast.success('作業進捗更新できました。', { id: toastid });
@@ -110,10 +106,7 @@ const SPChecking = () => {
         axios
             .get(
                 import.meta.env.VITE_DOMAIN +
-                    '/api/supermarket/dailydata/' +
-                    selectDate +
-                    '/' +
-                    inputData['TF0']
+                    `/api/${pageType}/dailydata/${selectDate}/${inputData['TF0']}`
             )
             .then((res) => {
                 console.log(res.data.length);
@@ -127,9 +120,8 @@ const SPChecking = () => {
                     if (res.data[0].一次梱包フラグ == 1)
                         ResultError('梱包した問い合わせ番号です。');
                     else {
-                        SetSceneName(res.data[0].シーン名);
-                        SetDetailNo(res.data[0].注文明細No);
-                        SetAddress(res.data[0].納品先住所);
+                        console.log(res.data[0]);
+                        SetSearchData(res.data[0]);
                         ResultOK();
                     }
                 }
@@ -163,12 +155,16 @@ const SPChecking = () => {
             }));
 
             if (taskCnt == 2) {
-                if (is_number(inputData['TF2'])) {
+                if (!is_number(inputData['TF2'])) {
+                    ResultError('数量を入力してください');
+                    return;
+                }
+                if (searchData.数量 == inputData['TF2']) {
                     const toastid = toast.loading('出荷処理中...');
                     axios
                         .put(
                             import.meta.env.VITE_DOMAIN +
-                                `/api/supermarket/firstpacking/${selectDate}/${inputData['TF0']}`
+                                `/api/${pageType}/firstpacking/${selectDate}/${inputData['TF0']}`
                         )
                         .then((res) => {
                             toast.success('検品処理完了しました。', {
@@ -181,7 +177,11 @@ const SPChecking = () => {
                             ResultError();
                             toast.error('error', { id: toastid });
                         });
-                } else ResultError('数量を入力してください');
+                } else {
+                    ResultError(
+                        `入力数量:${inputData['TF2']} 数量が違います。`
+                    );
+                }
             } else if (taskCnt == 1) {
                 if (inputData['TF0'] == inputData['TF1']) {
                     ResultOK();
@@ -259,15 +259,15 @@ const SPChecking = () => {
                 <Box height={'10%'} gap={2} mx={4} my={2} display={'flex'}>
                     <Box minWidth={200} width={'15%'}>
                         <Typography>注文明細No</Typography>
-                        <Box sx={insOutputOption}>{detailNo}</Box>
+                        <Box sx={insOutputOption}>{searchData.注文No}</Box>
                     </Box>
                     <Box minWidth={250} width={'25%'}>
                         <Typography>宛名</Typography>
-                        <Box sx={insOutputOption}>{sceneName}</Box>
+                        <Box sx={insOutputOption}>{searchData.シーン名}</Box>
                     </Box>
                     <Box minWidth={500} width={'45%'}>
                         <Typography>納品先住所</Typography>
-                        <Box sx={insOutputOption}>{address}</Box>
+                        <Box sx={insOutputOption}>{searchData.納品先住所}</Box>
                     </Box>
                     <Box minWidth={150} width={'10%'}>
                         <Typography>作業進捗</Typography>

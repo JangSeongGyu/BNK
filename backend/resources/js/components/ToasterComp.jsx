@@ -6,23 +6,21 @@ const ToasterComp = (props) => {
             position="top-right"
             reverseOrder={false}
             gutter={8}
-            containerClassName=""
-            containerStyle={{}}
             toastOptions={{
                 // Define default options
                 className: '',
                 duration: 5000,
                 style: {
+                    fontSize: 16,
                     background: 'white',
                     color: 'black',
-                    width: 500,
-                    height: 70,
+                    width: 400,
+                    height: 50,
                 },
 
-                // Default options for specific types
-                // success: {
-                //     duration: 3000,
-                // },
+                success: {
+                    duration: 5000,
+                },
             }}
         />
     );

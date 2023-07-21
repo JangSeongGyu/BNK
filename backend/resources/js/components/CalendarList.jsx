@@ -43,7 +43,6 @@ const CalendarList = (props) => {
         }
     `;
 
-    // Monthly_Data & Data_Grouping
     useEffect(() => {
         if (pageType != null) updateCalendar();
     }, []);
@@ -67,9 +66,8 @@ const CalendarList = (props) => {
                 });
                 console.log(res.data);
                 SetEventList(res.data);
-                test = res.data;
             })
-            .catch(toast.success('カレンダー情報エラー。', { id: toastid }));
+            .catch(toast.error('カレンダー情報エラー。', { id: toastid }));
     };
 
     const SetEventList = (datas) => {

@@ -5,7 +5,7 @@ import SelectDateCard from './SelectDateCard';
 import PrintOutBtnList from './PrintOutBtnList';
 import BizlogiBtnList from './BizlogiBtnList';
 import SuperMarketDesign from '../Design/SuperMarketDesign';
-import InspectionList from './InspectionList';
+import CheckingList from './CheckingList';
 
 const BorderOption = SuperMarketDesign('BorderOption');
 const BtnOption = SuperMarketDesign('BtnOption');
@@ -20,27 +20,15 @@ const MarketSideList = (props) => {
     // }, [props.dailyData]);
 
     const SideList = () => {
-        if (isData)
-            return (
-                <>
-                    <SelectDateCard
-                        pageType={pageType}
-                        selectDate={selectDate}
-                    />
-                    <BizlogiBtnList
-                        pageType={pageType}
-                        selectDate={selectDate}
-                    />
-                    <PrintOutBtnList
-                        pageType={pageType}
-                        selectDate={selectDate}
-                    />
-                    <InspectionList
-                        pageType={pageType}
-                        selectDate={selectDate}
-                    />
-                </>
-            );
+        // if (isData)
+        return (
+            <>
+                <SelectDateCard pageType={pageType} selectDate={selectDate} />
+                <BizlogiBtnList pageType={pageType} selectDate={selectDate} />
+                <PrintOutBtnList pageType={pageType} selectDate={selectDate} />
+                <CheckingList pageType={pageType} selectDate={selectDate} />
+            </>
+        );
     };
 
     return (

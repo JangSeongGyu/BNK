@@ -19,11 +19,14 @@ const SuperMarketDesign = (data) => {
                 width: '100%',
                 height: 50,
                 border: 1,
-                borderColor: pink[500],
-                color: pink[500],
+                borderColor: 'primary.font',
+                color: 'primary.font',
+                fontWeight: 'bold',
+                fontSize: 20,
+                fontFamily: 'Meiryo',
                 backgroundColor: 'white',
                 '&:hover': {
-                    backgroundColor: pink[500],
+                    backgroundColor: 'primary.font',
                     color: 'white',
                 },
             };
@@ -62,7 +65,6 @@ const SuperMarketDesign = (data) => {
                 fontSize: 20,
                 border: 1,
                 borderColor: grey[400],
-                // boxShadow: 1,
                 backgroundColor: grey[100],
             };
         case 'insTFOption':

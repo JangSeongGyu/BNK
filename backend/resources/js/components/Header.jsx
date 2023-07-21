@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useEffect, useState } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -6,13 +6,23 @@ import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import FunctionList from '../components/FunctionList';
+import { blue } from '@mui/material/colors';
 
 const Header = (props) => {
-    const title = props.title;
+    const pageType = props.pageType;
+    const [title, SetTitle] = useState('');
     const disableList = props.disableList;
+
+    useEffect(() => {
+        if (pageType == 'supermarket') SetTitle('スーパーマーケット');
+        else if (pageType == 'taxi') SetTitle('タクシー');
+
+        console.log(pageType);
+    }, []);
+
     return (
         <Box sx={{ flexGrow: 1 }}>
-            <AppBar position="static">
+            <AppBar sx={{ color: 'primary.dark' }} position="static">
                 <Toolbar variant="dense">
                     <IconButton
                         edge="start"

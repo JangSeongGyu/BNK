@@ -6,6 +6,8 @@ import ReactToPrint from 'react-to-print';
 import LabelLayout from './LabelLayout';
 import YamaLayout from './YamaLayout';
 import JobTicketLayout from './JobTicketLayout';
+import axios from 'axios';
+import QRBtn from './QRBtn';
 
 const BorderOption = SuperMarketDesign('BorderOption');
 const BtnOption = SuperMarketDesign('BtnOption');
@@ -17,18 +19,21 @@ const PrintOutBtnList = (props) => {
     const LabelRef = useRef();
     const YamaRef = useRef();
     const JobRef = useRef();
-    const ButtonClick = (e) => {};
     return (
         <Box mt={1} width={'100%'} sx={BorderOption}>
             <Typography sx={calendarBoxTypo}>帳票出力</Typography>
             <Box mt={1}>
-                {/* <Typography>出荷数量:{dailyData.length}</Typography> */}
                 <Box sx={{ display: 'flex', gap: 1, mb: 1 }}>
-                    <Button onClick={(e) => ButtonClick(e)} sx={BtnOption}>
-                        QRエクスポート
-                    </Button>
+                    <QRBtn selectDate={selectDate} pageType={pageType} />
                 </Box>
-                <Box sx={{ display: 'flex', gap: 1, mt: 1 }}>
+                <Box
+                    sx={{
+                        display: 'flex',
+                        flexDirection: { xs: 'column', lg: 'row' },
+                        gap: 1,
+                        mt: 1,
+                    }}
+                >
                     <ReactToPrint
                         trigger={() => (
                             <Button sx={BtnOption}>JOBチケット</Button>

@@ -19,7 +19,10 @@ const ToasterComp = (props) => {
                 },
 
                 success: {
-                    duration: 5000,
+                    duration: 2000,
+                },
+                error: {
+                    duration: 2000,
                 },
             }}
         />

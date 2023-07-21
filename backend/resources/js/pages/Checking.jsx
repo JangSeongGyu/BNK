@@ -5,6 +5,7 @@ import SuperMarketDesign from '../Design/SuperMarketDesign';
 import ForwardIcon from '@mui/icons-material/Forward';
 import { green, grey, pink, red } from '@mui/material/colors';
 import { useParams } from 'react-router-dom';
+import barcode from '../images/barcode.png';
 import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
 
@@ -14,18 +15,18 @@ const insOutputOption = SuperMarketDesign('insOutputOption');
 const insListResultOption = SuperMarketDesign('insListResultOption');
 const BtnOption = SuperMarketDesign('BtnOption');
 
-const SPChecking2 = (props) => {
+const Checking = (props) => {
     const insListResultTypoOption = SuperMarketDesign(
         'insListResultTypoOption'
     );
     const insTFOption = SuperMarketDesign('insTFOption');
 
+    const pageType = props.pageType;
     const [MsgBox, SetMsgBox] = useState({
         MB0: '未完了',
         MB1: '未完了',
         MB2: '未完了',
     });
-    const pageType = props.pageType;
     const [inputData, SetInputData] = useState({});
     const [taskCnt, SetTaskCnt] = useState(0);
     const [maxWorkCount, SetMaxWorkCount] = useState(0);
@@ -33,12 +34,10 @@ const SPChecking2 = (props) => {
     const boxRef = useRef(new Array());
     const inputRef = useRef(new Array());
     const btnRef = useRef();
-    const { selectDate } = useParams();
-    const [sceneName, SetSceneName] = useState('');
-    const [detailNo, SetDetailNo] = useState('');
-    const [address, SetAddress] = useState('');
+    const { selectDate, type } = useParams();
+    const [searchData, SetSearchData] = useState([]);
+    const maxTask = 3;
 
-    const maxTask = 2;
     const dataClear = () => {
         console.log('clear');
         for (let i = 0; i < maxTask; i++) {
@@ -46,12 +45,10 @@ const SPChecking2 = (props) => {
             inputRef.current[i].disabled = true;
         }
         SetTaskCnt(0);
-        SetInputData({ TF0: '', TF1: '' });
+        SetInputData({ TF0: '', TF1: '', TF2: '' });
         SetMsgBox({ MB0: '未完了', MB1: '未完了', MB2: '未完了' });
         focusing(0);
-        SetSceneName('');
-        SetDetailNo('');
-        SetAddress('');
+        SetSearchData([]);
     };
 
     useEffect(() => {
@@ -73,14 +70,16 @@ const SPChecking2 = (props) => {
         axios
             .get(
                 import.meta.env.VITE_DOMAIN +
-                    `/api/${pageType}/dailydata/` +
-                    selectDate
+                    `/api/${pageType}/dailydata/${selectDate}`
             )
             .then((res) => {
                 toast.success('作業進捗更新できました。', { id: toastid });
                 SetMaxWorkCount(res.data.length);
                 res.data.forEach((data) => {
-                    if (data.二次梱包フラグ == 1) cnt++;
+                    console.log(data);
+                    if (data.一次梱包フラグ == 1 || data.二次梱包フラグ == 1) {
+                        cnt++;
+                    }
                 });
                 console.log(WorkCount);
 
@@ -118,12 +117,11 @@ const SPChecking2 = (props) => {
                     ResultError(str);
                     inputData['TF0'] = '';
                 } else {
-                    if (res.data[0].二次梱包フラグ == 1)
+                    if (res.data[0].一次梱包フラグ == 1)
                         ResultError('梱包した問い合わせ番号です。');
                     else {
-                        SetSceneName(res.data[0].シーン名);
-                        SetDetailNo(res.data[0].注文明細No);
-                        SetAddress(res.data[0].納品先住所);
+                        console.log(res.data[0]);
+                        SetSearchData(res.data[0]);
                         ResultOK();
                     }
                 }
@@ -156,14 +154,17 @@ const SPChecking2 = (props) => {
                 [str2]: 'サーバ接続中…',
             }));
 
-            if (taskCnt == 0) GetNumberData();
-            else if (taskCnt == 1) {
-                if (inputData['TF0'] == inputData['TF1']) {
+            if (taskCnt == 2) {
+                if (!is_number(inputData['TF2'])) {
+                    ResultError('数量を入力してください');
+                    return;
+                }
+                if (searchData.数量 == inputData['TF2']) {
                     const toastid = toast.loading('出荷処理中...');
                     axios
                         .put(
                             import.meta.env.VITE_DOMAIN +
-                                `/api/${pageType}/secondpacking/${selectDate}/${inputData['TF0']}`
+                                `/api/${pageType}/firstpacking/${selectDate}/${inputData['TF0']}`
                         )
                         .then((res) => {
                             toast.success('検品処理完了しました。', {
@@ -173,14 +174,26 @@ const SPChecking2 = (props) => {
                             dataClear();
                         })
                         .catch((e) => {
-                            ResultError('サーバエラー');
+                            ResultError();
                             toast.error('error', { id: toastid });
                         });
+                } else {
+                    ResultError(
+                        `入力数量:${inputData['TF2']} 
+                        数量が違います。`
+                    );
+                    inputData[str] = '';
+                }
+            } else if (taskCnt == 1) {
+                if (inputData['TF0'] == inputData['TF1']) {
+                    ResultOK();
                 } else {
                     ResultError(`入力番号:${inputData['TF1']}
                     問い合わせ番号が違います。`);
                     inputData['TF1'] = '';
                 }
+            } else if (taskCnt == 0) {
+                GetNumberData();
             }
         }
     };
@@ -210,7 +223,7 @@ const SPChecking2 = (props) => {
 
     return (
         <>
-            <Header title="スーパーマーケット" disableList="false" />
+            <Header pageType={pageType} disableList="false" />
             <Box height={'90%'}>
                 <Box
                     width={'100%'}
@@ -223,7 +236,7 @@ const SPChecking2 = (props) => {
                         onClick={() => SetTaskCnt(taskCnt + 1)}
                         fontSize={24}
                     >
-                        2次検品
+                        検品
                     </Typography>
                     <Box
                         display={'flex'}
@@ -235,7 +248,7 @@ const SPChecking2 = (props) => {
                             出荷日 : {selectDate}
                         </Typography>
 
-                        <Box ref={btnRef} width={'30%'} mt={-1}>
+                        <Box ref={btnRef} width={'30%'}>
                             <Button onClick={() => dataClear()} sx={BtnOption}>
                                 クリア
                             </Button>
@@ -248,15 +261,15 @@ const SPChecking2 = (props) => {
                 <Box height={'10%'} gap={2} mx={4} my={2} display={'flex'}>
                     <Box minWidth={200} width={'15%'}>
                         <Typography>注文明細No</Typography>
-                        <Box sx={insOutputOption}>{detailNo}</Box>
+                        <Box sx={insOutputOption}>{searchData.注文No}</Box>
                     </Box>
                     <Box minWidth={250} width={'25%'}>
                         <Typography>宛名</Typography>
-                        <Box sx={insOutputOption}>{sceneName}</Box>
+                        <Box sx={insOutputOption}>{searchData.シーン名}</Box>
                     </Box>
                     <Box minWidth={500} width={'45%'}>
                         <Typography>納品先住所</Typography>
-                        <Box sx={insOutputOption}>{address}</Box>
+                        <Box sx={insOutputOption}>{searchData.納品先住所}</Box>
                     </Box>
                     <Box minWidth={150} width={'10%'}>
                         <Typography>作業進捗</Typography>
@@ -359,10 +372,42 @@ const SPChecking2 = (props) => {
                                 </Typography>
                             </Box>
                         </Box>
+                        <ForwardIcon sx={{ fontSize: 100, height: '100%' }} />
+                        {/* 数量入力 */}
+                        <Box
+                            sx={insListOption}
+                            border={2}
+                            borderColor={taskCnt == 2 ? red[500] : grey[500]}
+                        >
+                            <Box my={2} fontSize={20} textAlign={'center'}>
+                                数量入力
+                            </Box>
+
+                            <TextField
+                                label="数量入力"
+                                onChange={TextFieldHandler}
+                                inputProps={{ onKeyPress: handleKeyPress }}
+                                inputRef={(ref) => inputRef.current.push(ref)}
+                                value={inputData['TF2']}
+                                id="TF2"
+                                sx={insTFOption}
+                            />
+                            <Box
+                                ref={(ref) => boxRef.current.push(ref)}
+                                sx={insListResultOption}
+                            >
+                                <Typography
+                                    whiteSpace={'pre-line'}
+                                    sx={insListResultTypoOption}
+                                >
+                                    {MsgBox['MB2']}
+                                </Typography>
+                            </Box>
+                        </Box>
                     </Box>
                 </Box>
             </Box>
         </>
     );
 };
-export default SPChecking2;
+export default Checking;

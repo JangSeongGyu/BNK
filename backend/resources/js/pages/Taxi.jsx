@@ -7,10 +7,9 @@ import MarketSideList from '../components/MarketSideList';
 import MarketShipmentDialog from '../components/MarketShipmentDialog';
 import { Dialog, Divider, Typography } from '@mui/material';
 import { grey, pink, red } from '@mui/material/colors';
-
 import { toast } from 'react-hot-toast';
 
-const SuperMarket = () => {
+const Taxi = () => {
     const [selectDate, SetSelectDate] = useState('');
     const [open, SetOpen] = useState(false);
     const [logDatas, SetLogDatas] = useState('');
@@ -20,10 +19,10 @@ const SuperMarket = () => {
 
     useEffect(() => {
         axios
-            .get(import.meta.env.VITE_DOMAIN + '/api/supermarket/backlogdata/')
+            .get(import.meta.env.VITE_DOMAIN + '/api/taxi/backlogdata/')
             .then((res) => {
-                SetLogDatas(res.data);
-                // SetLogDatas('');
+                // SetLogDatas(res.data);
+                SetLogDatas('');
             })
             .catch((e) => {});
     }, []);
@@ -45,7 +44,6 @@ const SuperMarket = () => {
         else SetOpen(true);
     };
 
-    // Get Calender -> selectDate & dailyData
     const CallSelectDate = (data) => {
         SetSelectDate(data.selectDate);
         SetIsData(data.isData);
@@ -53,40 +51,42 @@ const SuperMarket = () => {
 
     return (
         <>
-            <Header pageType={'supermarket'} />
-
+            <Header pageType={'taxi'} />
+            {logDatas.length > 0 && (
+                <Box
+                    sx={{
+                        left: 200,
+                        top: 110,
+                        position: 'absolute',
+                        display: 'inline',
+                        fontSize: 28,
+                        height: 50,
+                        p: 0.5,
+                        borderRadius: 3,
+                        zIndex: 10,
+                        color: 'white',
+                        backgroundColor: pink[500],
+                        textAlign: 'center',
+                    }}
+                >
+                    未処理件数:
+                    {logDatas.length}
+                </Box>
+            )}
             <Box height={'80%'} sx={{ display: 'flex' }}>
                 <Box height={'100%'} sx={{ width: '60%' }}>
-                    {logDatas.length > 0 && (
-                        <Box
-                            sx={{
-                                left: 180,
-                                top: 115,
-                                position: 'absolute',
-                                display: 'inline',
-                                fontSize: 20,
-                                p: 1,
-                                borderRadius: 3,
-                                zIndex: 10,
-                                color: 'white',
-                                backgroundColor: pink[500],
-                                textAlign: 'center',
-                            }}
-                        >
-                            未処理 : {logDatas.length}
-                        </Box>
-                    )}
                     <CalendarList
-                        pageType={'supermarket'}
+                        pageType={'taxi'}
                         Today={thisMonth}
                         CallSelectDate={CallSelectDate}
                         handleOpen={handleOpen}
                     />
                 </Box>
+
                 <Box mt={1} sx={{ width: '40%' }}>
                     {isData && (
                         <MarketSideList
-                            pageType={'supermarket'}
+                            pageType={'taxi'}
                             selectDate={selectDate}
                             isData={isData}
                             logDatas={logDatas}
@@ -96,7 +96,7 @@ const SuperMarket = () => {
             </Box>
             <Dialog onClose={handleClose} open={open}>
                 <MarketShipmentDialog
-                    pageType={'supermarket'}
+                    pageType={'taxi'}
                     handleClose={handleClose}
                     logDatas={logDatas.length}
                     selectDate={selectDate}
@@ -105,5 +105,4 @@ const SuperMarket = () => {
         </>
     );
 };
-
-export default SuperMarket;
+export default Taxi;

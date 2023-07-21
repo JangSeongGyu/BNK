@@ -75,7 +75,10 @@ const BizlogiBtnList = (props) => {
             <Box
                 mt={1}
                 gap={1}
-                display={'flex'}
+                sx={{
+                    display: 'flex',
+                    flexDirection: { xs: 'column', lg: 'row' },
+                }}
                 justifyContent={'space-between'}
             >
                 <Button onClick={() => BtnClick()} sx={BtnOption}>

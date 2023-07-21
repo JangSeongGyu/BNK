@@ -1,11 +1,13 @@
+import { pink } from '@mui/material/colors';
 import { createTheme } from '@mui/material/styles';
 
-const Theme = createTheme({
+const SPTheme = createTheme({
     palette: {
         primary: {
             light: '#fafafa',
-            main: '#e91e63',
-            dark: '#f06292',
+            main: pink[500],
+            dark: 'white',
+            font: pink[500],
             contrastText: '#fff',
             borderColor: '#bdbdbd',
         },
@@ -23,4 +25,4 @@ const Theme = createTheme({
     },
 });
 
-export default Theme;
+export default SPTheme;

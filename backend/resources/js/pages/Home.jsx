@@ -2,10 +2,11 @@ import React from 'react';
 import Button from '@mui/material/Button';
 import Header from '../components/Header';
 
-const Home = () => {
+const Home = (props) => {
+    let pageType = 'home';
     return (
         <>
-            <Header title="Home" />
+            <Header pageType={pageType} />
             <Button
                 sx={{ backgroundColor: 'primary.main', m: 2 }}
                 variant="contained"

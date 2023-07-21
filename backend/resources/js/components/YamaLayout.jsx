@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef, forwardRef } from 'react';
 import { Grid, Typography, Box } from '@mui/material';
 import { blue, grey, red } from '@mui/material/colors';
+import axios from 'axios';
 
 const MainWidth = 1058;
 const MainHeight = 1497;
@@ -49,11 +50,39 @@ const SceneCardOption = () => {
         px: 2,
         borderRight: 1,
         borderColor: grey[400],
-        textAlign: 'center',
     };
 };
 
 const YamaLayout = forwardRef((props, ref) => {
+    const pageType = props.pageType;
+    const selectDate = props.selectDate;
+    const [groupData, SetGroupData] = useState([]);
+
+    useEffect(() => {
+        axios
+            .get(
+                import.meta.env.VITE_DOMAIN +
+                    `/api/${pageType}/totalpick/` +
+                    selectDate
+            )
+            .then((res) => {
+                GroupingData(res.data);
+            });
+    }, []);
+
+    const GroupingData = (datas) => {
+        let groupData = {};
+        datas.forEach((data) => {
+            let key = data.納品先会社名;
+            if (!groupData[key]) {
+                groupData[key] = [];
+            }
+            groupData[key].push(data);
+        });
+
+        console.log('group', groupData);
+        SetGroupData(groupData);
+    };
     const CardHeader = (selectDate) => {
         return (
             <>
@@ -113,7 +142,7 @@ const YamaLayout = forwardRef((props, ref) => {
     };
 
     // 送り先　TOP　LAYOUT
-    const CardListHeader = (number) => {
+    const CardListHeader = () => {
         return (
             <Grid alignItems={'center'} height={40} container width={'100%'}>
                 <Grid
@@ -123,7 +152,7 @@ const YamaLayout = forwardRef((props, ref) => {
                     item
                     xs={1}
                 >
-                    {number}
+                    {}
                 </Grid>
                 <Grid sx={CardListHeaderOption} item xs={8}>
                     送り先名
@@ -149,7 +178,16 @@ const YamaLayout = forwardRef((props, ref) => {
     };
 
     // 送り先　BOTTOM　Layout
-    const Card = (number) => {
+    const Card = (datas) => {
+        let taskCount = 0;
+        let count = 0;
+
+        datas.forEach((data) => {
+            count += parseInt(data.数量);
+        });
+
+        taskCount = datas.length;
+
         return (
             <Box
                 borderRight={1}
@@ -166,7 +204,7 @@ const YamaLayout = forwardRef((props, ref) => {
                     container
                     width={'100%'}
                 >
-                    {CardListHeader(number)}
+                    {CardListHeader()}
                     <Grid
                         sx={CardListOption}
                         textAlign={'center'}
@@ -175,7 +213,7 @@ const YamaLayout = forwardRef((props, ref) => {
                     ></Grid>
 
                     <Grid sx={CardListOption} item xs={8}>
-                        株式会社フォーシーズ ピザーラ 松山枝松店
+                        {datas[0].納品先会社名}
                     </Grid>
                     <Grid
                         sx={CardListOption}
@@ -183,7 +221,7 @@ const YamaLayout = forwardRef((props, ref) => {
                         item
                         xs={1.5}
                     >
-                        1件
+                        {taskCount}件
                     </Grid>
                     <Grid
                         sx={CardListOption}
@@ -191,7 +229,7 @@ const YamaLayout = forwardRef((props, ref) => {
                         item
                         xs={1.5}
                     >
-                        20枚
+                        {count}枚
                     </Grid>
                 </Grid>
             </Box>
@@ -199,7 +237,7 @@ const YamaLayout = forwardRef((props, ref) => {
     };
 
     // SCENE LAYOUT
-    const SceneCard = () => {
+    const SceneCard = (data) => {
         return (
             <Grid
                 borderBottom={1}
@@ -215,25 +253,34 @@ const YamaLayout = forwardRef((props, ref) => {
                     →
                 </Grid>
                 <Grid sx={SceneCardOption} textAlign={'center'} item xs={2}>
-                    ショップコード
+                    {data.ショップコード}
                 </Grid>
                 <Grid sx={SceneCardOption} item xs={7}>
-                    シーン名
+                    {data.シーン名}
                 </Grid>
-                <Grid
-                    sx={SceneCardOption}
-                    textAlign={'center'}
-                    item
-                    xs={2}
-                ></Grid>
+                <Grid fontSize={20} textAlign={'center'} item xs={2}>
+                    {data.数量}枚
+                </Grid>
             </Grid>
         );
     };
 
     // 総計Layout
-    const LastCard = (number) => {
+    const LastCard = (datas) => {
+        let taskCount = 0;
+        let count = 0;
+        let keys = Object.keys(datas);
+        console.log('last', keys);
+        taskCount = keys.length;
+
+        keys.forEach((key) => {
+            for (let i = 0; i < datas[key].length; i++) {
+                count += parseInt(datas[key][i].数量);
+            }
+        });
+
         return (
-            <Box p={1} width={'100%'} backgroundColor={blue[100]} height={110}>
+            <Box width={'100%'} backgroundColor={blue[100]} height={110}>
                 <Grid container>
                     <Grid
                         sx={CardListHeaderOption}
@@ -244,24 +291,24 @@ const YamaLayout = forwardRef((props, ref) => {
                         佐川件数 総計
                     </Grid>
 
-                    <Grid item xs={7}></Grid>
+                    <Grid item xs={5}></Grid>
 
                     <Grid
                         sx={CardListHeaderOption}
                         textAlign={'center'}
                         item
-                        xs={1.5}
+                        xs={2.5}
                     >
-                        件数総計
+                        送り先件数総計
                     </Grid>
 
                     <Grid
                         sx={CardListHeaderOption}
                         textAlign={'center'}
                         item
-                        xs={1.5}
+                        xs={2.5}
                     >
-                        枚数総計
+                        送り先枚数総計
                     </Grid>
                 </Grid>
 
@@ -274,19 +321,19 @@ const YamaLayout = forwardRef((props, ref) => {
                         item
                         xs={2}
                     >
-                        {number}件
+                        {taskCount}件
                     </Grid>
 
-                    <Grid item xs={7}></Grid>
+                    <Grid item xs={5}></Grid>
 
                     <Grid
                         sx={CardListOption}
                         textAlign={'center'}
                         backgroundColor={'white'}
                         item
-                        xs={1.5}
+                        xs={2.5}
                     >
-                        3件
+                        {taskCount}件
                     </Grid>
 
                     <Grid
@@ -294,9 +341,9 @@ const YamaLayout = forwardRef((props, ref) => {
                         textAlign={'center'}
                         backgroundColor={'white'}
                         item
-                        xs={1.5}
+                        xs={2.5}
                     >
-                        23枚
+                        {count}枚
                     </Grid>
                 </Grid>
             </Box>
@@ -305,20 +352,18 @@ const YamaLayout = forwardRef((props, ref) => {
 
     const Cards = () => {
         let html = [];
-        let selectDate = '2023-07-20';
-        let heightCnt = 340;
-        let list = [
-            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2,
-            2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-        ];
-        let length = list.length;
 
+        let heightCnt = 340;
+        let insertHeight = 0;
         html.push(CardHeader(selectDate));
-        html.push(LastCard(length));
-        for (let i = 0; i < length; i++) {
-            let plus = 86 + list[i] * 40;
-            console.log(MainHeight, heightCnt, plus);
-            if (heightCnt + plus > MainHeight - 100) {
+        html.push(LastCard(groupData));
+        let keys = Object.keys(groupData);
+
+        keys.forEach((key) => {
+            let length = groupData[key].length;
+
+            insertHeight = 86 + length * 40;
+            if (heightCnt + insertHeight > MainHeight - 100) {
                 html.push(
                     <Box
                         borderBottom={1}
@@ -330,11 +375,14 @@ const YamaLayout = forwardRef((props, ref) => {
                 heightCnt = 0;
             }
 
-            html.push(Card(i));
-            for (let j = 1; j <= list[i]; j++) html.push(SceneCard());
+            html.push(Card(groupData[key]));
 
-            heightCnt += plus;
-        }
+            for (let i = 0; i < length; i++)
+                html.push(SceneCard(groupData[key][i]));
+
+            heightCnt += insertHeight;
+            insertHeight = 0;
+        });
 
         return html;
     };

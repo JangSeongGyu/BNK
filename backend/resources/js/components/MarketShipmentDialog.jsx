@@ -18,6 +18,7 @@ const MarketOutSideList = (props) => {
     const ShipmentClick = () => {
         const toastid = toast.loading('サーバ接続中...');
         axios
+
             .put(
                 import.meta.env.VITE_DOMAIN +
                     `/api/${pageType}/shipment/` +
@@ -68,7 +69,18 @@ const MarketOutSideList = (props) => {
                     >
                         出荷処理
                     </Button>
-                    <Button sx={BtnOption} onClick={() => props.handleClose()}>
+                    <Button
+                        sx={{
+                            width: '100%',
+                            color: red[600],
+                            border: 1,
+                            '&:hover': {
+                                backgroundColor: red[600],
+                                color: 'white',
+                            },
+                        }}
+                        onClick={() => props.handleClose()}
+                    >
                         戻る
                     </Button>
                 </Box>

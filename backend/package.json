@@ -27,6 +27,7 @@
         "@mui/icons-material": "^5.11.11",
         "@mui/material": "^5.11.13",
         "dotenv": "^16.3.1",
+        "exceljs": "^4.3.0",
         "papaparse": "^5.4.1",
         "react-dropzone": "^14.2.3",
         "react-hot-toast": "^2.4.1",

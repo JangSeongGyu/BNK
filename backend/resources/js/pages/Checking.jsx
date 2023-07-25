@@ -115,10 +115,10 @@ const Checking = (props) => {
                         データがありません。`;
 
                     ResultError(str);
-                    inputData['TF0'] = '';
                 } else {
                     if (res.data[0].一次梱包フラグ == 1)
-                        ResultError('梱包した問い合わせ番号です。');
+                        ResultError(`入力番号:${inputData['TF0']}
+                        梱包した問い合わせ番号です。`);
                     else {
                         console.log(res.data[0]);
                         SetSearchData(res.data[0]);
@@ -182,7 +182,6 @@ const Checking = (props) => {
                         `入力数量:${inputData['TF2']} 
                         数量が違います。`
                     );
-                    inputData[str] = '';
                 }
             } else if (taskCnt == 1) {
                 if (inputData['TF0'] == inputData['TF1']) {
@@ -190,7 +189,6 @@ const Checking = (props) => {
                 } else {
                     ResultError(`入力番号:${inputData['TF1']}
                     問い合わせ番号が違います。`);
-                    inputData['TF1'] = '';
                 }
             } else if (taskCnt == 0) {
                 GetNumberData();
@@ -209,8 +207,11 @@ const Checking = (props) => {
 
     const ResultError = (text) => {
         var str = 'MB' + taskCnt;
+        var TF = 'TF' + taskCnt;
+
         SetMsgBox((prevState) => ({ ...prevState, [str]: [text] }));
         boxRef.current[taskCnt].style.backgroundColor = red[200];
+        inputData[TF] = '';
     };
 
     const TextFieldHandler = (e) => {
@@ -232,10 +233,7 @@ const Checking = (props) => {
                     display={'flex'}
                     alignItems={'center'}
                 >
-                    <Typography
-                        onClick={() => SetTaskCnt(taskCnt + 1)}
-                        fontSize={24}
-                    >
+                    <Typography fontSize={24} fontWeight={'bold'}>
                         検品
                     </Typography>
                     <Box
@@ -244,11 +242,11 @@ const Checking = (props) => {
                         alignItems={'center'}
                         justifyContent={'space-between'}
                     >
-                        <Typography fontSize={24} ml={4}>
+                        <Typography fontSize={24} ml={4} fontWeight={'bold'}>
                             出荷日 : {selectDate}
                         </Typography>
 
-                        <Box ref={btnRef} width={'30%'}>
+                        <Box ref={btnRef} width={'20%'}>
                             <Button onClick={() => dataClear()} sx={BtnOption}>
                                 クリア
                             </Button>
@@ -314,9 +312,14 @@ const Checking = (props) => {
                             border={2}
                             borderColor={taskCnt == 0 ? red[500] : grey[500]}
                         >
-                            <Box my={2} fontSize={20} textAlign={'center'}>
+                            <Typography
+                                my={2}
+                                fontSize={20}
+                                textAlign={'center'}
+                                fontWeight={'bold'}
+                            >
                                 バーコード
-                            </Box>
+                            </Typography>
                             <TextField
                                 value={inputData['TF0']}
                                 onChange={TextFieldHandler}
@@ -347,9 +350,14 @@ const Checking = (props) => {
                             border={2}
                             borderColor={taskCnt == 1 ? red[500] : grey[500]}
                         >
-                            <Box my={2} fontSize={20} textAlign={'center'}>
+                            <Typography
+                                my={2}
+                                fontSize={20}
+                                textAlign={'center'}
+                                fontWeight={'bold'}
+                            >
                                 バーコード２
-                            </Box>
+                            </Typography>
                             <TextField
                                 value={inputData['TF1']}
                                 onChange={TextFieldHandler}
@@ -379,9 +387,14 @@ const Checking = (props) => {
                             border={2}
                             borderColor={taskCnt == 2 ? red[500] : grey[500]}
                         >
-                            <Box my={2} fontSize={20} textAlign={'center'}>
+                            <Typography
+                                my={2}
+                                fontSize={20}
+                                textAlign={'center'}
+                                fontWeight={'bold'}
+                            >
                                 数量入力
-                            </Box>
+                            </Typography>
 
                             <TextField
                                 label="数量入力"

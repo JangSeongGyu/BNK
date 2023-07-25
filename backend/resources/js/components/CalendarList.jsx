@@ -13,7 +13,6 @@ import { toast } from 'react-hot-toast';
 
 const CalendarList = (props) => {
     const pageType = props.pageType;
-
     const [selectDate, SetSelectDate] = useState('');
     const [eventDatas, SetEventDatas] = useState([]);
     const [cssStr, SetCssStr] = useState('');
@@ -44,8 +43,36 @@ const CalendarList = (props) => {
     `;
 
     useEffect(() => {
-        if (pageType != null) updateCalendar();
+        if (pageType != null) {
+            // parent Ref
+            console.log(props.UpdateRef);
+            props.UpdateRef.current = {
+                event: updateCalendar,
+                side: SetSideList,
+            };
+            console.log(props.UpdateRef);
+            //first Get Data
+            updateCalendar();
+        }
     }, []);
+
+    // Get Select Date Data
+    useEffect(() => {
+        if (selectDate != '') {
+            if (CheckDate(selectDate)) {
+                console.log('isData');
+                props.CallSelectDate({
+                    selectDate: selectDate,
+                    isData: true,
+                });
+            } else {
+                props.CallSelectDate({
+                    selectDate: selectDate,
+                    isData: false,
+                });
+            }
+        }
+    }, [selectDate]);
 
     const updateCalendar = () => {
         const toastid = toast.loading('カレンダー情報更新中...');
@@ -67,7 +94,19 @@ const CalendarList = (props) => {
                 console.log(res.data);
                 SetEventList(res.data);
             })
-            .catch(toast.error('カレンダー情報エラー。', { id: toastid }));
+            .catch((e) => {
+                if (e.response == null) {
+                    toast.error('カレンダー更新失敗。', {
+                        id: toastid,
+                    });
+                } else if (e.response.status == '410') {
+                    toast.success('カレンダー情報更新完了。', {
+                        id: toastid,
+                    });
+                } else {
+                    toast.error(e.response.message, { id: toastid });
+                }
+            });
     };
 
     const SetEventList = (datas) => {
@@ -101,23 +140,14 @@ const CalendarList = (props) => {
         return res;
     };
 
-    // Get Select Date Data
-    useEffect(() => {
-        if (selectDate != '') {
-            if (CheckDate(selectDate)) {
-                console.log('isData');
-                props.CallSelectDate({
-                    selectDate: selectDate,
-                    isData: true,
-                });
-            } else {
-                props.CallSelectDate({
-                    selectDate: selectDate,
-                    isData: false,
-                });
-            }
-        }
-    }, [selectDate]);
+    const SetSideList = (date) => {
+        console.log('selectData', date);
+        SetSelectDate(date);
+        props.CallSelectDate({
+            selectDate: date,
+            isData: true,
+        });
+    };
 
     const handleDateClick = (dateClickInfo) => {
         SetSelectDate(dateClickInfo.dateStr);

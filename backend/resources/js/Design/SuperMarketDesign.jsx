@@ -21,9 +21,10 @@ const SuperMarketDesign = (data) => {
                 border: 1,
                 borderColor: 'primary.font',
                 color: 'primary.font',
+                fontWeight: 500,
+                fontSize: 18,
                 fontWeight: 'bold',
-                fontSize: 20,
-                fontFamily: 'Meiryo',
+                fontFamily: '游ゴシック',
                 backgroundColor: 'white',
                 '&:hover': {
                     backgroundColor: 'primary.font',
@@ -56,6 +57,8 @@ const SuperMarketDesign = (data) => {
                 fontSize: 20,
                 alignSelf: 'center',
                 mx: 'auto',
+
+                fontWeight: 'bold',
             };
         case 'insOutputOption':
             return {

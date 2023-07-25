@@ -16,13 +16,15 @@ const ToasterComp = (props) => {
                     color: 'black',
                     width: 400,
                     height: 50,
+                    fontFamily: '游ゴシック',
+                    fontWeight: 'bold',
                 },
 
                 success: {
                     duration: 2000,
                 },
                 error: {
-                    duration: 2000,
+                    duration: 3000,
                 },
             }}
         />

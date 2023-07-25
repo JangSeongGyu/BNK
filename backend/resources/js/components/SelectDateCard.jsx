@@ -14,18 +14,17 @@ const SelectDateCard = (props) => {
             <Typography sx={calendarBoxTypo}>
                 出荷日 <br />
             </Typography>
-            <Box
+            {/* <Box
                 sx={{
                     display: 'flex',
-                    mt: 1,
                     alignItems: 'center',
                 }}
-            >
-                <Typography sx={{ color: '', fontSize: 40 }}>
-                    {selectDate}
-                </Typography>
-                {/* <Button sx={{ border: 1, height: 40 }}>明細</Button> */}
-            </Box>
+            > */}
+            <Typography sx={{ fontWeight: 'bold', fontSize: 32 }}>
+                {selectDate}
+            </Typography>
+            {/* <Button sx={{ border: 1, height: 40 }}>明細</Button> */}
+            {/* </Box> */}
         </Box>
     );
 };

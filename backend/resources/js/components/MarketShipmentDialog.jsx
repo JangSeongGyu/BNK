@@ -4,21 +4,36 @@ import { Box, Button, Dialog, Typography } from '@mui/material';
 import SuperMarketDesign from '../Design/SuperMarketDesign';
 import axios from 'axios';
 import { green, red } from '@mui/material/colors';
-
 import toast, { Toaster } from 'react-hot-toast';
+
+// const http = axios.create({
+//     baseURL: 'http://192.168.150.196:8080/',
+//     withCredentials: true,
+// });
+
+// axios.get('/sanctum/csrf-cookie').then((res) => {
+//     console.log(res);
+// });
 
 const MarketOutSideList = (props) => {
     const selectDate = props.selectDate;
     const logDatas = props.logDatas;
     const pageType = props.pageType;
-    const BorderOption = SuperMarketDesign('BorderOption');
+    const normalCnt = props.normalCnt;
+    const pouchCnt = props.pouchCnt;
 
-    const BtnOption = SuperMarketDesign('BtnOption');
+    const [boxCount, SetBoxCount] = useState(0);
+    const [selectOption, SetSelectOption] = useState('');
 
     const ShipmentClick = () => {
+        if (pageType == 'supermarket') SPAxios();
+        else if (pageType == 'taxi') TXAxios();
+        else if (pageType == 'eagles') TXAxios();
+    };
+
+    const SPAxios = () => {
         const toastid = toast.loading('サーバ接続中...');
         axios
-
             .put(
                 import.meta.env.VITE_DOMAIN +
                     `/api/${pageType}/shipment/` +
@@ -26,51 +41,148 @@ const MarketOutSideList = (props) => {
             )
             .then((res) => {
                 toast.success('出荷処理しました。', { id: toastid });
-                props.handleClose();
+                props.handleClose('ok');
             })
             .catch((e) => {
                 toast.error('出荷処理に失敗しました。', { id: toastid });
             });
     };
 
-    return (
-        <Box width={500} height={150} p={2}>
-            <Box
-                height={'100%'}
-                display={'flex'}
-                flexDirection={'column'}
-                justifyContent={'space-between'}
-            >
-                <Typography sx={{ fontSize: 20 }}>
-                    {' '}
-                    出荷日：{selectDate}
-                    <br />
-                    未処理案件：{logDatas}件
-                </Typography>
+    // const TXAxios = () => {
+    //     const toastid = toast.loading('サーバ接続中...');
+    //     axios
+    //         .put(
+    //             import.meta.env.VITE_DOMAIN +
+    //                 `/api/${pageType}/shipment/` +
+    //                 selectDate
+    //         )
+    //         .then((res) => {
+    //             toast.success('出荷処理しました。', { id: toastid });
+    //             props.handleClose();
+    //         })
+    //         .catch((e) => {
+    //             toast.error('出荷処理に失敗しました。', { id: toastid });
+    //         });
+    // };
+
+    const ConfirmBox = () => {
+        return (
+            <Box width={500} height={200} p={2}>
                 <Box
+                    height={'100%'}
                     display={'flex'}
+                    flexDirection={'column'}
                     justifyContent={'space-between'}
-                    gap={1}
-                    mt={1}
                 >
-                    <Button
-                        onClick={() => ShipmentClick()}
-                        // border={1}
-                        sx={{
-                            width: '100%',
-                            border: 1,
-                            color: green[700],
-                            backgroundColor: 'white',
-                            '&:hover': {
-                                backgroundColor: green[700],
-                                color: 'white',
-                            },
-                        }}
+                    <Typography sx={{ fontWeight: 'bold', fontSize: 20 }}>
+                        {' '}
+                        出荷日：{selectDate}
+                        <br />
+                        未処理案件：{logDatas}件
+                        {/* <br />
+                        情報: {pageType}{' '}
+                        {selectOption != '' && <>,{selectOption}</>} */}
+                    </Typography>
+                    <Box
+                        display={'flex'}
+                        justifyContent={'space-between'}
+                        gap={1}
+                        mt={1}
                     >
-                        出荷処理
-                    </Button>
+                        <Button
+                            onClick={() => ShipmentClick()}
+                            // border={1}
+                            sx={{
+                                width: '100%',
+                                border: 1,
+                                color: green[700],
+                                backgroundColor: 'white',
+                                fontWeight: 'bold',
+                                '&:hover': {
+                                    backgroundColor: green[700],
+                                    color: 'white',
+                                },
+                            }}
+                        >
+                            出荷処理
+                        </Button>
+                        <Button
+                            sx={{
+                                width: '100%',
+                                color: red[600],
+                                border: 1,
+                                fontWeight: 'bold',
+                                '&:hover': {
+                                    backgroundColor: red[600],
+                                    color: 'white',
+                                },
+                            }}
+                            onClick={() => props.handleClose('exit')}
+                        >
+                            戻る
+                        </Button>
+                    </Box>
+                </Box>
+            </Box>
+        );
+    };
+    const CheckingBox = () => {
+        return (
+            <Box width={500} height={170} p={2}>
+                <Box
+                    height={'100%'}
+                    display={'flex'}
+                    flexDirection={'column'}
+                    justifyContent={'space-between'}
+                >
+                    <Typography
+                        textAlign={'center'}
+                        sx={{ fontWeight: 'bold', fontSize: 20 }}
+                    >
+                        出荷するデータを選んでください。
+                    </Typography>
+                    <Box
+                        display={'flex'}
+                        justifyContent={'space-between'}
+                        gap={1}
+                        mt={1}
+                    >
+                        <Button
+                            onClick={() => ClickPouch()}
+                            disabled={pouchCnt == 0 ? true : false}
+                            sx={{
+                                width: '100%',
+                                border: 1,
+                                color: green[700],
+                                backgroundColor: 'white',
+                                '&:hover': {
+                                    backgroundColor: green[700],
+                                    color: 'white',
+                                },
+                            }}
+                        >
+                            パウチ
+                        </Button>
+                        <Button
+                            disabled={normalCnt == 0 ? true : false}
+                            sx={{
+                                width: '100%',
+                                border: 1,
+                                color: green[700],
+                                backgroundColor: 'white',
+                                '&:hover': {
+                                    backgroundColor: green[700],
+                                    color: 'white',
+                                },
+                            }}
+                            onClick={ClickNotPouch}
+                        >
+                            通常
+                        </Button>
+                    </Box>
                     <Button
                         sx={{
+                            mt: 1,
                             width: '100%',
                             color: red[600],
                             border: 1,
@@ -85,7 +197,33 @@ const MarketOutSideList = (props) => {
                     </Button>
                 </Box>
             </Box>
-        </Box>
-    );
+        );
+    };
+
+    const ClickPouch = () => {
+        console.log('ClickPouch');
+        SetSelectOption('パウチ');
+        SetBoxCount(boxCount + 1);
+    };
+
+    const ClickNotPouch = () => {
+        console.log('ClickNotPouch');
+        cd;
+        SetSelectOption('通常');
+        SetBoxCount(boxCount + 1);
+    };
+
+    useEffect(() => {
+        if (pageType == 'supermarket') {
+            SetBoxCount(boxCount + 1);
+        }
+    }, []);
+
+    const TypeBox = () => {
+        if (pageType == 'supermarket') return <ConfirmBox />;
+        return <>{boxCount == 0 ? <CheckingBox /> : <ConfirmBox />}</>;
+    };
+
+    return <TypeBox />;
 };
 export default MarketOutSideList;

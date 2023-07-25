@@ -1,32 +1,64 @@
 import React, { useEffect, useState, useRef } from 'react';
-import Box from '@mui/material/Box';
 import Header from '../components/Header';
 import axios from 'axios';
 import CalendarList from '../components/CalendarList';
 import MarketSideList from '../components/MarketSideList';
 import MarketShipmentDialog from '../components/MarketShipmentDialog';
-import { Dialog, Divider, Typography } from '@mui/material';
+import { Dialog, Divider, Typography, Button, Box } from '@mui/material';
 import { grey, pink, red } from '@mui/material/colors';
-
 import { toast } from 'react-hot-toast';
+import SuperMarketDesign from '../Design/SuperMarketDesign';
 
-const SuperMarket = () => {
+const BtnOption = SuperMarketDesign('BtnOption');
+
+const SuperMarket = (props) => {
+    const pageType = props.pageType;
     const [selectDate, SetSelectDate] = useState('');
     const [open, SetOpen] = useState(false);
     const [logDatas, SetLogDatas] = useState('');
+    const [SFDatas, SetSFDatas] = useState('');
     const [dailyData, SetDailyData] = useState([]);
     const [clickType, SetClickType] = useState('');
     const [isData, SetIsData] = useState(false);
+    const UpdateRef = useRef(null);
 
     useEffect(() => {
+        CallSFData();
+        callBacklog();
+    }, []);
+
+    const CallSFData = () => {
+        const toastId = toast.loading('SFデータ取得中...');
         axios
-            .get(import.meta.env.VITE_DOMAIN + '/api/supermarket/backlogdata/')
+            .get(import.meta.env.VITE_DOMAIN + `/api/${pageType}/order/`)
+            .then((res) => {
+                toast.success('SFデータ取得完了。', { id: toastId });
+                SetSFDatas(res.data);
+                console.log(res.data);
+            })
+            .catch((e) => {
+                toast.error(e.response.data.message, { id: toastId });
+            });
+    };
+
+    const ClickSFData = () => {
+        // axios
+        //     .post(import.meta.env.VITE_DOMAIN + '/api/supermarket/order/')
+        //     .then((res) => {
+        //         console.log(res);
+        //     })
+        //     .catch((e) => {});
+    };
+
+    const callBacklog = () => {
+        axios
+            .get(import.meta.env.VITE_DOMAIN + `/api/${pageType}/backlogdata/`)
             .then((res) => {
                 SetLogDatas(res.data);
-                // SetLogDatas('');
+                SetSelectDate(data.selectDate);
             })
             .catch((e) => {});
-    }, []);
+    };
 
     const thisMonth = () => {
         const today = new Date();
@@ -36,8 +68,14 @@ const SuperMarket = () => {
         )}`;
     };
 
-    const handleClose = () => {
-        console.log('close');
+    const handleClose = (res) => {
+        if (res == 'ok') {
+            callBacklog();
+            UpdateRef.current.event();
+            UpdateRef.current.side(selectDate);
+        }
+        // else if (res == 'error' || res == 'exit') {}
+        // console.log('close');
         SetOpen(false);
     };
     const handleOpen = () => {
@@ -53,40 +91,80 @@ const SuperMarket = () => {
 
     return (
         <>
-            <Header pageType={'supermarket'} />
+            <Header pageType={pageType} />
 
             <Box height={'80%'} sx={{ display: 'flex' }}>
-                <Box height={'100%'} sx={{ width: '60%' }}>
-                    {logDatas.length > 0 && (
-                        <Box
+                <Box sx={{ width: '60%', height: '100%' }}>
+                    <Box
+                        sx={{
+                            left: 160,
+                            top: 110,
+                            gap: 1,
+                            position: 'absolute',
+                            display: 'flex',
+                            alignItems: 'center',
+                            textAlign: 'center',
+                        }}
+                    >
+                        <Button
+                            disabled={SFDatas.length == 0 ? true : false}
                             sx={{
-                                left: 180,
-                                top: 115,
-                                position: 'absolute',
-                                display: 'inline',
-                                fontSize: 20,
-                                p: 1,
-                                borderRadius: 3,
-                                zIndex: 10,
-                                color: 'white',
-                                backgroundColor: pink[500],
-                                textAlign: 'center',
+                                width: 150,
+                                height: 50,
+                                border: 1,
+                                color: 'primary.main',
+                                backgroundColor: 'white',
+                                '&:hover': {
+                                    backgroundColor: 'primary.main',
+                                    color: 'white',
+                                },
+                            }}
+                            onClick={() => {
+                                ClickSFData();
                             }}
                         >
-                            未処理 : {logDatas.length}
-                        </Box>
-                    )}
+                            SFデータ取得
+                        </Button>
+                        <Typography
+                            width={110}
+                            fontSize={20}
+                            fontWeight={'bold'}
+                            backgroundColor={'white'}
+                            color={'primary.main'}
+                            borderRadius={1}
+                        >
+                            SFデータ
+                            <br />
+                            {SFDatas.length}
+                        </Typography>
+
+                        <Typography
+                            width={110}
+                            fontSize={20}
+                            fontWeight={'bold'}
+                            white
+                            backgroundColor={'white'}
+                            color={'primary.main'}
+                            borderRadius={1}
+                        >
+                            未処理
+                            <br />
+                            {logDatas.length}
+                        </Typography>
+                    </Box>
+
                     <CalendarList
-                        pageType={'supermarket'}
+                        UpdateRef={UpdateRef}
+                        pageType={pageType}
                         Today={thisMonth}
                         CallSelectDate={CallSelectDate}
                         handleOpen={handleOpen}
                     />
                 </Box>
-                <Box mt={1} sx={{ width: '40%' }}>
+                <Box mt={1} sx={{ width: '40%' }} height={'100%'}>
                     {isData && (
                         <MarketSideList
-                            pageType={'supermarket'}
+                            pageType={pageType}
                             selectDate={selectDate}
                             isData={isData}
                             logDatas={logDatas}
@@ -94,9 +172,9 @@ const SuperMarket = () => {
                     )}
                 </Box>
             </Box>
-            <Dialog onClose={handleClose} open={open}>
+            <Dialog onClose={() => handleClose('exit')} open={open}>
                 <MarketShipmentDialog
-                    pageType={'supermarket'}
+                    pageType={pageType}
                     handleClose={handleClose}
                     logDatas={logDatas.length}
                     selectDate={selectDate}

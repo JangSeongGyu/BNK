@@ -9,20 +9,28 @@ import { Dialog, Divider, Typography } from '@mui/material';
 import { grey, pink, red } from '@mui/material/colors';
 import { toast } from 'react-hot-toast';
 
-const Taxi = () => {
+const Taxi = (props) => {
+    const pageType = props.pageType;
     const [selectDate, SetSelectDate] = useState('');
     const [open, SetOpen] = useState(false);
     const [logDatas, SetLogDatas] = useState('');
+    const [normalCnt, SetNormalCnt] = useState(0);
+    const [pouchCnt, SetPouchCnt] = useState(0);
     const [dailyData, SetDailyData] = useState([]);
     const [clickType, SetClickType] = useState('');
     const [isData, SetIsData] = useState(false);
 
     useEffect(() => {
         axios
-            .get(import.meta.env.VITE_DOMAIN + '/api/taxi/backlogdata/')
+            .get(import.meta.env.VITE_DOMAIN + `/api/taxi/backlogdata`)
             .then((res) => {
-                // SetLogDatas(res.data);
-                SetLogDatas('');
+                SetLogDatas(res.data);
+                let arr = res.data;
+                if (arr.length == 0) return;
+                arr.forEach((data) => {
+                    if (data.パウチ == 1) SetPouchCnt(pouchCnt + 1);
+                    else SetNormalCnt(normalCnt + 1);
+                });
             })
             .catch((e) => {});
     }, []);
@@ -51,32 +59,31 @@ const Taxi = () => {
 
     return (
         <>
-            <Header pageType={'taxi'} />
+            <Header pageType={pageType} />
             {logDatas.length > 0 && (
-                <Box
+                <Typography
                     sx={{
-                        left: 200,
-                        top: 110,
+                        left: 170,
+                        top: 105,
                         position: 'absolute',
                         display: 'inline',
                         fontSize: 28,
-                        height: 50,
-                        p: 0.5,
+                        p: 1,
                         borderRadius: 3,
                         zIndex: 10,
-                        color: 'white',
-                        backgroundColor: pink[500],
                         textAlign: 'center',
+                        fontWeight: 'bold',
                     }}
                 >
-                    未処理件数:
-                    {logDatas.length}
-                </Box>
+                    パウチ : {logDatas.length}
+                    <> / </>
+                    通常:{logDatas.length}
+                </Typography>
             )}
             <Box height={'80%'} sx={{ display: 'flex' }}>
                 <Box height={'100%'} sx={{ width: '60%' }}>
                     <CalendarList
-                        pageType={'taxi'}
+                        pageType={pageType}
                         Today={thisMonth}
                         CallSelectDate={CallSelectDate}
                         handleOpen={handleOpen}
@@ -86,19 +93,20 @@ const Taxi = () => {
                 <Box mt={1} sx={{ width: '40%' }}>
                     {isData && (
                         <MarketSideList
-                            pageType={'taxi'}
-                            selectDate={selectDate}
-                            isData={isData}
-                            logDatas={logDatas}
+                            pageType={pageType}
+                            selectDate={'2023-07-20'}
+                            isData={true}
                         />
                     )}
                 </Box>
             </Box>
             <Dialog onClose={handleClose} open={open}>
                 <MarketShipmentDialog
-                    pageType={'taxi'}
+                    pageType={pageType}
                     handleClose={handleClose}
                     logDatas={logDatas.length}
+                    normalCnt={normalCnt}
+                    pouchCnt={pouchCnt}
                     selectDate={selectDate}
                 />
             </Dialog>

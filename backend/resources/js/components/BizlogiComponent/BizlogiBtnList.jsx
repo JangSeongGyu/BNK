@@ -1,9 +1,10 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Grid, Modal, Typography, Box, Button } from '@mui/material';
-import SuperMarketDesign from '../Design/SuperMarketDesign';
+import SuperMarketDesign from '../../Design/SuperMarketDesign';
 import { blue, grey, pink, red } from '@mui/material/colors';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
+import BizlogiImportBtn from './BizlogiImportBtn';
 
 const BorderOption = SuperMarketDesign('BorderOption');
 const BtnOption = SuperMarketDesign('BtnOption');
@@ -73,18 +74,21 @@ const BizlogiBtnList = (props) => {
         <Box mt={1} width={'100%'} sx={BorderOption}>
             <Typography sx={calendarBoxTypo}>Bizlogi処理</Typography>
             <Box
-                mt={1}
-                gap={1}
+                gap={0.5}
                 sx={{
                     display: 'flex',
                     flexDirection: { xs: 'column', lg: 'row' },
                 }}
                 justifyContent={'space-between'}
             >
-                <Button onClick={() => BtnClick()} sx={BtnOption}>
-                    Bizlogiエクスポート
+                <Button
+                    width={'100%'}
+                    onClick={() => BtnClick()}
+                    sx={BtnOption}
+                >
+                    Bizlogi エクスポート
                 </Button>
-                <Button sx={BtnOption}>Bizlogiインポート</Button>
+                <BizlogiImportBtn selectDate={selectDate} pageType={pageType} />
             </Box>
         </Box>
     );

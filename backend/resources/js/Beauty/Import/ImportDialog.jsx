@@ -15,6 +15,8 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
+import { Box, Input, Stack, Typography } from '@mui/material';
+import { grey } from '@mui/material/colors';
 
 const Transition = forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -23,13 +25,14 @@ const Transition = forwardRef(function Transition(props, ref) {
 const baseStyle = {
     display: 'flex',
     flexDirection: 'column',
-    width: 800,
-    height: 600,
 };
 const borderNormalStyle = {
+    width: 400,
+    height: 400,
     border: '1px dotted #888',
 };
 const borderDragStyle = {
+    width: '100%',
     border: '1px solid #00f',
     transition: 'border .5s ease-in-out',
 };
@@ -63,7 +66,7 @@ const ImportDialog = forwardRef((props, ref) => {
             if (file.type == 'text/csv') {
                 parse(file, {
                     header: true,
-                    encoding: 'utf-8',
+                    encoding: 'SHIFT-JIS',
                     skipEmptyLines: true,
                     complete(results) {
                         const csvData = results.data;
@@ -82,6 +85,7 @@ const ImportDialog = forwardRef((props, ref) => {
     }, [file]);
 
     const onDrop = useCallback((acceptedFiles) => {
+        console.log(acceptedFiles);
         handleFileChange(acceptedFiles);
 
         // if (
@@ -103,6 +107,11 @@ const ImportDialog = forwardRef((props, ref) => {
     const arrayPush = (array, value) => {
         array.push(value);
         return array;
+    };
+
+    const InputChange = (event) => {
+        const { files } = event.target;
+        setFile(files[0]);
     };
 
     const setParent = () => {
@@ -131,6 +140,7 @@ const ImportDialog = forwardRef((props, ref) => {
         onDrop,
         noClick: true,
     });
+
     const style = useMemo(
         () => ({
             ...baseStyle,
@@ -138,6 +148,7 @@ const ImportDialog = forwardRef((props, ref) => {
         }),
         [isDragActive]
     );
+
     const files = useMemo(
         () => acceptedFiles.map((file) => <li key={file.path}>{file.path}</li>),
         [acceptedFiles]
@@ -150,37 +161,56 @@ const ImportDialog = forwardRef((props, ref) => {
                 TransitionComponent={Transition}
                 keepMounted
                 onClose={handleClose}
-                aria-describedby="alert-dialog-slide-description"
             >
-                <DialogTitle>{"Use Google's location service?"}</DialogTitle>
-                <DialogContent>
-                    <div {...getRootProps({ style })}>
-                        <input {...getInputProps()} />
-                        <p>
-                            入稿リスト(csv)をドラッグ＆ドロップ<br></br>
-                            またはダイアログから選択してください。<br></br>
-                            {file != null ? file.name : ''}
-                        </p>
-                        <button
-                            type="button"
-                            onClick={fileDialog}
-                            className="btn btn-primary align-self-center"
-                        >
-                            Select files
-                        </button>
-                    </div>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleClose}>キャンセル</Button>
-                    <Button
-                        onClick={() => {
-                            handleClose();
-                            setParent();
-                        }}
-                    >
-                        適用
-                    </Button>
-                </DialogActions>
+                <Box p={3}>
+                    <Box>
+                        <Typography fontWeight={'bold'} fontSize={30}>
+                            インポートファイル
+                        </Typography>
+                        <Typography>(.csv)をドラッグ＆ドロップ</Typography>
+                        <Typography>
+                            またはダイアログから選択してください。
+                        </Typography>
+                    </Box>
+                    <Box>
+                        <label htmlFor="inputId">
+                            <div {...getRootProps({ style })}>
+                                {/* <Input{...getInputProps()} /> */}
+                                <Box
+                                    height={'100%'}
+                                    display={'flex'}
+                                    alignItems={'center'}
+                                    justifyContent={'center'}
+                                    flexDirection={'column'}
+                                >
+                                    <Typography fontWeight={'bold'}>
+                                        ファイルをどドラッグ&ドロップしてください。
+                                    </Typography>
+                                </Box>
+                            </div>
+                        </label>
+                        {/* {file != null ? (
+                                        <> 選択したファイル名：{file.name}</>
+                                    ) : (
+                                        ''
+                                    )} */}
+
+                        <Box width={'100%'}>
+                            <Button width={'100%'} onClick={handleClose}>
+                                キャンセル
+                            </Button>
+                            <Button
+                                width={'100%'}
+                                onClick={() => {
+                                    handleClose();
+                                    setParent();
+                                }}
+                            >
+                                適用
+                            </Button>
+                        </Box>
+                    </Box>
+                </Box>
             </Dialog>
         </>
     );

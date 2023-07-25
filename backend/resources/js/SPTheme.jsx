@@ -2,6 +2,10 @@ import { pink } from '@mui/material/colors';
 import { createTheme } from '@mui/material/styles';
 
 const SPTheme = createTheme({
+    typography: {
+        fontFamily: `游ゴシック`,
+    },
+
     palette: {
         primary: {
             light: '#fafafa',
@@ -19,7 +23,7 @@ const SPTheme = createTheme({
         },
     },
     fonts: {
-        body: '"メイリオ", Meiryo, "ＭＳ Ｐゴシック", "MS PGothic", sans-serif',
+        body: '"メイリオ", Meiryo, "ＭＳ Ｐゴシック", "MS PGothic", sans-serif ,ヒラギノ角ゴシック',
         heading: '"Segoe UI", Roboto, sans-sefig',
         monospace: 'Menlo, monospace',
     },

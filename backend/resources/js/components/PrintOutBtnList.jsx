@@ -4,7 +4,7 @@ import SuperMarketDesign from '../Design/SuperMarketDesign';
 import { red } from '@mui/material/colors';
 import ReactToPrint from 'react-to-print';
 import LabelLayout from './LabelLayout';
-import YamaLayout from './YamaLayout';
+import YamaLayout from './YamaComponent/YamaLayout';
 import JobTicketLayout from './JobTicketLayout';
 import axios from 'axios';
 import QRBtn from './QRBtn';
@@ -19,11 +19,26 @@ const PrintOutBtnList = (props) => {
     const LabelRef = useRef();
     const YamaRef = useRef();
     const JobRef = useRef();
+    const [clickedBtn, SetClickedBtn] = useState('');
+
+    const LabelBtn = () => {
+        return (
+            <ReactToPrint
+                trigger={() => <Button sx={BtnOption}>梱包ラベル</Button>}
+                content={() => LabelRef.current}
+            />
+        );
+    };
+
+    const CheckLabelBtn = () => {
+        if (pageType == 'supermarket') return <LabelBtn />;
+    };
+
     return (
         <Box mt={1} width={'100%'} sx={BorderOption}>
             <Typography sx={calendarBoxTypo}>帳票出力</Typography>
-            <Box mt={1}>
-                <Box sx={{ display: 'flex', gap: 1, mb: 1 }}>
+            <Box>
+                <Box sx={{ display: 'flex', mb: 1 }}>
                     <QRBtn selectDate={selectDate} pageType={pageType} />
                 </Box>
                 <Box
@@ -31,12 +46,13 @@ const PrintOutBtnList = (props) => {
                         display: 'flex',
                         flexDirection: { xs: 'column', lg: 'row' },
                         gap: 1,
-                        mt: 1,
                     }}
                 >
                     <ReactToPrint
                         trigger={() => (
-                            <Button sx={BtnOption}>JOBチケット</Button>
+                            <Button onClick={() => {}} sx={BtnOption}>
+                                JOBチケット
+                            </Button>
                         )}
                         pageStyle="
                         @media print {
@@ -45,12 +61,7 @@ const PrintOutBtnList = (props) => {
                         @page { size: A4 landscape; margin: 0; }"
                         content={() => JobRef.current}
                     />
-                    <ReactToPrint
-                        trigger={() => (
-                            <Button sx={BtnOption}>梱包ラベル</Button>
-                        )}
-                        content={() => LabelRef.current}
-                    />{' '}
+                    <CheckLabelBtn />
                     <ReactToPrint
                         trigger={() => (
                             <Button sx={BtnOption}>山出しリスト</Button>

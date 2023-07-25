@@ -1,7 +1,7 @@
 import { amber, blue, orange, pink } from '@mui/material/colors';
 import { createTheme } from '@mui/material/styles';
 
-const TXTheme = createTheme({
+const EGTheme = createTheme({
     typography: {
         fontFamily: `游ゴシック`,
     },
@@ -9,9 +9,9 @@ const TXTheme = createTheme({
     palette: {
         primary: {
             light: '#fafafa',
-            main: orange[500],
-            dark: 'black',
-            font: orange['A700'],
+            main: '#7F001B',
+            dark: 'white',
+            font: '#7F001B',
             contrastText: '#fff',
             borderColor: '#bdbdbd',
         },
@@ -23,4 +23,4 @@ const TXTheme = createTheme({
     },
 });
 
-export default TXTheme;
+export default EGTheme;

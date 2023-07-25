@@ -55,10 +55,17 @@ const JobTicketLayout = forwardRef((props, ref) => {
     const selectDate = props.selectDate;
     const pageType = props.pageType;
     const [ticketData, SetTicketData] = useState([]);
+    const [basicData, SetBasicData] = useState({});
     const [count, SetCount] = useState(0);
+
     useEffect(() => {
         let cnt = 0;
-        let typeUrl = '';
+        if (pageType == 'supermarket') {
+            SetBasicData({
+                name: 'スーパー' + [selectDate] + '発注分',
+                contentId: 'DD109842-01-003',
+            });
+        }
 
         axios
             .get(
@@ -88,9 +95,9 @@ const JobTicketLayout = forwardRef((props, ref) => {
                     <Grid sx={ListHeaderOption} item xs={2}>
                         サイズ
                     </Grid>
-                    {/* BODY */}
+                    {/* BODY ----------------------------------------------- */}
                     <Grid sx={ListBodyOption} fontSize={28} item xs={8}>
-                        スーパー {selectDate}発注分
+                        {basicData.name}
                     </Grid>
                     <Grid sx={ListBodyOption} item xs={2}>
                         {count}
@@ -98,7 +105,7 @@ const JobTicketLayout = forwardRef((props, ref) => {
                     <Grid sx={ListBodyOption} item xs={2}>
                         210×297
                     </Grid>
-                    {/* ---------------------- */}
+                    {/* ----------------------------------------------------- */}
                     <Grid container>
                         <Grid sx={ListHeaderOption} item xs={6}>
                             コンテンツID
@@ -106,9 +113,9 @@ const JobTicketLayout = forwardRef((props, ref) => {
                         <Grid sx={ListHeaderOption} item xs={6}>
                             受注番号
                         </Grid>
-                        {/* BODY */}
+                        {/* BODY ----------------------------------------------*/}
                         <Grid sx={ListBodyOption} item xs={6}>
-                            DD109842-01-003
+                            {basicData.contentId}
                         </Grid>
                         <Grid sx={ListBodyOption} item xs={6}>
                             {ticketData.length > 0 && ticketData[0].受注番号}
@@ -229,6 +236,7 @@ const JobTicketLayout = forwardRef((props, ref) => {
                     <TopLayout />
                     <Box sx={DividerOption}>生産</Box>
                     <BottomLayout />
+
                     <Box display={'flex'}>
                         <Box sx={DividerOption}>基本スケジュール</Box>{' '}
                         <Box ml={2} color={red[500]} fontSize={16} mt={'auto'}>

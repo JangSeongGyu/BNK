@@ -18,6 +18,18 @@ const CheckingList = (props) => {
     const Checking2BtnClick = () => {
         navigate('checking2/' + selectDate);
     };
+
+    const Check2Btn = () => {
+        return (
+            <Button sx={BtnOption} onClick={() => Checking2BtnClick()}>
+                二次検品
+            </Button>
+        );
+    };
+
+    const CheckCheck2Btn = () => {
+        if (pageType == 'supermarket') return <Check2Btn />;
+    };
     return (
         <Box my={1} width={'100%'} sx={BorderOption}>
             <Typography sx={calendarBoxTypo}>検品</Typography>
@@ -26,9 +38,7 @@ const CheckingList = (props) => {
                     一次検品
                 </Button>
             </Box>
-            <Button sx={BtnOption} onClick={() => Checking2BtnClick()}>
-                二次検品
-            </Button>
+            <CheckCheck2Btn />
         </Box>
     );
 };

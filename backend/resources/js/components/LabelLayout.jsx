@@ -1,11 +1,7 @@
 import React, { useEffect, useState, useRef, forwardRef } from 'react';
 import { Grid, Modal, Typography, Box, Button, CardMedia } from '@mui/material';
-import { grey } from '@mui/material/colors';
-import barcode from '../images/barcode.png';
 import axios from 'axios';
 
-const leftwidth = '40%';
-const rightwidth = '100%';
 const MainWidth = 1080;
 const MainHeight = MainWidth * 1.4142;
 
@@ -94,7 +90,7 @@ const LabelLayout = forwardRef((props, ref) => {
         // 余白処理
         if (count % 6 != 0)
             for (i = 0; i < 6 - (count % 6); i++) {
-                cardList.push(<Box width={420} height={343}></Box>);
+                cardList.push(<Box key={i} width={420} height={343}></Box>);
             }
         if (cardList.length > 0)
             html.push(

@@ -16,7 +16,7 @@ const Header = (props) => {
     useEffect(() => {
         if (pageType == 'supermarket') SetTitle('スーパーマーケット');
         else if (pageType == 'taxi') SetTitle('タクシー');
-
+        else if (pageType == 'eagles') SetTitle('イーグルス');
         console.log(pageType);
     }, []);
 
@@ -32,7 +32,12 @@ const Header = (props) => {
                     >
                         <MenuIcon />
                     </IconButton>
-                    <Typography variant="h6" color="inherit" component="div">
+                    <Typography
+                        variant="h6"
+                        fontWeight={'bold'}
+                        color="inherit"
+                        component="div"
+                    >
                         Rakuten業務SYS {title}
                     </Typography>
                 </Toolbar>

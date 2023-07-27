@@ -34,7 +34,7 @@ const Checking = (props) => {
     const boxRef = useRef(new Array());
     const inputRef = useRef(new Array());
     const btnRef = useRef();
-    const { selectDate, type } = useParams();
+    const { selectDate } = useParams();
     const [searchData, SetSearchData] = useState([]);
     const maxTask = 3;
 
@@ -127,8 +127,10 @@ const Checking = (props) => {
                 }
             })
             .catch((e) => {
+                let errMsg = e.response.data.message;
+
                 ResultError(`入力番号:${inputData['TF0']}
-                データの形式が違います。`);
+                ${errMsg}`);
             });
     };
 
@@ -175,6 +177,7 @@ const Checking = (props) => {
                         })
                         .catch((e) => {
                             ResultError();
+                            inputRef['MB2'] = e.response.data.message;
                             toast.error('error', { id: toastid });
                         });
                 } else {

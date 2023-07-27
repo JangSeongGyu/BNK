@@ -15,6 +15,9 @@ import toast, { Toaster } from 'react-hot-toast';
 //     console.log(res);
 // });
 
+const dialogYes = SuperMarketDesign('dialogYes');
+const dialogNo = SuperMarketDesign('dialogNo');
+
 const MarketOutSideList = (props) => {
     const selectDate = props.selectDate;
     const logDatas = props.logDatas;
@@ -107,16 +110,7 @@ const MarketOutSideList = (props) => {
                             出荷処理
                         </Button>
                         <Button
-                            sx={{
-                                width: '100%',
-                                color: red[600],
-                                border: 1,
-                                fontWeight: 'bold',
-                                '&:hover': {
-                                    backgroundColor: red[600],
-                                    color: 'white',
-                                },
-                            }}
+                            sx={dialogNo}
                             onClick={() => props.handleClose('exit')}
                         >
                             戻る
@@ -150,47 +144,21 @@ const MarketOutSideList = (props) => {
                         <Button
                             onClick={() => ClickPouch()}
                             disabled={pouchCnt == 0 ? true : false}
-                            sx={{
-                                width: '100%',
-                                border: 1,
-                                color: green[700],
-                                backgroundColor: 'white',
-                                '&:hover': {
-                                    backgroundColor: green[700],
-                                    color: 'white',
-                                },
-                            }}
+                            sx={dialogYes}
                         >
                             パウチ
                         </Button>
                         <Button
                             disabled={normalCnt == 0 ? true : false}
-                            sx={{
-                                width: '100%',
-                                border: 1,
-                                color: green[700],
-                                backgroundColor: 'white',
-                                '&:hover': {
-                                    backgroundColor: green[700],
-                                    color: 'white',
-                                },
-                            }}
+                            sx={dialogYes}
                             onClick={ClickNotPouch}
                         >
                             通常
                         </Button>
                     </Box>
                     <Button
-                        sx={{
-                            mt: 1,
-                            width: '100%',
-                            color: red[600],
-                            border: 1,
-                            '&:hover': {
-                                backgroundColor: red[600],
-                                color: 'white',
-                            },
-                        }}
+                        mt={1}
+                        sx={dialogNo}
                         onClick={() => props.handleClose()}
                     >
                         戻る

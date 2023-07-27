@@ -28,17 +28,13 @@ const SuperMarket = (props) => {
     }, []);
 
     const CallSFData = () => {
-        const toastId = toast.loading('SFデータ取得中...');
         axios
             .get(import.meta.env.VITE_DOMAIN + `/api/${pageType}/order/`)
             .then((res) => {
-                toast.success('SFデータ取得完了。', { id: toastId });
                 SetSFDatas(res.data);
                 console.log(res.data);
             })
-            .catch((e) => {
-                toast.error(e.response.data.message, { id: toastId });
-            });
+            .catch((e) => {});
     };
 
     const ClickSFData = () => {

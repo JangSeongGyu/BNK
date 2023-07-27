@@ -19,40 +19,14 @@ const BizlogiImportBtn = (props) => {
     const [data, setData] = useState([]);
     const [updateData, setUpdateData] = useState(null);
 
-    const shapeData = (getData) => {
-        try {
-            let subData = getData.map((rows) => {
-                let shapeRows = Object.assign({}, rows); // イミュータブルにする
-                for (let key in shapeRows) {
-                    if (key.indexOf('【RB】') === -1) {
-                        delete shapeRows[key];
-                    }
-                }
-                return Object.entries(shapeRows);
-            });
-
-            let mainData = getData.map((rows, index) => {
-                let shapeRows = Object.assign({}, rows); // イミュータブルにする
-                for (let key in shapeRows) {
-                    if (key.indexOf('【RB】') !== -1) {
-                        delete shapeRows[key];
-                    }
-                }
-                shapeRows['sub'] = subData[index];
-                return shapeRows;
-            });
-            setHeader(Object.keys(mainData[0]));
-            setData(mainData);
-        } catch (e) {
-            alert(e);
-        }
-    };
-
     const putWKOrder = async (json) => {
         // waitCircleRef.current.handleOpen();
-        let errCnt = '';
+        let errCnt = 0;
+        let maxCnt = json['クール区分'].length;
+
         const toastId = toast.loading('インポート中...');
-        for (let i = 0; i < json['クール区分'].length; i++) {
+        for (let i = 0; i < maxCnt; i++) {
+            toast.loading(`(${i}/${maxCnt}) 処理中...`, { id: toastId });
             let inquiry_no = json['問合せNo'][i];
             let shipment_no = json['注文番号'][i];
             await axios
@@ -66,29 +40,37 @@ const BizlogiImportBtn = (props) => {
                 )
                 .then((response) => {})
                 .catch((e) => {
-                    if (e.response == null) {
-                        return (errCnt = '接続がタイムアウトしました。');
-                    }
-                    const errors = e.response.data;
-                    return (errCnt = errors.message);
+                    // if (e.response == null) {
+                    //     return (errCnt += 1);
+                    // }
+                    // const errors = e.response.data;
+                    return (errCnt += 1);
                 })
                 .finally(() => {});
         }
 
-        if (errCnt == '') toast.success('インポート完了。', { id: toastId });
-        else toast.error(errCnt, { id: toastId });
-        tsubushi();
+        if (errCnt == 0) {
+            toast.success(`${maxCnt - errCnt}件成功、${errCnt}件エラー`, {
+                id: toastId,
+            });
+            tsubushi();
+        } else {
+            toast.error(`${maxCnt - errCnt}件成功、${errCnt}件エラー`, {
+                id: toastId,
+            });
+        }
+
+        // toast.error(errCnt, { id: toastId });
+
         setJson(null);
     };
     const tsubushi = async () => {
         await axios
-            .get(
+            .put(
                 import.meta.env.VITE_DOMAIN +
                     `/api/${pageType}/tsubushi/${selectDate}`
             )
-            .then((response) => {
-                shapeData(response.data.return);
-            })
+            .then((response) => {})
             .catch((e) => {
                 if (e.response == null) {
                     return alert('接続がタイムアウトしました。');

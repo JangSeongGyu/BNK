@@ -1,4 +1,4 @@
-import { red, grey, pink, yellow } from '@mui/material/colors';
+import { red, grey, pink, green, yellow } from '@mui/material/colors';
 
 const SuperMarketDesign = (data) => {
     switch (data) {
@@ -55,6 +55,7 @@ const SuperMarketDesign = (data) => {
         case 'insListResultTypoOption':
             return {
                 fontSize: 20,
+                textAlign: 'center',
                 alignSelf: 'center',
                 mx: 'auto',
 
@@ -75,6 +76,28 @@ const SuperMarketDesign = (data) => {
                 variant: 'filled',
                 backgroundColor: 'white',
                 width: '90%',
+            };
+
+        case 'dialogYes':
+            return {
+                width: '100%',
+                color: red[600],
+                border: 1,
+                '&:hover': {
+                    backgroundColor: red[600],
+                    color: 'white',
+                },
+            };
+
+        case 'dialogNo':
+            return {
+                width: '100%',
+                color: green[700],
+                border: 1,
+                '&:hover': {
+                    backgroundColor: green[600],
+                    color: 'white',
+                },
             };
 
         default:

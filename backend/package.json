@@ -27,6 +27,7 @@
         "@mui/icons-material": "^5.11.11",
         "@mui/material": "^5.11.13",
         "dotenv": "^16.3.1",
+        "encoding-japanese": "^2.0.0",
         "exceljs": "^4.3.0",
         "papaparse": "^5.4.1",
         "react-dropzone": "^14.2.3",

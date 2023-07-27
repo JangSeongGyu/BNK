@@ -5,6 +5,7 @@ import React, {
     useCallback,
     useImperativeHandle,
     forwardRef,
+    useRef,
 } from 'react';
 import { useDropzone } from 'react-dropzone';
 import * as XLSX from 'xlsx';
@@ -16,7 +17,13 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
 import { Box, Input, Stack, Typography } from '@mui/material';
-import { grey } from '@mui/material/colors';
+import { blue, green, grey, red } from '@mui/material/colors';
+import SuperMarketDesign from '../../Design/SuperMarketDesign';
+import FileDownloadIcon from '@mui/icons-material/FileDownload';
+
+const BtnOption = SuperMarketDesign('BtnOption');
+const dialogYes = SuperMarketDesign('dialogYes');
+const dialogNo = SuperMarketDesign('dialogNo');
 
 const Transition = forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -29,17 +36,20 @@ const baseStyle = {
 const borderNormalStyle = {
     width: 400,
     height: 400,
-    border: '1px dotted #888',
+    // border: '1px dashed  #00f',
+    // ':hover': { border: '2px solid  #f0f' },
 };
 const borderDragStyle = {
-    width: '100%',
-    border: '1px solid #00f',
-    transition: 'border .5s ease-in-out',
+    width: 400,
+    height: 400,
+    border: '1px outset  #00f',
 };
 
 const ImportDialog = forwardRef((props, ref) => {
     // ダイアログの開閉
     const [open, setOpen] = useState(false);
+    const inputRef = useRef(null);
+
     useImperativeHandle(ref, () => {
         return {
             handleClickOpen() {
@@ -48,11 +58,13 @@ const ImportDialog = forwardRef((props, ref) => {
         };
     });
     const handleClose = () => {
+        inputRef.current.value = '';
+        setFile('');
         setOpen(false);
     };
 
     // Config
-    const [file, setFile] = useState(null);
+    const [file, setFile] = useState('');
     const [json, setJson] = useState('');
     const handleFileChange = (files) => {
         if (files.length > 0) {
@@ -87,21 +99,6 @@ const ImportDialog = forwardRef((props, ref) => {
     const onDrop = useCallback((acceptedFiles) => {
         console.log(acceptedFiles);
         handleFileChange(acceptedFiles);
-
-        // if (
-        //     acceptedFiles[0].type ==
-        //     'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-        // ) {
-        //     var data = new Uint8Array(await acceptedFiles[0].arrayBuffer());
-        //     const workbook = XLSX.read(data, {
-        //         type: 'array',
-        //     });
-        //     const worksheet = workbook.Sheets[workbook.SheetNames[0]];
-        //     const jsonTextFromExcel = JSON.stringify(
-        //         XLSX.utils.sheet_to_json(worksheet)
-        //     );
-        //     setJson(jsonTextFromExcel);
-        // }
     }, []);
 
     const arrayPush = (array, value) => {
@@ -111,7 +108,10 @@ const ImportDialog = forwardRef((props, ref) => {
 
     const InputChange = (event) => {
         const { files } = event.target;
-        setFile(files[0]);
+        console.log(files[0]);
+        if (files.length > 0) {
+            setFile(files[0]);
+        }
     };
 
     const setParent = () => {
@@ -162,51 +162,104 @@ const ImportDialog = forwardRef((props, ref) => {
                 keepMounted
                 onClose={handleClose}
             >
-                <Box p={3}>
+                <Box px={3} py={2}>
                     <Box>
-                        <Typography fontWeight={'bold'} fontSize={30}>
+                        <Typography mb={1} fontWeight={'bold'} fontSize={30}>
                             インポートファイル
                         </Typography>
-                        <Typography>(.csv)をドラッグ＆ドロップ</Typography>
+                        {/* <Typography>(.csv)をドラッグ＆ドロップ</Typography>
                         <Typography>
-                            またはダイアログから選択してください。
-                        </Typography>
+                            またはクリックして選択してください。
+                        </Typography> */}
                     </Box>
                     <Box>
-                        <label htmlFor="inputId">
-                            <div {...getRootProps({ style })}>
-                                {/* <Input{...getInputProps()} /> */}
-                                <Box
-                                    height={'100%'}
-                                    display={'flex'}
-                                    alignItems={'center'}
-                                    justifyContent={'center'}
-                                    flexDirection={'column'}
-                                >
-                                    <Typography fontWeight={'bold'}>
-                                        ファイルをどドラッグ&ドロップしてください。
-                                    </Typography>
-                                </Box>
-                            </div>
-                        </label>
-                        {/* {file != null ? (
+                        <Box
+                            sx={{
+                                border: 1,
+                                backgroundColor: grey[100],
+                                borderColor: grey[500],
+                                borderStyle: 'dashed',
+                                ':hover': {
+                                    borderColor: blue[700],
+                                    borderStyle: 'solid',
+                                    backgroundColor: grey[300],
+                                },
+                            }}
+                        >
+                            <label htmlFor="inputId">
+                                <div {...getRootProps({ style })}>
+                                    {/* <Input{...getInputProps()} /> */}
+                                    <Box
+                                        height={'100%'}
+                                        display={'flex'}
+                                        alignItems={'center'}
+                                        justifyContent={'center'}
+                                        flexDirection={'column'}
+                                    >
+                                        {/* {file != null ? (
                                         <> 選択したファイル名：{file.name}</>
                                     ) : (
                                         ''
                                     )} */}
+                                        <FileDownloadIcon
+                                            sx={{
+                                                fontSize: 80,
+                                                color: grey[500],
+                                            }}
+                                        />
 
-                        <Box width={'100%'}>
-                            <Button width={'100%'} onClick={handleClose}>
-                                キャンセル
+                                        <Typography
+                                            fontSize={14}
+                                            textAlign={'center'}
+                                            fontWeight={'bold'}
+                                        >
+                                            {file == '' || file == null ? (
+                                                <>
+                                                    ファイルをドラッグ&ドロップしてください。
+                                                    <br />
+                                                    または、ここをクリックするとダイアログが開きます。
+                                                </>
+                                            ) : (
+                                                <>{file.name}</>
+                                            )}
+                                        </Typography>
+                                    </Box>
+                                </div>
+                            </label>
+                        </Box>
+                        <input
+                            id={'inputId'}
+                            ref={inputRef}
+                            style={{ display: 'none' }}
+                            type="file"
+                            accept="text/csv"
+                            onChange={(event) => InputChange(event)}
+                        />
+
+                        <Box display={'flex'} gap={1} mt={2}>
+                            <Button sx={dialogYes} onClick={handleClose}>
+                                <Typography
+                                    sx={{
+                                        fontWeight: 'bold',
+                                    }}
+                                >
+                                    キャンセル
+                                </Typography>
                             </Button>
                             <Button
-                                width={'100%'}
+                                sx={dialogNo}
                                 onClick={() => {
                                     handleClose();
                                     setParent();
                                 }}
                             >
-                                適用
+                                <Typography
+                                    sx={{
+                                        fontWeight: 'bold',
+                                    }}
+                                >
+                                    適用
+                                </Typography>
                             </Button>
                         </Box>
                     </Box>

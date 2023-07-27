@@ -15,6 +15,7 @@ import SPTheme from './SPTheme';
 import { ThemeProvider } from '@mui/material';
 import TXTheme from './TXTheme';
 import EGTheme from './EGTheme';
+import DetailView from './pages/DetailView';
 
 const Router = () => {
     return (
@@ -46,6 +47,15 @@ const Router = () => {
                     element={
                         <ThemeProvider theme={SPTheme}>
                             <Checking2 pageType="supermarket" />
+                        </ThemeProvider>
+                    }
+                />
+                <Route
+                    exact
+                    path={`/supermarket/detail/:selectDate/`}
+                    element={
+                        <ThemeProvider theme={SPTheme}>
+                            <DetailView pageType="supermarket" />
                         </ThemeProvider>
                     }
                 />

@@ -5,6 +5,7 @@ import { blue, grey, pink, red } from '@mui/material/colors';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
 import BizlogiImportBtn from './BizlogiImportBtn';
+import Encoding, { convert } from 'encoding-japanese';
 
 const BorderOption = SuperMarketDesign('BorderOption');
 const BtnOption = SuperMarketDesign('BtnOption');
@@ -40,9 +41,13 @@ const BizlogiBtnList = (props) => {
         });
 
         console.log(hcsv);
+
+        let str = Encoding.stringToCode(hcsv);
+        let convert = Encoding.convert(str, 'sjis', 'unicode');
+        let u8a = new Uint8Array(convert);
         const element = document.createElement('a');
-        const file = new Blob([hcsv], {
-            type: 'text/plain;charset=utf-8',
+        const file = new Blob([u8a], {
+            type: 'text/csv',
         });
         element.href = URL.createObjectURL(file);
         element.download = 'bizlogi_' + selectDate + '.csv';

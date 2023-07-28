@@ -213,4 +213,7 @@ return [
         'Debugbar' => Barryvdh\Debugbar\Facade::class,
     ])->toArray(),
 
+    'supermarket' => [
+        'qr_url' => env('QR_URL_SUPERMARKET')
+    ]
 ];

@@ -7,7 +7,7 @@ import jaLocale from '@fullcalendar/core/locales/ja';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import tippy from 'tippy.js';
 import axios from 'axios';
-import SuperMarketDesign from '../Design/SuperMarketDesign';
+import DesignOption from '../Design/DesignOption';
 import { red } from '@mui/material/colors';
 import { toast } from 'react-hot-toast';
 

@@ -35,7 +35,6 @@ const CardHeader = (props) => {
     let datas = props.data;
     let keys = Object.keys(datas);
     let deliCount = keys.length;
-    console.log('last', keys);
 
     keys.forEach((key) => {
         for (let i = 0; i < datas[key].length; i++) {

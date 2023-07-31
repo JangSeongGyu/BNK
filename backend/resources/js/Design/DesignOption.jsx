@@ -1,6 +1,6 @@
 import { red, grey, pink, green, yellow } from '@mui/material/colors';
 
-const SuperMarketDesign = (data) => {
+const DesignOption = (data) => {
     switch (data) {
         case 'BorderOption':
             return {
@@ -21,7 +21,6 @@ const SuperMarketDesign = (data) => {
                 border: 1,
                 borderColor: 'primary.font',
                 color: 'primary.font',
-                fontWeight: 500,
                 fontSize: 18,
                 fontWeight: 'bold',
                 fontFamily: '游ゴシック',
@@ -81,10 +80,10 @@ const SuperMarketDesign = (data) => {
         case 'dialogYes':
             return {
                 width: '100%',
-                color: red[600],
+                color: green[700],
                 border: 1,
                 '&:hover': {
-                    backgroundColor: red[600],
+                    backgroundColor: green[600],
                     color: 'white',
                 },
             };
@@ -92,10 +91,11 @@ const SuperMarketDesign = (data) => {
         case 'dialogNo':
             return {
                 width: '100%',
-                color: green[700],
+
+                color: red[600],
                 border: 1,
                 '&:hover': {
-                    backgroundColor: green[600],
+                    backgroundColor: red[600],
                     color: 'white',
                 },
             };
@@ -105,4 +105,4 @@ const SuperMarketDesign = (data) => {
     }
 };
 
-export default SuperMarketDesign;
+export default DesignOption;

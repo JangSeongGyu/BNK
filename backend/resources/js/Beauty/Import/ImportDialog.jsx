@@ -18,12 +18,12 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
 import { Box, Input, Stack, Typography } from '@mui/material';
 import { blue, green, grey, red } from '@mui/material/colors';
-import SuperMarketDesign from '../../Design/SuperMarketDesign';
+import DesignOption from '../../Design/DesignOption';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 
-const BtnOption = SuperMarketDesign('BtnOption');
-const dialogYes = SuperMarketDesign('dialogYes');
-const dialogNo = SuperMarketDesign('dialogNo');
+const BtnOption = DesignOption('BtnOption');
+const dialogYes = DesignOption('dialogYes');
+const dialogNo = DesignOption('dialogNo');
 
 const Transition = forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;

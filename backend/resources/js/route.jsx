@@ -16,6 +16,7 @@ import { ThemeProvider } from '@mui/material';
 import TXTheme from './TXTheme';
 import EGTheme from './EGTheme';
 import DetailView from './pages/DetailView';
+import Master from './pages/Master';
 
 const Router = () => {
     return (
@@ -31,7 +32,6 @@ const Router = () => {
                         </ThemeProvider>
                     }
                 />
-
                 <Route
                     exact
                     path={`/supermarket/checking/:selectDate/`}
@@ -59,6 +59,17 @@ const Router = () => {
                         </ThemeProvider>
                     }
                 />
+
+                <Route
+                    exact
+                    path={`/supermarket/master`}
+                    element={
+                        <ThemeProvider theme={SPTheme}>
+                            <Master pageType="supermarket" />
+                        </ThemeProvider>
+                    }
+                />
+
                 <Route exact path="/test" element={<YamaLayout />}></Route>
 
                 <Route
@@ -73,30 +84,19 @@ const Router = () => {
 
                 <Route
                     exact
+                    path={`/taxi/master`}
+                    element={
+                        <ThemeProvider theme={TXTheme}>
+                            <Taxi pageType="taxi" />
+                        </ThemeProvider>
+                    }
+                />
+                <Route
+                    exact
                     path={`/taxi/checking/:selectDate/`}
                     element={
                         <ThemeProvider theme={TXTheme}>
                             <Checking pageType="taxi" />
-                        </ThemeProvider>
-                    }
-                />
-
-                <Route
-                    exact
-                    path={`/eagles`}
-                    element={
-                        <ThemeProvider theme={EGTheme}>
-                            <Taxi pageType="eagles" />
-                        </ThemeProvider>
-                    }
-                />
-
-                <Route
-                    exact
-                    path={`/eagles/checking/:selectDate/`}
-                    element={
-                        <ThemeProvider theme={EGTheme}>
-                            <Checking pageType="eagles" />
                         </ThemeProvider>
                     }
                 />

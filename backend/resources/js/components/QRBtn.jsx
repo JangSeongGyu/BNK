@@ -1,11 +1,17 @@
 import { useEffect, useState, useRef } from 'react';
 import { Grid, Modal, Typography, Box, Button } from '@mui/material';
-import SuperMarketDesign from '../Design/SuperMarketDesign';
+import DesignOption from '../Design/DesignOption';
 import { red } from '@mui/material/colors';
 import axios from 'axios';
 import ExcelJS from 'exceljs';
+import { toast } from 'react-hot-toast';
+import { saveAs } from 'file-saver';
+import JSZip from 'jszip';
 
-const BtnOption = SuperMarketDesign('BtnOption');
+import * as zip from '@zip.js/zip.js';
+import ZipDownload from './ZipDownload';
+
+const BtnOption = DesignOption('BtnOption');
 
 const QRBtn = (props) => {
     const selectDate = props.selectDate;
@@ -13,6 +19,7 @@ const QRBtn = (props) => {
     const [qrData, SetQrData] = useState([]);
 
     const ButtonClick = async () => {
+        const toastId = toast.loading('QRエクスポート中...');
         axios
             .get(
                 import.meta.env.VITE_DOMAIN +
@@ -25,8 +32,11 @@ const QRBtn = (props) => {
                 });
 
                 SetQrData(sorted);
+                toast.success('エクスポート完了。', { id: toastId });
+            })
+            .catch((e) => {
+                toast.error(e.response.message, { id: toastId });
             });
-        console.log(selectDate);
     };
 
     useEffect(() => {
@@ -89,20 +99,30 @@ const QRBtn = (props) => {
                 }
             }
 
-            const download = async () => {
-                // Xlsx
-                let uint8Array = await workbook.xlsx.writeBuffer(); //xlsxの場合
-                let blob = new Blob([uint8Array], {
-                    type: 'application/octet-binary',
-                });
-                let link = document.createElement('a');
-                link.href = window.URL.createObjectURL(blob);
-                link.download = `QR_${selectDate}.xlsx`;
-                link.click();
-            };
-            download();
+            download(workbook);
         }
     }, [qrData]);
+
+    const download = async (workbook) => {
+        // console.log('download');
+
+        // // // Xlsx
+        let excelFile = await workbook.xlsx.writeBuffer(); //xlsxの場合
+        console.log('Original', [excelFile]);
+        ZipDownload([excelFile], 'ddd.zip');
+
+        // var zip = new JSZip();
+        // let blob = new Blob([excelFile], {
+        //     type: 'application/octet-binary',
+        // });
+        // console.log(excelFile);
+
+        // zip.file(`QR_${selectDate}.xlsx`, excelFile);
+
+        // zip.generateAsync({ type: 'blob' }).then(function (content) {
+        //     saveAs(content, `QR_${selectDate}.zip`);
+        // });
+    };
 
     const paddingNum = (data, index) => {
         return data.toString().padStart(index, '0');

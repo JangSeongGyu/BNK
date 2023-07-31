@@ -1,14 +1,14 @@
 import { Grid, Modal, Typography, Box, Button } from '@mui/material';
-import SuperMarketDesign from '../Design/SuperMarketDesign';
+import DesignOption from '../Design/DesignOption';
 import { useNavigate } from 'react-router-dom';
 import { red } from '@mui/material/colors';
 
 const CheckingList = (props) => {
     var selectDate = props.selectDate;
     const pageType = props.pageType;
-    const BorderOption = SuperMarketDesign('BorderOption');
-    const BtnOption = SuperMarketDesign('BtnOption');
-    const calendarBoxTypo = SuperMarketDesign('calendarBoxTypo');
+    const BorderOption = DesignOption('BorderOption');
+    const BtnOption = DesignOption('BtnOption');
+    const calendarBoxTypo = DesignOption('calendarBoxTypo');
 
     let navigate = useNavigate();
     const CheckingBtnClick = () => {

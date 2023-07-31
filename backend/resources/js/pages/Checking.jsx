@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Typography, Box, Button, Divider, TextField } from '@mui/material';
 import Header from '../components/Header';
-import SuperMarketDesign from '../Design/SuperMarketDesign';
+import DesignOption from '../Design/DesignOption';
 import ForwardIcon from '@mui/icons-material/Forward';
 import { green, grey, pink, red } from '@mui/material/colors';
 import { useParams } from 'react-router-dom';
@@ -9,23 +9,21 @@ import barcode from '../images/barcode.png';
 import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
 
-const BorderOption = SuperMarketDesign('BorderOption');
-const insListOption = SuperMarketDesign('insListOption');
-const insOutputOption = SuperMarketDesign('insOutputOption');
-const insListResultOption = SuperMarketDesign('insListResultOption');
-const BtnOption = SuperMarketDesign('BtnOption');
+const BorderOption = DesignOption('BorderOption');
+const insListOption = DesignOption('insListOption');
+const insOutputOption = DesignOption('insOutputOption');
+const insListResultOption = DesignOption('insListResultOption');
+const BtnOption = DesignOption('BtnOption');
 
 const Checking = (props) => {
-    const insListResultTypoOption = SuperMarketDesign(
-        'insListResultTypoOption'
-    );
-    const insTFOption = SuperMarketDesign('insTFOption');
+    const insListResultTypoOption = DesignOption('insListResultTypoOption');
+    const insTFOption = DesignOption('insTFOption');
 
     const pageType = props.pageType;
     const [MsgBox, SetMsgBox] = useState({
-        MB0: '未完了',
-        MB1: '未完了',
-        MB2: '未完了',
+        0: '未完了',
+        1: '未完了',
+        2: '未完了',
     });
     const [inputData, SetInputData] = useState({});
     const [taskCnt, SetTaskCnt] = useState(0);
@@ -45,8 +43,8 @@ const Checking = (props) => {
             inputRef.current[i].disabled = true;
         }
         SetTaskCnt(0);
-        SetInputData({ TF0: '', TF1: '', TF2: '' });
-        SetMsgBox({ MB0: '未完了', MB1: '未完了', MB2: '未完了' });
+        SetInputData({ 0: '', 1: '', 2: '' });
+        SetMsgBox({ 0: '未完了', 1: '未完了', 2: '未完了' });
         focusing(0);
         SetSearchData([]);
     };
@@ -96,28 +94,26 @@ const Checking = (props) => {
             });
     };
 
-    const focusing = (number) => {
+    const focusing = (nuer) => {
         console.log(inputRef);
-        inputRef.current[number].disabled = false;
-        inputRef.current[number].focus();
+        inputRef.current[nuer].disabled = false;
+        inputRef.current[nuer].focus();
     };
 
-    const GetNumberData = () => {
+    const GetNuerData = () => {
         axios
             .get(
                 import.meta.env.VITE_DOMAIN +
-                    `/api/${pageType}/dailydata/${selectDate}/${inputData['TF0']}`
+                    `/api/${pageType}/checkingdata/${selectDate}/${inputData['0']}`
             )
             .then((res) => {
                 console.log(res.data.length);
                 if (res.data.length == 0) {
-                    let str = `入力番号:${inputData['TF0']}
-                        データがありません。`;
-
-                    ResultError(str);
+                    ResultError(`入力番号:${inputData['0']}
+                    データがありません。`);
                 } else {
                     if (res.data[0].一次梱包フラグ == 1)
-                        ResultError(`入力番号:${inputData['TF0']}
+                        ResultError(`入力番号:${inputData['0']}
                         梱包した問い合わせ番号です。`);
                     else {
                         console.log(res.data[0]);
@@ -128,13 +124,12 @@ const Checking = (props) => {
             })
             .catch((e) => {
                 let errMsg = e.response.data.message;
-
-                ResultError(`入力番号:${inputData['TF0']}
+                ResultError(`入力番号:${inputData['0']}
                 ${errMsg}`);
             });
     };
 
-    const is_number = (text) => {
+    const is_nuer = (text) => {
         const regex = /^[0-9]+$/;
         if (regex.test(text)) {
             return true;
@@ -144,29 +139,31 @@ const Checking = (props) => {
 
     const handleKeyPress = (e) => {
         const event = e;
-        const str = 'TF' + taskCnt;
-        const str2 = 'MB' + taskCnt;
         if (event.key === 'Enter') {
-            if (inputData[str] == '' || inputData[str] == null) {
+            // 入力データがない時
+            if (inputData[taskCnt] == '' || inputData[taskCnt] == null) {
                 ResultError('入力してください');
                 return;
             }
             SetMsgBox((prevState) => ({
                 ...prevState,
-                [str2]: 'サーバ接続中…',
+                [taskCnt]: 'サーバ接続中…',
             }));
 
             if (taskCnt == 2) {
-                if (!is_number(inputData['TF2'])) {
+                // 数量なのかチェック
+                if (!is_nuer(inputData['2'])) {
                     ResultError('数量を入力してください');
                     return;
                 }
-                if (searchData.数量 == inputData['TF2']) {
+
+                // 数量がデータベースと同じだったら実行
+                if (searchData.数量 == inputData['2']) {
                     const toastid = toast.loading('出荷処理中...');
                     axios
                         .put(
                             import.meta.env.VITE_DOMAIN +
-                                `/api/${pageType}/firstpacking/${selectDate}/${inputData['TF0']}`
+                                `/api/${pageType}/firstpacking/${selectDate}/${inputData['0']}`
                         )
                         .then((res) => {
                             toast.success('検品処理完了しました。', {
@@ -176,45 +173,40 @@ const Checking = (props) => {
                             dataClear();
                         })
                         .catch((e) => {
-                            ResultError();
-                            inputRef['MB2'] = e.response.data.message;
+                            ResultError('エラー：' + e.response.data.message);
                             toast.error('error', { id: toastid });
                         });
                 } else {
                     ResultError(
-                        `入力数量:${inputData['TF2']} 
-                        数量が違います。`
+                        `入力数量:${inputData['2']} 
+                        入力数量数量が違います。`
                     );
                 }
             } else if (taskCnt == 1) {
-                if (inputData['TF0'] == inputData['TF1']) {
+                if (inputData['0'] == inputData['1']) {
                     ResultOK();
                 } else {
-                    ResultError(`入力番号:${inputData['TF1']}
+                    ResultError(`入力番号:${inputData['1']}
                     問い合わせ番号が違います。`);
                 }
             } else if (taskCnt == 0) {
-                GetNumberData();
+                GetNuerData();
             }
         }
     };
 
     const ResultOK = () => {
-        var str = 'MB' + taskCnt;
         inputRef.current[taskCnt].disabled = true;
-        SetMsgBox((prevState) => ({ ...prevState, [str]: '完了' }));
+        SetMsgBox((prevState) => ({ ...prevState, [taskCnt]: '完了' }));
         boxRef.current[taskCnt].style.backgroundColor = green[200];
         focusing(taskCnt + 1);
         SetTaskCnt(taskCnt + 1);
     };
 
     const ResultError = (text) => {
-        var str = 'MB' + taskCnt;
-        var TF = 'TF' + taskCnt;
-
-        SetMsgBox((prevState) => ({ ...prevState, [str]: [text] }));
+        SetMsgBox((prevState) => ({ ...prevState, [taskCnt]: [text] }));
         boxRef.current[taskCnt].style.backgroundColor = red[200];
-        inputData[TF] = '';
+        inputData[taskCnt] = '';
     };
 
     const TextFieldHandler = (e) => {
@@ -251,7 +243,7 @@ const Checking = (props) => {
 
                         <Box ref={btnRef} width={'20%'}>
                             <Button onClick={() => dataClear()} sx={BtnOption}>
-                                クリア
+                                データクリア
                             </Button>
                         </Box>
                     </Box>
@@ -324,11 +316,11 @@ const Checking = (props) => {
                                 バーコード
                             </Typography>
                             <TextField
-                                value={inputData['TF0']}
+                                value={inputData['0']}
                                 onChange={TextFieldHandler}
                                 inputProps={{ onKeyPress: handleKeyPress }}
                                 inputRef={(ref) => inputRef.current.push(ref)}
-                                id="TF0"
+                                id="0"
                                 label="問い合わせNo"
                                 sx={insTFOption}
                             />
@@ -342,7 +334,7 @@ const Checking = (props) => {
                                     whiteSpace={'pre-line'}
                                     sx={insListResultTypoOption}
                                 >
-                                    {MsgBox['MB0']}
+                                    {MsgBox['0']}
                                 </Typography>
                             </Box>
                         </Box>
@@ -362,11 +354,11 @@ const Checking = (props) => {
                                 バーコード２
                             </Typography>
                             <TextField
-                                value={inputData['TF1']}
+                                value={inputData['1']}
                                 onChange={TextFieldHandler}
                                 inputProps={{ onKeyPress: handleKeyPress }}
                                 inputRef={(ref) => inputRef.current.push(ref)}
-                                id="TF1"
+                                id="1"
                                 label="問い合わせNo"
                                 sx={insTFOption}
                             />
@@ -379,7 +371,7 @@ const Checking = (props) => {
                                     whiteSpace={'pre-line'}
                                     sx={insListResultTypoOption}
                                 >
-                                    {MsgBox['MB1']}
+                                    {MsgBox['1']}
                                 </Typography>
                             </Box>
                         </Box>
@@ -404,8 +396,8 @@ const Checking = (props) => {
                                 onChange={TextFieldHandler}
                                 inputProps={{ onKeyPress: handleKeyPress }}
                                 inputRef={(ref) => inputRef.current.push(ref)}
-                                value={inputData['TF2']}
-                                id="TF2"
+                                value={inputData['2']}
+                                id="2"
                                 sx={insTFOption}
                             />
                             <Box
@@ -416,7 +408,7 @@ const Checking = (props) => {
                                     whiteSpace={'pre-line'}
                                     sx={insListResultTypoOption}
                                 >
-                                    {MsgBox['MB2']}
+                                    {MsgBox['2']}
                                 </Typography>
                             </Box>
                         </Box>

@@ -9,7 +9,7 @@ const ToasterComp = (props) => {
             toastOptions={{
                 // Define default options
                 className: '',
-                duration: 5000,
+                duration: 10000,
                 style: {
                     fontSize: 16,
                     background: 'white',

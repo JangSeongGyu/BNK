@@ -1,17 +1,17 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Grid, Modal, Typography, Box, Button } from '@mui/material';
-import SuperMarketDesign from '../Design/SuperMarketDesign';
+import DesignOption from '../Design/DesignOption';
 import { red } from '@mui/material/colors';
-import ReactToPrint from 'react-to-print';
+import ReactToPrint, { useReactToPrint } from 'react-to-print';
 import LabelLayout from './LabelLayout';
 import YamaLayout from './YamaComponent/YamaLayout';
 import JobTicketLayout from './JobTicketLayout';
 import axios from 'axios';
 import QRBtn from './QRBtn';
 
-const BorderOption = SuperMarketDesign('BorderOption');
-const BtnOption = SuperMarketDesign('BtnOption');
-const calendarBoxTypo = SuperMarketDesign('calendarBoxTypo');
+const BorderOption = DesignOption('BorderOption');
+const BtnOption = DesignOption('BtnOption');
+const calendarBoxTypo = DesignOption('calendarBoxTypo');
 
 const PrintOutBtnList = (props) => {
     const selectDate = props.selectDate;
@@ -26,6 +26,7 @@ const PrintOutBtnList = (props) => {
             <ReactToPrint
                 trigger={() => <Button sx={BtnOption}>梱包ラベル</Button>}
                 content={() => LabelRef.current}
+                documentTitle={`梱包ラベル_${selectDate}`}
             />
         );
     };
@@ -50,7 +51,10 @@ const PrintOutBtnList = (props) => {
                 >
                     <ReactToPrint
                         trigger={() => (
-                            <Button onClick={() => {}} sx={BtnOption}>
+                            <Button
+                                onClick={() => console.log('dd')}
+                                sx={BtnOption}
+                            >
                                 JOBチケット
                             </Button>
                         )}
@@ -60,6 +64,7 @@ const PrintOutBtnList = (props) => {
                                 }
                         @page { size: A4 landscape; margin: 0; }"
                         content={() => JobRef.current}
+                        documentTitle={`Jobチケット_${selectDate}`}
                     />
                     <CheckLabelBtn />
                     <ReactToPrint
@@ -67,6 +72,7 @@ const PrintOutBtnList = (props) => {
                             <Button sx={BtnOption}>山出しリスト</Button>
                         )}
                         content={() => YamaRef.current}
+                        documentTitle={`山出リスト_${selectDate}`}
                     />
                 </Box>
             </Box>

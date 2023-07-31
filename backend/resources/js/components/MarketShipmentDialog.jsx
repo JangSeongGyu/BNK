@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import SelectDateCard from './SelectDateCard';
 import { Box, Button, Dialog, Typography } from '@mui/material';
-import SuperMarketDesign from '../Design/SuperMarketDesign';
+import DesignOption from '../Design/DesignOption';
 import axios from 'axios';
 import { green, red } from '@mui/material/colors';
 import toast, { Toaster } from 'react-hot-toast';
@@ -15,8 +15,8 @@ import toast, { Toaster } from 'react-hot-toast';
 //     console.log(res);
 // });
 
-const dialogYes = SuperMarketDesign('dialogYes');
-const dialogNo = SuperMarketDesign('dialogNo');
+const dialogYes = DesignOption('dialogYes');
+const dialogNo = DesignOption('dialogNo');
 
 const MarketOutSideList = (props) => {
     const selectDate = props.selectDate;

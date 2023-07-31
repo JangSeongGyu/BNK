@@ -1,11 +1,11 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Grid, Modal, Typography, Box, Button } from '@mui/material';
-import SuperMarketDesign from '../Design/SuperMarketDesign';
+import DesignOption from '../Design/DesignOption';
 import { Navigate, useNavigate } from 'react-router-dom';
 
-const BorderOption = SuperMarketDesign('BorderOption');
-const BtnOption = SuperMarketDesign('BtnOption');
-const calendarBoxTypo = SuperMarketDesign('calendarBoxTypo');
+const BorderOption = DesignOption('BorderOption');
+const BtnOption = DesignOption('BtnOption');
+const calendarBoxTypo = DesignOption('calendarBoxTypo');
 
 const SelectDateCard = (props) => {
     const selectDate = props.selectDate;
@@ -25,14 +25,16 @@ const SelectDateCard = (props) => {
                 <Typography sx={{ fontWeight: 'bold', fontSize: 32 }}>
                     {selectDate}
                 </Typography>
-                <Button
-                    onClick={() =>
-                        navigate(`/${pageType}/detail/${selectDate}`)
-                    }
-                    sx={{ border: 1, height: 40 }}
-                >
-                    明細
-                </Button>
+                <Box ml={2}>
+                    <Button
+                        onClick={() =>
+                            navigate(`/${pageType}/detail/${selectDate}`)
+                        }
+                        sx={BtnOption}
+                    >
+                        明細
+                    </Button>
+                </Box>
             </Box>
         </Box>
     );

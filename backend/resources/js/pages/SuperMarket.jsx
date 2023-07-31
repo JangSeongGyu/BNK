@@ -7,9 +7,9 @@ import MarketShipmentDialog from '../components/MarketShipmentDialog';
 import { Dialog, Divider, Typography, Button, Box } from '@mui/material';
 import { grey, pink, red } from '@mui/material/colors';
 import { toast } from 'react-hot-toast';
-import SuperMarketDesign from '../Design/SuperMarketDesign';
+import DesignOption from '../Design/DesignOption';
 
-const BtnOption = SuperMarketDesign('BtnOption');
+const BtnOption = DesignOption('BtnOption');
 
 const SuperMarket = (props) => {
     const pageType = props.pageType;
@@ -38,12 +38,12 @@ const SuperMarket = (props) => {
     };
 
     const ClickSFData = () => {
-        // axios
-        //     .post(import.meta.env.VITE_DOMAIN + '/api/supermarket/order/')
-        //     .then((res) => {
-        //         console.log(res);
-        //     })
-        //     .catch((e) => {});
+        axios
+            .post(import.meta.env.VITE_DOMAIN + `/api/${pageType}/order/`)
+            .then((res) => {
+                console.log(res.data);
+            })
+            .catch((e) => {});
     };
 
     const callBacklog = () => {
@@ -70,8 +70,6 @@ const SuperMarket = (props) => {
             UpdateRef.current.event();
             UpdateRef.current.side(selectDate);
         }
-        // else if (res == 'error' || res == 'exit') {}
-        // console.log('close');
         SetOpen(false);
     };
     const handleOpen = () => {
@@ -82,12 +80,29 @@ const SuperMarket = (props) => {
     // Get Calender -> selectDate & dailyData
     const CallSelectDate = (data) => {
         SetSelectDate(data.selectDate);
-        SetIsData(data.isData);
+        if (data.isData == true) callDailyData(data.selectDate);
+        else SetIsData(false);
+        // SetIsData(data.isData);
+    };
+
+    const callDailyData = (date) => {
+        axios
+            .get(
+                import.meta.env.VITE_DOMAIN +
+                    `/api/${pageType}/dailydata/${date}`
+            )
+            .then((res) => {
+                SetIsData(true);
+                console.log(res.data);
+            })
+            .catch((e) => {
+                // SetIsData(false);
+            });
     };
 
     return (
         <>
-            <Header pageType={pageType} />
+            <Header page={0} pageType={pageType} />
 
             <Box height={'80%'} sx={{ display: 'flex' }}>
                 <Box sx={{ width: '60%', height: '100%' }}>

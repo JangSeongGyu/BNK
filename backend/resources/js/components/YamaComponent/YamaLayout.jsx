@@ -51,7 +51,8 @@ const YamaLayout = forwardRef((props, ref) => {
         html.push(<CardHeader data={groupData} selectDate={selectDate} />);
 
         let keys = Object.keys(groupData);
-        keys.forEach((key) => {
+        let cnt = 0;
+        keys.forEach((key, index) => {
             let length = groupData[key].length;
 
             insertHeight = 86 + length * 40;
@@ -59,12 +60,12 @@ const YamaLayout = forwardRef((props, ref) => {
                 // ページ　余白処理
                 html.push(
                     <Box
-                        key={i}
+                        key={cnt++}
                         borderBottom={1}
                         pb={4}
                         borderColor={grey[400]}
                         height={MainHeight - heightCnt}
-                    ></Box>
+                    />
                 );
                 heightCnt = 0;
             }
@@ -72,7 +73,7 @@ const YamaLayout = forwardRef((props, ref) => {
             // 送り先　Header
             html.push(
                 <ListHeader
-                    key={key}
+                    key={cnt++}
                     data={groupData[key]}
                     selectDate={selectDate}
                 />
@@ -82,11 +83,11 @@ const YamaLayout = forwardRef((props, ref) => {
             for (let i = 0; i < length; i++)
                 if (pageType == 'supermarket')
                     html.push(
-                        <SPSceneCard data={groupData[key][i]}></SPSceneCard>
+                        <SPSceneCard key={cnt++} data={groupData[key][i]} />
                     );
                 else if (pageType == 'eagles' || pageType == 'taxi')
                     html.push(
-                        <TXSceneCard data={groupData[key][i]}></TXSceneCard>
+                        <TXSceneCard key={cnt++} data={groupData[key][i]} />
                     );
             heightCnt += insertHeight;
             insertHeight = 0;

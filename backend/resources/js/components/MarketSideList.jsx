@@ -4,11 +4,11 @@ import { red } from '@mui/material/colors';
 import SelectDateCard from './SelectDateCard';
 import PrintOutBtnList from './PrintOutBtnList';
 import BizlogiBtnList from './BizlogiComponent/BizlogiBtnList';
-import SuperMarketDesign from '../Design/SuperMarketDesign';
+import DesignOption from '../Design/DesignOption';
 import CheckingList from './CheckingList';
 
-const BorderOption = SuperMarketDesign('BorderOption');
-const BtnOption = SuperMarketDesign('BtnOption');
+const BorderOption = DesignOption('BorderOption');
+const BtnOption = DesignOption('BtnOption');
 
 const MarketSideList = (props) => {
     const selectDate = props.selectDate;

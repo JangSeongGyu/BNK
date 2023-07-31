@@ -1,39 +1,60 @@
 import React, { useEffect, useState, useRef } from 'react';
-import Box from '@mui/material/Box';
 import Header from '../components/Header';
 import axios from 'axios';
 import CalendarList from '../components/CalendarList';
 import MarketSideList from '../components/MarketSideList';
 import MarketShipmentDialog from '../components/MarketShipmentDialog';
-import { Dialog, Divider, Typography } from '@mui/material';
+import { Dialog, Divider, Typography, Button, Box } from '@mui/material';
 import { grey, pink, red } from '@mui/material/colors';
 import { toast } from 'react-hot-toast';
+import DesignOption from '../Design/DesignOption';
+
+const BtnOption = DesignOption('BtnOption');
 
 const Taxi = (props) => {
     const pageType = props.pageType;
     const [selectDate, SetSelectDate] = useState('');
     const [open, SetOpen] = useState(false);
     const [logDatas, SetLogDatas] = useState('');
-    const [normalCnt, SetNormalCnt] = useState(0);
-    const [pouchCnt, SetPouchCnt] = useState(0);
+    const [SFDatas, SetSFDatas] = useState('');
     const [dailyData, SetDailyData] = useState([]);
     const [clickType, SetClickType] = useState('');
     const [isData, SetIsData] = useState(false);
+    const UpdateRef = useRef(null);
 
     useEffect(() => {
+        CallSFData();
+        callBacklog();
+    }, []);
+
+    const CallSFData = () => {
         axios
-            .get(import.meta.env.VITE_DOMAIN + `/api/taxi/backlogdata`)
+            .get(import.meta.env.VITE_DOMAIN + `/api/${pageType}/order/`)
             .then((res) => {
-                SetLogDatas(res.data);
-                let arr = res.data;
-                if (arr.length == 0) return;
-                arr.forEach((data) => {
-                    if (data.パウチ == 1) SetPouchCnt(pouchCnt + 1);
-                    else SetNormalCnt(normalCnt + 1);
-                });
+                SetSFDatas(res.data);
+                console.log(res.data);
             })
             .catch((e) => {});
-    }, []);
+    };
+
+    const ClickSFData = () => {
+        axios
+            .post(import.meta.env.VITE_DOMAIN + `/api/${pageType}/order/`)
+            .then((res) => {
+                console.log(res.data);
+            })
+            .catch((e) => {});
+    };
+
+    const callBacklog = () => {
+        axios
+            .get(import.meta.env.VITE_DOMAIN + `/api/${pageType}/backlogdata/`)
+            .then((res) => {
+                SetLogDatas(res.data);
+                SetSelectDate(data.selectDate);
+            })
+            .catch((e) => {});
+    };
 
     const thisMonth = () => {
         const today = new Date();
@@ -43,8 +64,12 @@ const Taxi = (props) => {
         )}`;
     };
 
-    const handleClose = () => {
-        console.log('close');
+    const handleClose = (res) => {
+        if (res == 'ok') {
+            callBacklog();
+            UpdateRef.current.event();
+            UpdateRef.current.side(selectDate);
+        }
         SetOpen(false);
     };
     const handleOpen = () => {
@@ -52,65 +77,122 @@ const Taxi = (props) => {
         else SetOpen(true);
     };
 
+    // Get Calender -> selectDate & dailyData
     const CallSelectDate = (data) => {
         SetSelectDate(data.selectDate);
-        SetIsData(data.isData);
+        if (data.isData == true) callDailyData(data.selectDate);
+        else SetIsData(false);
+        // SetIsData(data.isData);
+    };
+
+    const callDailyData = (date) => {
+        axios
+            .get(
+                import.meta.env.VITE_DOMAIN +
+                    `/api/${pageType}/dailydata/${date}`
+            )
+            .then((res) => {
+                SetIsData(true);
+                console.log(res.data);
+            })
+            .catch((e) => {
+                // SetIsData(false);
+            });
     };
 
     return (
         <>
-            <Header pageType={pageType} />
-            {logDatas.length > 0 && (
-                <Typography
-                    sx={{
-                        left: 170,
-                        top: 105,
-                        position: 'absolute',
-                        display: 'inline',
-                        fontSize: 28,
-                        p: 1,
-                        borderRadius: 3,
-                        zIndex: 10,
-                        textAlign: 'center',
-                        fontWeight: 'bold',
-                    }}
-                >
-                    パウチ : {logDatas.length}
-                    <> / </>
-                    通常:{logDatas.length}
-                </Typography>
-            )}
+            <Header page={0} pageType={pageType} />
+
             <Box height={'80%'} sx={{ display: 'flex' }}>
-                <Box height={'100%'} sx={{ width: '60%' }}>
+                <Box sx={{ width: '60%', height: '100%' }}>
+                    <Box
+                        sx={{
+                            left: 160,
+                            top: 110,
+                            gap: 1,
+                            position: 'absolute',
+                            display: 'flex',
+                            alignItems: 'center',
+                            textAlign: 'center',
+                        }}
+                    >
+                        <Button
+                            disabled={SFDatas.length == 0 ? true : false}
+                            sx={{
+                                width: 150,
+                                height: 50,
+                                border: 1,
+                                color: 'primary.main',
+                                backgroundColor: 'white',
+                                '&:hover': {
+                                    backgroundColor: 'primary.main',
+                                    color: 'white',
+                                },
+                            }}
+                            onClick={() => {
+                                ClickSFData();
+                            }}
+                        >
+                            SFデータ取得
+                        </Button>
+                        <Typography
+                            width={110}
+                            fontSize={20}
+                            fontWeight={'bold'}
+                            backgroundColor={'white'}
+                            color={'primary.main'}
+                            borderRadius={1}
+                        >
+                            SFデータ
+                            <br />
+                            {SFDatas.length}
+                        </Typography>
+
+                        <Typography
+                            width={110}
+                            fontSize={20}
+                            fontWeight={'bold'}
+                            white
+                            backgroundColor={'white'}
+                            color={'primary.main'}
+                            borderRadius={1}
+                        >
+                            未処理
+                            <br />
+                            {logDatas.length}
+                        </Typography>
+                    </Box>
+
                     <CalendarList
+                        UpdateRef={UpdateRef}
                         pageType={pageType}
                         Today={thisMonth}
                         CallSelectDate={CallSelectDate}
                         handleOpen={handleOpen}
                     />
                 </Box>
-
-                <Box mt={1} sx={{ width: '40%' }}>
+                <Box mt={1} sx={{ width: '40%' }} height={'100%'}>
                     {isData && (
                         <MarketSideList
                             pageType={pageType}
-                            selectDate={'2023-07-20'}
-                            isData={true}
+                            selectDate={selectDate}
+                            isData={isData}
+                            logDatas={logDatas}
                         />
                     )}
                 </Box>
             </Box>
-            <Dialog onClose={handleClose} open={open}>
+            <Dialog onClose={() => handleClose('exit')} open={open}>
                 <MarketShipmentDialog
                     pageType={pageType}
                     handleClose={handleClose}
                     logDatas={logDatas.length}
-                    normalCnt={normalCnt}
-                    pouchCnt={pouchCnt}
                     selectDate={selectDate}
                 />
             </Dialog>
         </>
     );
 };
+
 export default Taxi;

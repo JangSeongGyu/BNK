@@ -69,7 +69,7 @@ class Handler extends ExceptionHandler
         }
 
         // それ以外の場合は Internal Server Error とする
-        return $this->toResponse($request, 'Internal Server Error', Response::HTTP_INTERNAL_SERVER_ERROR);
+        return $this->toResponse($request, $exception->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
     }
 
     protected function toResponse($request, string $message, int $statusCode)

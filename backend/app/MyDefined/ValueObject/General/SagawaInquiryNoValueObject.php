@@ -26,7 +26,7 @@ class SagawaInquiryNoValueObject extends ValueObject
         if(!strlen($inquiryNo) == 12){
             throw new InvalidValueErrorResponseException('問い合わせ番号: ' . $inquiryNo);
         }
-        return;
+        return $inquiryNo;
     }
 
 }

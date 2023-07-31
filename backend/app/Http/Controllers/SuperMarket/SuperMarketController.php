@@ -15,6 +15,7 @@ use App\MyDefined\ValueObject\SuperMarket\CheckInquiryNoValueObject;
 use App\MyDefined\ValueObject\General\YearMonthValueObject;
 use App\MyDefined\ValueObject\General\OrderNoValueObject;
 
+use App\MyDefined\UseCase\SuperMarket\GetOrderDataUseCase;
 use App\MyDefined\UseCase\SuperMarket\CreateOrderDataUseCase;
 use App\MyDefined\UseCase\SuperMarket\UpdateShipmentUseCase;
 use App\MyDefined\UseCase\SuperMarket\GetBacklogDataUseCase;
@@ -22,7 +23,7 @@ use App\MyDefined\UseCase\SuperMarket\GetBizlogiUseCase;
 use App\MyDefined\UseCase\SuperMarket\GetDailyShipmentDataUseCase;
 use App\MyDefined\UseCase\SuperMarket\GetBetweenShipmentDataUseCase;
 use App\MyDefined\UseCase\SuperMarket\GetBetweenShipmentCountUseCase;
-use App\MyDefined\UseCase\SuperMarket\GetDTFUseCase;
+use App\MyDefined\UseCase\SuperMarket\GetQRDataUseCase;
 use App\MyDefined\UseCase\SuperMarket\GetLabelUseCase;
 use App\MyDefined\UseCase\SuperMarket\GetJobTicketUseCase;
 use App\MyDefined\UseCase\SuperMarket\GetTotalPickUseCase;
@@ -32,7 +33,7 @@ use App\MyDefined\UseCase\SuperMarket\GetDataByInquiryNoUseCase;
 use App\MyDefined\UseCase\SuperMarket\UpdateFirstPackingUseCase;
 use App\MyDefined\UseCase\SuperMarket\UpdateSecondPackingUseCase;
 use App\MyDefined\UseCase\SuperMarket\CreateMonthlyNumberUseCase;
-use App\MyDefined\UseCase\SuperMarket\GetMonthlyDataUseCase;
+use App\MyDefined\UseCase\SuperMarket\GetMonthlyNumberUseCase;
 use App\MyDefined\UseCase\SuperMarket\GetAllDataUseCase;
 
 /**
@@ -41,6 +42,19 @@ use App\MyDefined\UseCase\SuperMarket\GetAllDataUseCase;
 
 class SuperMarketController extends Controller
 {
+    /**
+     * [GET]SFOrderデータ取得
+     *
+     * @param GetOrderDataUseCase $GetOrderDataUseCase
+     */
+
+    public function getOrderData(
+        GetOrderDataUseCase $GetOrderDataUseCase,
+    ){
+        $orderData = $GetOrderDataUseCase->execute();
+        return new JsonResponse($orderData, 200, [], JSON_UNESCAPED_UNICODE);
+    }
+
     /**
      * [POST]注文データインポート
      *
@@ -74,10 +88,11 @@ class SuperMarketController extends Controller
      */
 
     public function updateShipment(
-        UpdateShipmentUseCase $UpdateShipmentUseCase,
-        $shipmentDate
+        $shipmentDate,
+        UpdateShipmentUseCase $UpdateShipmentUseCase
     ){
         $DateVO = DateValueObject::create($shipmentDate);
+        // return new JsonResponse($DateVO->value, 200, [], JSON_UNESCAPED_UNICODE);
         $UpdateShipmentUseCase->execute($DateVO);
         return new JsonResponse();
     }
@@ -143,17 +158,17 @@ class SuperMarketController extends Controller
     }
 
     /**
-     * [GET]DTF連携データ出力
-     * @param GetDTFUseCase $GetDTFUseCase
+     * [GET]QR用データ出力
+     * @param GetQRDataUseCase $GetQRDataUseCase
      */
 
-    public function getDTF(
-        GetDTFUseCase $GetDTFUseCase,
+    public function getQRData(
+        GetQRDataUseCase $GetQRDataUseCase,
         $shipmentDate
     ){
         $DateVO = DateValueObject::create($shipmentDate);
-        $dtfData = $GetDTFUseCase->execute($DateVO);
-        return new JsonResponse($dtfData, 200, [], JSON_UNESCAPED_UNICODE);
+        $dtfData = $GetQRDataUseCase->execute($DateVO);
+        return new JsonResponse($dtfData, 200, [], JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES);
     }
 
     /**
@@ -302,15 +317,13 @@ class SuperMarketController extends Controller
     /**
      * [GET]月次集計
      *
-     * @param GetMonthlyDataUseCase $GetMonthlyDataUseCase
+     * @param GetMonthlyNumberUseCase $GetMonthlyNumberUseCase
      */
 
-    public function getMonthlyData(
-        GetMonthlyDataUseCase $GetMonthlyDataUseCase,
-        $yearMonth
+    public function getMonthlyNumber(
+        GetMonthlyNumberUseCase $GetMonthlyNumberUseCase
     ){
-        $YearMonthVO = YearMonthValueObject::create($yearMonth);
-        $monthlyData = $GetMonthlyDataUseCase->execute($YearMonthVO);
+        $monthlyData = $GetMonthlyNumberUseCase->execute();
         return new JsonResponse($monthlyData, 200, [], JSON_UNESCAPED_UNICODE);
     }
 

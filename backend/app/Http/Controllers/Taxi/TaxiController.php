@@ -60,7 +60,7 @@ class TaxiController extends Controller
         GetBacklogDataUseCase $GetBacklogDataUseCase,
     ){
         $backlogData = $GetBacklogDataUseCase->execute();
-        return new JsonResponse($backlogData);
+        return new JsonResponse($backlogData, 200, [], JSON_UNESCAPED_UNICODE);
     }
 
     /**

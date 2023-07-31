@@ -27,10 +27,8 @@ final class UpdateRepository implements UpdateRepoInterface{
         $transaction->bindParam(5, $UserEntity->name, PDO::PARAM_STR);
         $transaction->bindParam(6, $ShipmentEntity->shipmentDate, PDO::PARAM_STR);
         $transaction->execute();
-
-       
         
-        if(!$msgCD){
+        if($msgCD !== null){
             RoutingResponseExceptions::Routing($msgCD, $msgParam1 . $msgParam2 . $msgParam3);
         }
 
@@ -53,7 +51,7 @@ final class UpdateRepository implements UpdateRepoInterface{
         $transaction->bindParam(8, $InquiryNoEntity->inquiryNo, PDO::PARAM_STR);
         $transaction->execute();
         
-        if(!$msgCD){
+        if($msgCD !== null){
             RoutingResponseExceptions::Routing($msgCD, $msgParam1 . $msgParam2 . $msgParam3);
         }
 
@@ -73,7 +71,7 @@ final class UpdateRepository implements UpdateRepoInterface{
         $transaction->bindParam(6, $TsubushiEntity->shipmentDate, PDO::PARAM_STR);
         $transaction->execute();
         
-        if(!$msgCD){
+        if($msgCD !== null){
             RoutingResponseExceptions::Routing($msgCD, $msgParam1 . $msgParam2 . $msgParam3);
         }
 
@@ -95,12 +93,10 @@ final class UpdateRepository implements UpdateRepoInterface{
         $transaction->bindParam(6, $FirstPackingEntity->shipmentDate, PDO::PARAM_STR);
         $transaction->bindParam(7, $FirstPackingEntity->inputBarcode, PDO::PARAM_STR);
         $transaction->execute();
-
-       
-        if(!$msgCD){
+        
+        if($msgCD !== null){
             RoutingResponseExceptions::Routing($msgCD, $msgParam1 . $msgParam2 . $msgParam3);
         }
-       
 
         return;  
     }
@@ -119,7 +115,7 @@ final class UpdateRepository implements UpdateRepoInterface{
         $transaction->bindParam(7, $SecondPackingEntity->inputBarcode, PDO::PARAM_STR);
         $transaction->execute();
         
-        if(!$msgCD){
+        if($msgCD !== null){
             RoutingResponseExceptions::Routing($msgCD, $msgParam1 . $msgParam2 . $msgParam3);
         }
 

@@ -5,8 +5,9 @@ namespace App\Exceptions;
 use App\Exceptions\NotExistsErrorResponseException;
 use App\Exceptions\AlreadyCompletedErrorResponseException;
 use App\Exceptions\StoredProcedureErrorResponseException;
+use App\Exceptions\BaseErrorResponseException;
 
-class RoutingResponseExceptions
+class RoutingResponseExceptions extends BaseErrorResponseException
 {
     public static function Routing(int $errorCode, string $message = '')
     {
@@ -16,9 +17,20 @@ class RoutingResponseExceptions
         elseif($errorCode == 410){
             throw new NotExistsErrorResponseException();
         }
-        elseif($errorCode == 500){
+        elseif($errorCode == 505){
             throw new StoredProcedureErrorResponseException($message);
         }
+        else{
+            throw new self('', $errorCode);
+        }
 
+    }
+
+    public function toResponse($request)
+    {
+        $this->setErrorMessage('予期せぬエラー\n'. $this->getErrorMessage());
+        $this->setStatusCode($this->getStatusCode());
+        $this->setErrorCode('routing_exceptions');
+        return parent::toResponse($request);
     }
 }

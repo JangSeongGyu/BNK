@@ -29,7 +29,7 @@ class YearMonthValueObject extends ValueObject
 
     private function validate(string $yearMonth)
     {
-        if(!preg_match('/[0-9]{4}[-\/][0-9]{2}/', $yearMonth)){
+        if(!preg_match('/^[0-9]{4}[-\/][0-9]{2}$/', $yearMonth)){
             throw new InvalidValueErrorResponseException('年月: ' . $yearMonth);
         }
         else{

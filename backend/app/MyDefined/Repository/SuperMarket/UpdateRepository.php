@@ -28,7 +28,7 @@ final class UpdateRepository implements UpdateRepoInterface{
         $transaction->bindParam(6, $ShipmentEntity->shipmentDate, PDO::PARAM_STR);
         $transaction->execute();
         
-        if(!$msgCD){
+        if($msgCD !== null){
             RoutingResponseExceptions::Routing($msgCD, $msgParam1 . $msgParam2 . $msgParam3);
         }
 
@@ -51,7 +51,7 @@ final class UpdateRepository implements UpdateRepoInterface{
         $transaction->bindParam(8, $InquiryNoEntity->inquiryNo, PDO::PARAM_STR);
         $transaction->execute();
         
-        if(!$msgCD){
+        if($msgCD !== null){
             RoutingResponseExceptions::Routing($msgCD, $msgParam1 . $msgParam2 . $msgParam3);
         }
 
@@ -71,7 +71,7 @@ final class UpdateRepository implements UpdateRepoInterface{
         $transaction->bindParam(6, $TsubushiEntity->shipmentDate, PDO::PARAM_STR);
         $transaction->execute();
         
-        if(!$msgCD){
+        if($msgCD !== null){
             RoutingResponseExceptions::Routing($msgCD, $msgParam1 . $msgParam2 . $msgParam3);
         }
 
@@ -92,7 +92,7 @@ final class UpdateRepository implements UpdateRepoInterface{
         $transaction->bindParam(6, $FirstPackingEntity->inputBarcode, PDO::PARAM_STR);
         $transaction->execute();
         
-        if(!$msgCD){
+        if($msgCD !== null){
             RoutingResponseExceptions::Routing($msgCD, $msgParam1 . $msgParam2 . $msgParam3);
         }
 
@@ -113,7 +113,7 @@ final class UpdateRepository implements UpdateRepoInterface{
         $transaction->bindParam(6, $SecondPackingEntity->inputBarcode, PDO::PARAM_STR);
         $transaction->execute();
         
-        if(!$msgCD){
+        if($msgCD !== null){
             RoutingResponseExceptions::Routing($msgCD, $msgParam1 . $msgParam2 . $msgParam3);
         }
 

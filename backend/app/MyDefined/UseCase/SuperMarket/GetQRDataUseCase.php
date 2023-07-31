@@ -2,13 +2,13 @@
 
 namespace App\MyDefined\UseCase\SuperMarket;
 
-use App\MyDefined\ValueObject\General\YearMonthValueObject;
+use App\MyDefined\ValueObject\General\DateValueObject;
 use App\MyDefined\Repository\SuperMarket\GetRepoInterface;
 
 /**
- * [SuperMarket]月次集計用データ取得
+ * [SuperMarket]指定出荷日でQR用データ取得
  */
-final class GetMonthlyDataUseCase
+final class GetQRDataUseCase
 {
     /**
      * リポジトリインターフェースをプロパティに設定
@@ -27,10 +27,10 @@ final class GetMonthlyDataUseCase
 
     /**
      * メイン処理
-     * 1．月次集計用データ取得
+     * 1．QR用データ取得
      */
-    public function execute(YearMonthValueObject $YearMonthVO){
-        $result = $this->getRepository->getAllDataByMonth($YearMonthVO);
+    public function execute(DateValueObject $DateVO){
+        $result = $this->getRepository->getQRData($DateVO);
         return $result;
     }
 }

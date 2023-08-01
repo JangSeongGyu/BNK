@@ -114,7 +114,7 @@ const Checking = (props) => {
                 } else {
                     if (res.data[0].一次梱包フラグ == 1)
                         ResultError(`入力番号:${inputData['0']}
-                        梱包した問い合わせ番号です。`);
+                        すでに`);
                     else {
                         console.log(res.data[0]);
                         SetSearchData(res.data[0]);

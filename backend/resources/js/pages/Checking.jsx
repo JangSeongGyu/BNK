@@ -5,11 +5,9 @@ import DesignOption from '../Design/DesignOption';
 import ForwardIcon from '@mui/icons-material/Forward';
 import { green, grey, pink, red } from '@mui/material/colors';
 import { useParams } from 'react-router-dom';
-import barcode from '../images/barcode.png';
 import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
 
-const BorderOption = DesignOption('BorderOption');
 const insListOption = DesignOption('insListOption');
 const insOutputOption = DesignOption('insOutputOption');
 const insListResultOption = DesignOption('insListResultOption');
@@ -85,7 +83,7 @@ const Checking = (props) => {
                 }
             })
             .catch((e) => {
-                toast.error('作業進捗更新できませんでした。', { id: toastid });
+                toast.error('作業進捗の更新に失敗しました。', { id: toastid });
             });
     };
 
@@ -296,7 +294,7 @@ const Checking = (props) => {
                                 textAlign={'center'}
                                 fontWeight={'bold'}
                             >
-                                バーコード
+                                頭紙バーコード
                             </Typography>
                             <TextField
                                 value={inputData['0']}
@@ -334,7 +332,7 @@ const Checking = (props) => {
                                 textAlign={'center'}
                                 fontWeight={'bold'}
                             >
-                                バーコード２
+                                梱包ラベルバーコード
                             </Typography>
                             <TextField
                                 value={inputData['1']}

@@ -3,7 +3,7 @@
 namespace App\Exceptions;
 
 use App\Exceptions\NotExistsErrorResponseException;
-use App\Exceptions\AlreadyCompletedErrorResponseException;
+use App\Exceptions\ConflictErrorResponseException;
 use App\Exceptions\StoredProcedureErrorResponseException;
 use App\Exceptions\BaseErrorResponseException;
 
@@ -12,7 +12,7 @@ class RoutingResponseExceptions extends BaseErrorResponseException
     public static function Routing(int $errorCode, string $message = '')
     {
         if($errorCode == 409){
-            throw new AlreadyCompletedErrorResponseException();
+            throw new ConflictErrorResponseException();
         }
         elseif($errorCode == 410){
             throw new NotExistsErrorResponseException();

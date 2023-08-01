@@ -293,7 +293,7 @@ const Checking2 = (props) => {
                                 textAlign={'center'}
                                 fontWeight={'bold'}
                             >
-                                バーコード
+                                梱包ラベルバーコード
                             </Typography>
                             <TextField
                                 value={inputData['0']}
@@ -331,7 +331,7 @@ const Checking2 = (props) => {
                                 textAlign={'center'}
                                 fontWeight={'bold'}
                             >
-                                バーコード２
+                                送り状バーコード
                             </Typography>
                             <TextField
                                 value={inputData['1']}

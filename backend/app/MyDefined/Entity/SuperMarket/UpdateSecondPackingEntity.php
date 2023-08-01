@@ -17,10 +17,10 @@ final class UpdateSecondPackingEntity{
 
     public static function reconstructFromUseCase(DateValueObject $DateVO, CheckInquiryNoValueObject $InquiryNoVO): UpdateSecondPackingEntity 
     {
-        $SecondPackingEntity = new self();
-        $SecondPackingEntity->shipmentDate = $DateVO->value;
-        $SecondPackingEntity->inputBarcode = $InquiryNoVO->value;
-        return $SecondPackingEntity;
+        $selfEntity = new self();
+        $selfEntity->shipmentDate = $DateVO->value;
+        $selfEntity->inputBarcode = $InquiryNoVO->value;
+        return $selfEntity;
     }
 }
 ?>

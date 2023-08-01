@@ -14,9 +14,9 @@ final class UpdateTsubushiEntity{
 
     public static function reconstructFromUseCase(DateValueObject $DateVO): UpdateTsubushiEntity 
     {
-        $TsubushiEntity = new self();
-        $TsubushiEntity->shipmentDate = $DateVO->value;
-        return $TsubushiEntity;
+        $selfEntity = new self();
+        $selfEntity->shipmentDate = $DateVO->value;
+        return $selfEntity;
     }
 }
 ?>

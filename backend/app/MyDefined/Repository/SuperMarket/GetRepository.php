@@ -5,9 +5,11 @@ namespace App\MyDefined\Repository\SuperMarket;
 use App\MyDefined\ValueObject\General\DateValueObject;
 use App\MyDefined\ValueObject\SuperMarket\CheckInquiryNoValueObject;
 use App\MyDefined\ValueObject\General\YearMonthValueObject;
+use App\MyDefined\ValueObject\SuperMarket\CheckingTypeValueObject;
+
+use App\MyDefined\Entity\SuperMarket\GetAllDataByInquiryNoEntity;
 
 use App\Exceptions\NotExistsErrorResponseException;
-
 use Illuminate\Support\Facades\DB;
 
 final class GetRepository implements GetRepoInterface{
@@ -71,11 +73,13 @@ final class GetRepository implements GetRepoInterface{
         if($rows == '[]'){
             throw new NotExistsErrorResponseException();
         }
-        $merchantCrc32 = crc32($rows[0]->店舗コード);
-        $sceneCrc32 = crc32($rows[0]->シーンコード);
-        $crc = sprintf("%'.08x", $merchantCrc32) . sprintf("%'.08x", $sceneCrc32);
-        $merchant = $rows[0]->店舗コード;
-        $rows[0]->URL = config('app.supermarket.qr_url') . '?c=' . $crc . '&m=' . $merchant;
+        foreach($rows as $key => $value){
+            $merchantCrc32 = crc32($rows[$key]->店舗コード);
+            $sceneCrc32 = crc32($rows[$key]->シーンコード);
+            $crc = sprintf("%'.08x", $merchantCrc32) . sprintf("%'.08x", $sceneCrc32 . '10000001');
+            $merchant = $rows[$key]->店舗コード;
+            $rows[$key]->URL = config('app.supermarket.qr_url') . '?c=' . $crc . '&m=' . $merchant;
+        }
         return $rows;
     }
 
@@ -105,7 +109,11 @@ final class GetRepository implements GetRepoInterface{
         return $rows;
     }
 
-    public function getAllDataByInquiryNo(DateValueObject $DateVO, CheckInquiryNoValueObject $InquiryNoVO)
+    public function getAllDataByInquiryNo(
+        DateValueObject $DateVO
+        , CheckInquiryNoValueObject $InquiryNoVO
+        , CheckingTypeValueObject $checkingTypeVO
+    ): GetAllDataByInquiryNoEntity
     {
         $rows = DB::connection('supermarket')
         ->table('TT_出荷指示')
@@ -117,7 +125,7 @@ final class GetRepository implements GetRepoInterface{
         if($rows == '[]'){
             throw new NotExistsErrorResponseException();
         }
-        return $rows;
+        return GetAllDataByInquiryNoEntity::reconstructViewWKFromRepository($rows, $checkingTypeVO);
     }
 
     public function getMonthlyNumber()

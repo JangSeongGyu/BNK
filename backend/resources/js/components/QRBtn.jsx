@@ -109,7 +109,7 @@ const QRBtn = (props) => {
         // // // Xlsx
         let excelFile = await workbook.xlsx.writeBuffer(); //xlsxの場合
         console.log('Original', [excelFile]);
-        ZipDownload([excelFile], 'ddd.zip');
+        ZipDownload([excelFile], `QR`);
 
         // var zip = new JSZip();
         // let blob = new Blob([excelFile], {

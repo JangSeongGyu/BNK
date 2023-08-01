@@ -237,7 +237,7 @@ const ImportDialog = forwardRef((props, ref) => {
                         />
 
                         <Box display={'flex'} gap={1} mt={2}>
-                            <Button sx={dialogYes} onClick={handleClose}>
+                            <Button sx={dialogNo} onClick={handleClose}>
                                 <Typography
                                     sx={{
                                         fontWeight: 'bold',
@@ -247,7 +247,7 @@ const ImportDialog = forwardRef((props, ref) => {
                                 </Typography>
                             </Button>
                             <Button
-                                sx={dialogNo}
+                                sx={dialogYes}
                                 onClick={() => {
                                     handleClose();
                                     setParent();

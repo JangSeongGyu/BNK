@@ -40,10 +40,7 @@ const BizlogiImportBtn = (props) => {
                 )
                 .then((response) => {})
                 .catch((e) => {
-                    // if (e.response == null) {
-                    //     return (errCnt += 1);
-                    // }
-                    // const errors = e.response.data;
+                    toast.error(e.response.data.message);
                     return (errCnt += 1);
                 })
                 .finally(() => {});

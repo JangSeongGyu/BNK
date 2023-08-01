@@ -75,10 +75,11 @@ const JobTicketLayout = forwardRef((props, ref) => {
             )
             .then((res) => {
                 SetTicketData(res.data);
+
                 res.data.forEach((data) => {
                     cnt += parseInt(data.数量);
                 });
-                SetCount(cnt);
+                SetCount(cnt + res.data.length);
             });
     }, []);
 
@@ -86,21 +87,27 @@ const JobTicketLayout = forwardRef((props, ref) => {
         return (
             <>
                 <Grid sx={MainBoxOption} width={'100%'} container>
-                    <Grid sx={ListHeaderOption} item xs={8}>
+                    <Grid sx={ListHeaderOption} item xs={6}>
                         品名
                     </Grid>
                     <Grid sx={ListHeaderOption} item xs={2}>
                         数量
+                    </Grid>{' '}
+                    <Grid sx={ListHeaderOption} item xs={2}>
+                        頭紙
                     </Grid>
                     <Grid sx={ListHeaderOption} item xs={2}>
                         サイズ
                     </Grid>
                     {/* BODY ----------------------------------------------- */}
-                    <Grid sx={ListBodyOption} fontSize={28} item xs={8}>
+                    <Grid sx={ListBodyOption} fontSize={28} item xs={6}>
                         {basicData.name}
                     </Grid>
                     <Grid sx={ListBodyOption} item xs={2}>
                         {count}
+                    </Grid>{' '}
+                    <Grid sx={ListBodyOption} item xs={2}>
+                        {ticketData.length}
                     </Grid>
                     <Grid sx={ListBodyOption} item xs={2}>
                         210×297

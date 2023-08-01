@@ -14,9 +14,9 @@ final class UpdateShipmentEntity{
 
     public static function reconstructFromUseCase(DateValueObject $DateVO): UpdateShipmentEntity 
     {
-        $ShipmentEntity = new self();
-        $ShipmentEntity->shipmentDate = $DateVO->value;
-        return $ShipmentEntity;
+        $selfEntity = new self();
+        $selfEntity->shipmentDate = $DateVO->value;
+        return $selfEntity;
     }
 }
 ?>

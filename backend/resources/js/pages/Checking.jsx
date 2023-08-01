@@ -5,11 +5,9 @@ import DesignOption from '../Design/DesignOption';
 import ForwardIcon from '@mui/icons-material/Forward';
 import { green, grey, pink, red } from '@mui/material/colors';
 import { useParams } from 'react-router-dom';
-import barcode from '../images/barcode.png';
 import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
 
-const BorderOption = DesignOption('BorderOption');
 const insListOption = DesignOption('insListOption');
 const insOutputOption = DesignOption('insOutputOption');
 const insListResultOption = DesignOption('insListResultOption');
@@ -90,7 +88,7 @@ const Checking = (props) => {
                 }
             })
             .catch((e) => {
-                toast.error('作業進捗更新できました。', { id: toastid });
+                toast.error('作業進捗の更新に失敗しました。', { id: toastid });
             });
     };
 
@@ -114,7 +112,7 @@ const Checking = (props) => {
                 } else {
                     if (res.data[0].一次梱包フラグ == 1)
                         ResultError(`入力番号:${inputData['0']}
-                        梱包した問い合わせ番号です。`);
+                        このラベルは既に検品済みです。`);
                     else {
                         console.log(res.data[0]);
                         SetSearchData(res.data[0]);
@@ -150,7 +148,18 @@ const Checking = (props) => {
                 [taskCnt]: 'サーバ接続中…',
             }));
 
-            if (taskCnt == 2) {
+            if (taskCnt == 0) {
+                GetNuerData();
+
+            } else if (taskCnt == 1) {
+                if (inputData['0'] == inputData['1']) {
+                    ResultOK();
+                } else {
+                    ResultError(`入力番号:${inputData['1']}
+                    問い合わせ番号が違います。`);
+                }
+
+            } else if (taskCnt == 2) {
                 // 数量なのかチェック
                 if (!is_nuer(inputData['2'])) {
                     ResultError('数量を入力してください');
@@ -182,15 +191,6 @@ const Checking = (props) => {
                         入力数量数量が違います。`
                     );
                 }
-            } else if (taskCnt == 1) {
-                if (inputData['0'] == inputData['1']) {
-                    ResultOK();
-                } else {
-                    ResultError(`入力番号:${inputData['1']}
-                    問い合わせ番号が違います。`);
-                }
-            } else if (taskCnt == 0) {
-                GetNuerData();
             }
         }
     };
@@ -313,7 +313,7 @@ const Checking = (props) => {
                                 textAlign={'center'}
                                 fontWeight={'bold'}
                             >
-                                バーコード
+                                頭紙バーコード
                             </Typography>
                             <TextField
                                 value={inputData['0']}
@@ -351,7 +351,7 @@ const Checking = (props) => {
                                 textAlign={'center'}
                                 fontWeight={'bold'}
                             >
-                                バーコード２
+                                梱包ラベルバーコード
                             </Typography>
                             <TextField
                                 value={inputData['1']}

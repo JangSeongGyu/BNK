@@ -12,6 +12,7 @@ use App\MyDefined\ValueObject\General\DateValueObject;
 use App\MyDefined\ValueObject\General\SagawaInquiryNoValueObject;
 use App\MyDefined\ValueObject\SuperMarket\ShipmentNoValueObject;
 use App\MyDefined\ValueObject\SuperMarket\CheckInquiryNoValueObject;
+use App\MyDefined\ValueObject\SuperMarket\CheckingTypeValueObject;
 use App\MyDefined\ValueObject\General\YearMonthValueObject;
 use App\MyDefined\ValueObject\General\OrderNoValueObject;
 
@@ -35,6 +36,7 @@ use App\MyDefined\UseCase\SuperMarket\UpdateSecondPackingUseCase;
 use App\MyDefined\UseCase\SuperMarket\CreateMonthlyNumberUseCase;
 use App\MyDefined\UseCase\SuperMarket\GetMonthlyNumberUseCase;
 use App\MyDefined\UseCase\SuperMarket\GetAllDataUseCase;
+use Illuminate\Http\Request;
 
 /**
  * 楽天スーパーコントローラー
@@ -253,13 +255,15 @@ class SuperMarketController extends Controller
      */
 
     public function getDataByInquiryNo(
+        Request $request,
         GetDataByInquiryNoUseCase $GetDataByInquiryNoUseCase,
         $shipmentDate,
         $inquiryNo
     ){
         $DateVO = DateValueObject::create($shipmentDate);
         $InquiryNoVO = CheckInquiryNoValueObject::create($inquiryNo);
-        $data = $GetDataByInquiryNoUseCase->execute($DateVO, $InquiryNoVO);
+        $CheckingTypeVO = CheckingTypeValueObject::create($request->input('type'));
+        $data = $GetDataByInquiryNoUseCase->execute($DateVO, $InquiryNoVO, $CheckingTypeVO);
         return new JsonResponse($data, 200, [], JSON_UNESCAPED_UNICODE);
     }
 

@@ -69,11 +69,7 @@ const Checking2 = (props) => {
         const toastid = toast.loading('作業進捗更新中...');
         SetWorkCount(0);
         axios
-            .get(
-                import.meta.env.VITE_DOMAIN +
-                    `/api/${pageType}/dailydata/` +
-                    selectDate
-            )
+            .get(`/api/${pageType}/dailydata/` + selectDate)
             .then((res) => {
                 toast.success('作業進捗更新できました。', { id: toastid });
                 SetMaxWorkCount(res.data.length);
@@ -104,8 +100,7 @@ const Checking2 = (props) => {
     const GetNuerData = () => {
         axios
             .get(
-                import.meta.env.VITE_DOMAIN +
-                    `/api/${pageType}/checkingdata/${selectDate}/${inputData['0']}`
+                `/api/${pageType}/checkingdata/${selectDate}/${inputData['0']}`
             )
             .then((res) => {
                 console.log(res.data);
@@ -157,8 +152,7 @@ const Checking2 = (props) => {
                     const toastid = toast.loading('出荷処理中...');
                     axios
                         .put(
-                            import.meta.env.VITE_DOMAIN +
-                                `/api/${pageType}/secondpacking/${selectDate}/${inputData['0']}`
+                            `/api/${pageType}/secondpacking/${selectDate}/${inputData['0']}`
                         )
                         .then((res) => {
                             toast.success('検品処理完了しました。', {

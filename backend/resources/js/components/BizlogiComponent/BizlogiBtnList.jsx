@@ -59,11 +59,7 @@ const BizlogiBtnList = (props) => {
     const CallData = () => {
         let toastid = toast.loading('エクスポート中です。');
         axios
-            .get(
-                import.meta.env.VITE_DOMAIN +
-                    `/api/${pageType}/bizlogi/` +
-                    selectDate
-            )
+            .get(`/api/${pageType}/bizlogi/` + selectDate)
             .then((res) => {
                 console.log(res.data);
                 ExportData(res.data, toastid);

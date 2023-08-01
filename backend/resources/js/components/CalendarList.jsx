@@ -83,10 +83,7 @@ const CalendarList = (props) => {
         console.log(startDate, endDate);
 
         axios
-            .get(
-                import.meta.env.VITE_DOMAIN +
-                    `/api/${pageType}/betweencount/${startDate}/${endDate}`
-            )
+            .get(`/api/${pageType}/betweencount/${startDate}/${endDate}`)
             .then((res) => {
                 toast.success('カレンダー情報更新完了。', {
                     id: toastid,

@@ -1,7 +1,8 @@
 import { saveAs } from 'file-saver';
 import JSZip from 'jszip';
+import { useEffect, useState, useRef } from 'react';
 
-function ZipDownload(files, title) {
+const ZipDownload = (files, title) => {
     const today = new Date();
     const year = String(today.getFullYear()).slice(-2);
     const month = String(today.getMonth() + 1).padStart(2, '0');
@@ -11,7 +12,7 @@ function ZipDownload(files, title) {
 
     const nowTime = year + month + day + hours + minute;
 
-    console.log('Copy', files);
+    console.log('nowTime', nowTime);
 
     var zip = new JSZip();
 
@@ -21,6 +22,8 @@ function ZipDownload(files, title) {
     zip.generateAsync({ type: 'blob' }).then((content) => {
         saveAs(content, title + '_' + nowTime);
     });
-}
+
+    return 'check';
+};
 
 export default ZipDownload;

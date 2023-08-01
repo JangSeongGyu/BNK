@@ -70,6 +70,7 @@ const LabelLayout = forwardRef((props, ref) => {
             if ((i + 1) % 6 == 0 && i != 0) {
                 html.push(
                     <Box
+                        key={i}
                         display={'flex'}
                         flexWrap={'wrap'}
                         gap={10}
@@ -117,7 +118,7 @@ const LabelLayout = forwardRef((props, ref) => {
 
         console.log(paddingNumber);
         return (
-            <Box width={420} height={343} border={3}>
+            <Box key={number} width={420} height={343} border={3}>
                 <Box sx={MainBoxOption} height={'21.5%'}>
                     <Box sx={LeftBoxOption}>
                         <Typography sx={LeftTypoOption}>店舗名</Typography>
@@ -203,16 +204,10 @@ const LabelLayout = forwardRef((props, ref) => {
         );
     };
     useEffect(() => {
-        axios
-            .get(
-                import.meta.env.VITE_DOMAIN +
-                    `/api/${pageType}/label/` +
-                    selectDate
-            )
-            .then((res) => {
-                console.log(res.data);
-                SetLabelData(res.data);
-            });
+        axios.get(`/api/${pageType}/label/` + selectDate).then((res) => {
+            console.log(res.data);
+            SetLabelData(res.data);
+        });
     }, []);
 
     return (

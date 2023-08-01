@@ -21,10 +21,7 @@ const QRBtn = (props) => {
     const ButtonClick = async () => {
         const toastId = toast.loading('QRエクスポート中...');
         axios
-            .get(
-                import.meta.env.VITE_DOMAIN +
-                    `/api/${pageType}/qrdata/${selectDate}`
-            )
+            .get(`/api/${pageType}/qrdata/${selectDate}`)
             .then((res) => {
                 console.log(res.data);
                 const sorted = [...res.data].sort((a, b) => {
@@ -109,7 +106,7 @@ const QRBtn = (props) => {
         // // // Xlsx
         let excelFile = await workbook.xlsx.writeBuffer(); //xlsxの場合
         console.log('Original', [excelFile]);
-        ZipDownload([excelFile], `QR`);
+        console.log(ZipDownload([excelFile], `QR`));
 
         // var zip = new JSZip();
         // let blob = new Blob([excelFile], {

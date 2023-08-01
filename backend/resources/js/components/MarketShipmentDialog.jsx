@@ -37,11 +37,7 @@ const MarketOutSideList = (props) => {
     const SPAxios = () => {
         const toastid = toast.loading('サーバ接続中...');
         axios
-            .put(
-                import.meta.env.VITE_DOMAIN +
-                    `/api/${pageType}/shipment/` +
-                    selectDate
-            )
+            .put(`/api/${pageType}/shipment/` + selectDate)
             .then((res) => {
                 toast.success('出荷処理しました。', { id: toastid });
                 props.handleClose('ok');
@@ -55,7 +51,6 @@ const MarketOutSideList = (props) => {
     //     const toastid = toast.loading('サーバ接続中...');
     //     axios
     //         .put(
-    //             import.meta.env.VITE_DOMAIN +
     //                 `/api/${pageType}/shipment/` +
     //                 selectDate
     //         )

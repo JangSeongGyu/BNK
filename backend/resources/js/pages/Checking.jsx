@@ -66,22 +66,17 @@ const Checking = (props) => {
         const toastid = toast.loading('作業進捗更新中...');
         SetWorkCount(0);
         axios
-            .get(
-                import.meta.env.VITE_DOMAIN +
-                    `/api/${pageType}/dailydata/${selectDate}`
-            )
+            .get(`/api/${pageType}/dailydata/${selectDate}`)
             .then((res) => {
                 toast.success('作業進捗更新できました。', { id: toastid });
                 SetMaxWorkCount(res.data.length);
                 res.data.forEach((data) => {
-                    console.log(data);
                     if (data.一次梱包フラグ == 1 || data.二次梱包フラグ == 1) {
                         cnt++;
                     }
                 });
-                console.log(WorkCount);
-
                 SetWorkCount(cnt);
+                // 全部処理したら実行
                 if (cnt == res.data.length) {
                     inputLock();
                     SetTaskCnt(5);
@@ -90,7 +85,7 @@ const Checking = (props) => {
                 }
             })
             .catch((e) => {
-                toast.error('作業進捗更新できました。', { id: toastid });
+                toast.error('作業進捗更新できませんでした。', { id: toastid });
             });
     };
 
@@ -100,36 +95,22 @@ const Checking = (props) => {
         inputRef.current[nuer].focus();
     };
 
-    const GetNuerData = () => {
+    const GetNumberData = () => {
         axios
             .get(
-                import.meta.env.VITE_DOMAIN +
-                    `/api/${pageType}/checkingdata/${selectDate}/${inputData['0']}`
+                `/api/${pageType}/checkingdata/${selectDate}/${inputData['0']}`
             )
             .then((res) => {
-                console.log(res.data.length);
-                if (res.data.length == 0) {
-                    ResultError(`入力番号:${inputData['0']}
-                    データがありません。`);
-                } else {
-                    if (res.data[0].一次梱包フラグ == 1)
-                        ResultError(`入力番号:${inputData['0']}
-                        すでに`);
-                    else {
-                        console.log(res.data[0]);
-                        SetSearchData(res.data[0]);
-                        ResultOK();
-                    }
-                }
+                SetSearchData(res.data[0]);
             })
             .catch((e) => {
-                let errMsg = e.response.data.message;
+                let errMsg = ErrorCheck(e);
                 ResultError(`入力番号:${inputData['0']}
                 ${errMsg}`);
             });
     };
 
-    const is_nuer = (text) => {
+    const is_number = (text) => {
         const regex = /^[0-9]+$/;
         if (regex.test(text)) {
             return true;
@@ -145,25 +126,34 @@ const Checking = (props) => {
                 ResultError('入力してください');
                 return;
             }
-            SetMsgBox((prevState) => ({
-                ...prevState,
-                [taskCnt]: 'サーバ接続中…',
-            }));
 
-            if (taskCnt == 2) {
+            if (taskCnt == 0) {
+                GetNumberData();
+            } else if (taskCnt == 1) {
+                if (inputData['0'] == inputData['1']) {
+                    ResultOK();
+                } else {
+                    ResultError(`入力番号:${inputData['1']}
+                    問い合わせ番号が違います。`);
+                }
+            } else if (taskCnt == 2) {
                 // 数量なのかチェック
-                if (!is_nuer(inputData['2'])) {
+                if (!is_number(inputData['2'])) {
                     ResultError('数量を入力してください');
                     return;
                 }
+
+                SetMsgBox((prevState) => ({
+                    ...prevState,
+                    [taskCnt]: 'サーバ接続中…',
+                }));
 
                 // 数量がデータベースと同じだったら実行
                 if (searchData.数量 == inputData['2']) {
                     const toastid = toast.loading('出荷処理中...');
                     axios
                         .put(
-                            import.meta.env.VITE_DOMAIN +
-                                `/api/${pageType}/firstpacking/${selectDate}/${inputData['0']}`
+                            `/api/${pageType}/firstpacking/${selectDate}/${inputData['0']}`
                         )
                         .then((res) => {
                             toast.success('検品処理完了しました。', {
@@ -173,7 +163,9 @@ const Checking = (props) => {
                             dataClear();
                         })
                         .catch((e) => {
-                            ResultError('エラー：' + e.response.data.message);
+                            let errMsg = ErrorCheck(e);
+
+                            ResultError('エラー：' + errMsg);
                             toast.error('error', { id: toastid });
                         });
                 } else {
@@ -182,15 +174,6 @@ const Checking = (props) => {
                         入力数量数量が違います。`
                     );
                 }
-            } else if (taskCnt == 1) {
-                if (inputData['0'] == inputData['1']) {
-                    ResultOK();
-                } else {
-                    ResultError(`入力番号:${inputData['1']}
-                    問い合わせ番号が違います。`);
-                }
-            } else if (taskCnt == 0) {
-                GetNuerData();
             }
         }
     };
@@ -419,3 +402,16 @@ const Checking = (props) => {
     );
 };
 export default Checking;
+
+function ErrorCheck(e) {
+    let errMsg = e.response.data.message;
+    let status = e.response.status;
+    if (status == 500) errMsg = e.response.data.message;
+    else if (status == 410) {
+        errMsg = e.response.data.message;
+    } else if (status == 409) {
+        errMsg = e.response.data.message;
+    } else errMsg = e.response.data.message;
+
+    return errMsg;
+}

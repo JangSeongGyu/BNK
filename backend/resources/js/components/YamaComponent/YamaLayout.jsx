@@ -17,15 +17,9 @@ const YamaLayout = forwardRef((props, ref) => {
     const [groupData, SetGroupData] = useState([]);
 
     useEffect(() => {
-        axios
-            .get(
-                import.meta.env.VITE_DOMAIN +
-                    `/api/${pageType}/totalpick/` +
-                    selectDate
-            )
-            .then((res) => {
-                GroupingData(res.data);
-            });
+        axios.get(`/api/${pageType}/totalpick/` + selectDate).then((res) => {
+            GroupingData(res.data);
+        });
     }, []);
 
     const GroupingData = (datas) => {
@@ -46,12 +40,14 @@ const YamaLayout = forwardRef((props, ref) => {
         let html = [];
         let heightCnt = 340;
         let insertHeight = 0;
+        let cnt = 0;
+        let keys = Object.keys(groupData);
 
         // Header ======================
-        html.push(<CardHeader data={groupData} selectDate={selectDate} />);
+        html.push(
+            <CardHeader key={cnt++} data={groupData} selectDate={selectDate} />
+        );
 
-        let keys = Object.keys(groupData);
-        let cnt = 0;
         keys.forEach((key, index) => {
             let length = groupData[key].length;
 
@@ -85,7 +81,7 @@ const YamaLayout = forwardRef((props, ref) => {
                     html.push(
                         <SPSceneCard key={cnt++} data={groupData[key][i]} />
                     );
-                else if (pageType == 'eagles' || pageType == 'taxi')
+                else if (pageType == 'taxi')
                     html.push(
                         <TXSceneCard key={cnt++} data={groupData[key][i]} />
                     );

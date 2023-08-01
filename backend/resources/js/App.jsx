@@ -6,9 +6,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import 'dayjs/locale/ja';
 
-axios.defaults.baseURL = 'http://192.168.150.196:8080/';
-// axios.defaults.xsrfHeaderName = 'X-CSRF-TOKEN';
-// axios.defaults.xsrfCookieName = 'csrftoken';
+axios.defaults.baseURL = import.meta.env.VITE_DOMAIN;
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 axios.defaults.headers.post['Accept'] = 'application/json';
 axios.defaults.headers.post['Access-Control-Allow-Origin'] =

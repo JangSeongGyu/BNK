@@ -58,15 +58,10 @@ const DetailView = (props) => {
             maxWidth += w;
         });
 
-        axios
-            .get(
-                import.meta.env.VITE_DOMAIN +
-                    `/api/${pageType}/dailydata/${selectDate}`
-            )
-            .then((res) => {
-                console.log(res.data);
-                SetTableDatas(res.data);
-            });
+        axios.get(`/api/${pageType}/dailydata/${selectDate}`).then((res) => {
+            console.log(res.data);
+            SetTableDatas(res.data);
+        });
     }, []);
 
     const openRow = (index) => {

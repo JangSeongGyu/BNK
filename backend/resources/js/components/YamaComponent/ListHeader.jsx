@@ -117,7 +117,7 @@ const ListHeader = (props) => {
 
     const CHeader = () => {
         let html = [];
-        html.push(HeaderBottom(data));
+        html.push(<Box key={0}>{HeaderBottom(data)}</Box>);
         return html;
     };
 

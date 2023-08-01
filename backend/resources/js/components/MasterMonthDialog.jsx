@@ -58,7 +58,7 @@ const MasterMonthDialog = forwardRef((props, ref) => {
 
     const callMonthlyData = () => {
         axios
-            .get(import.meta.env.VITE_DOMAIN + `/api/${pageType}/monthlynumber`)
+            .get(`/api/${pageType}/monthlynumber`)
             .then((res) => {
                 console.log(res.data);
                 grouping(res.data);
@@ -81,10 +81,10 @@ const MasterMonthDialog = forwardRef((props, ref) => {
     const clickCreate = () => {
         const toastId = toast.loading('登録しています...');
         axios
-            .put(
-                import.meta.env.VITE_DOMAIN + `/api/${pageType}/monthlynumber`,
-                { order_no: textData, year_month: selectDate }
-            )
+            .put(`/api/${pageType}/monthlynumber`, {
+                order_no: textData,
+                year_month: selectDate,
+            })
             .then((res) => {
                 console.log(res.data);
                 // SetMonthlyData(res.data);

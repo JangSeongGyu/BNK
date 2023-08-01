@@ -67,20 +67,14 @@ const JobTicketLayout = forwardRef((props, ref) => {
             });
         }
 
-        axios
-            .get(
-                import.meta.env.VITE_DOMAIN +
-                    `/api/${pageType}/jobticket/` +
-                    selectDate
-            )
-            .then((res) => {
-                SetTicketData(res.data);
+        axios.get(`/api/${pageType}/jobticket/` + selectDate).then((res) => {
+            SetTicketData(res.data);
 
-                res.data.forEach((data) => {
-                    cnt += parseInt(data.数量);
-                });
-                SetCount(cnt + res.data.length);
+            res.data.forEach((data) => {
+                cnt += parseInt(data.数量);
             });
+            SetCount(cnt + res.data.length);
+        });
     }, []);
 
     const TopLayout = () => {

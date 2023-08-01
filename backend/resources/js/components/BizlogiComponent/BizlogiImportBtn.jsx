@@ -30,14 +30,10 @@ const BizlogiImportBtn = (props) => {
             let inquiry_no = json['問合せNo'][i];
             let shipment_no = json['注文番号'][i];
             await axios
-                .put(
-                    import.meta.env.VITE_DOMAIN +
-                        `/api/${pageType}/inquiryno/${selectDate}`,
-                    {
-                        inquiry_no: inquiry_no,
-                        shipment_no: shipment_no,
-                    }
-                )
+                .put(`/api/${pageType}/inquiryno/${selectDate}`, {
+                    inquiry_no: inquiry_no,
+                    shipment_no: shipment_no,
+                })
                 .then((response) => {})
                 .catch((e) => {
                     toast.error(e.response.data.message);
@@ -63,10 +59,7 @@ const BizlogiImportBtn = (props) => {
     };
     const tsubushi = async () => {
         await axios
-            .put(
-                import.meta.env.VITE_DOMAIN +
-                    `/api/${pageType}/tsubushi/${selectDate}`
-            )
+            .put(`/api/${pageType}/tsubushi/${selectDate}`)
             .then((response) => {})
             .catch((e) => {
                 if (e.response == null) {

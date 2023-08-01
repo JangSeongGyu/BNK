@@ -29,7 +29,7 @@ const Taxi = (props) => {
 
     const CallSFData = () => {
         axios
-            .get(import.meta.env.VITE_DOMAIN + `/api/${pageType}/order/`)
+            .get(`/api/${pageType}/order/`)
             .then((res) => {
                 SetSFDatas(res.data);
                 console.log(res.data);
@@ -39,7 +39,7 @@ const Taxi = (props) => {
 
     const ClickSFData = () => {
         axios
-            .post(import.meta.env.VITE_DOMAIN + `/api/${pageType}/order/`)
+            .post(`/api/${pageType}/order/`)
             .then((res) => {
                 console.log(res.data);
             })
@@ -48,7 +48,7 @@ const Taxi = (props) => {
 
     const callBacklog = () => {
         axios
-            .get(import.meta.env.VITE_DOMAIN + `/api/${pageType}/backlogdata/`)
+            .get(`/api/${pageType}/backlogdata/`)
             .then((res) => {
                 SetLogDatas(res.data);
                 SetSelectDate(data.selectDate);
@@ -87,10 +87,7 @@ const Taxi = (props) => {
 
     const callDailyData = (date) => {
         axios
-            .get(
-                import.meta.env.VITE_DOMAIN +
-                    `/api/${pageType}/dailydata/${date}`
-            )
+            .get(`/api/${pageType}/dailydata/${date}`)
             .then((res) => {
                 SetIsData(true);
                 console.log(res.data);

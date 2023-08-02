@@ -5,17 +5,18 @@ import {
     ListTitleOption,
 } from '../Design/DesignOption';
 import { useNavigate } from 'react-router-dom';
-import { red } from '@mui/material/colors';
 
 const CheckingList = (props) => {
     const pageType = props.pageType;
     const selectDate = props.selectDate;
     let navigate = useNavigate();
     const CheckingBtnClick = () => {
+        localStorage.setItem('LastSelectDate', selectDate);
         navigate('checking/' + selectDate);
     };
 
     const Checking2BtnClick = () => {
+        localStorage.setItem('LastSelectDate', selectDate);
         navigate('checking2/' + selectDate);
     };
 

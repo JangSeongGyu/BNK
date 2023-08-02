@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import Header from '../components/Header';
 import axios from 'axios';
 import CalendarList from '../components/CalendarList';
@@ -7,8 +7,13 @@ import MarketShipmentDialog from '../components/MarketShipmentDialog';
 import { Dialog, Divider, Typography, Button, Box } from '@mui/material';
 import { grey, pink, red } from '@mui/material/colors';
 import { toast } from 'react-hot-toast';
-import { BtnOption } from '../Design/DesignOption';
 import { paddingNum } from '../components/GlobalComponent';
+
+const BacklogTextOption = {
+    width: 100,
+    fontSize: 18,
+    fontWeight: 'bold',
+};
 
 const SuperMarket = (props) => {
     const pageType = props.pageType;
@@ -19,45 +24,14 @@ const SuperMarket = (props) => {
     const [isData, SetIsData] = useState(false);
     const UpdateRef = useRef(null);
 
-    useEffect(() => {
-        // console.log();
-        CallSFData();
-        callBacklog();
-    }, []);
-
-    const CallSFData = () => {
-        axios
-            .get(`/api/${pageType}/order/`)
-            .then((res) => {
-                SetSFDatas(res.data);
-                console.log(res.data);
-            })
-            .catch((e) => {});
-    };
-
-    const ClickSFData = () => {
-        axios
-            .post(`/api/${pageType}/order/`)
-            .then((res) => {
-                callBacklog();
-                SetSFDatas('');
-                console.log(res.data);
-            })
-            .catch((e) => {});
-    };
-
-    const callBacklog = () => {
-        axios
-            .get(`/api/${pageType}/backlogdata/`)
-            .then((res) => {
-                SetLogDatas(res.data);
-            })
-            .catch((e) => {});
-    };
-
     const thisMonth = () => {
         const today = new Date();
         const month = paddingNum(String(today.getMonth() + 1), 2);
+        if (localStorage.getItem('LastSelectDate')) {
+            const date = localStorage.getItem('LastSelectDate');
+            return date;
+        }
+        localStorage.removeItem('LastSelectDate');
         return `${today.getFullYear()}-${month}`;
     };
 
@@ -74,14 +48,14 @@ const SuperMarket = (props) => {
         else SetOpen(true);
     };
 
-    // Get Calender -> selectDate & dailyData
+    // Get Calender -> selectDate
     const CallSelectDate = (data) => {
         SetSelectDate(data.selectDate);
         if (data.isData == true) callDailyData(data.selectDate);
         else SetIsData(false);
-        // SetIsData(data.isData);
     };
 
+    // Get Side List Data
     const callDailyData = (date) => {
         axios
             .get(`/api/${pageType}/dailydata/${date}`)
@@ -95,15 +69,14 @@ const SuperMarket = (props) => {
     };
 
     return (
-        <>
+        <Box height={'100%'} backgroundColor={grey[200]}>
             <Header page={0} pageType={pageType} />
-
             <Box height={'80%'} sx={{ display: 'flex' }}>
                 <Box sx={{ width: '60%', height: '100%' }}>
                     <Box
                         sx={{
-                            left: 160,
-                            top: 110,
+                            left: 170,
+                            top: 120,
                             gap: 1,
                             position: 'absolute',
                             display: 'flex',
@@ -130,27 +103,13 @@ const SuperMarket = (props) => {
                         >
                             SFデータ取得
                         </Button>
-                        <Typography
-                            width={100}
-                            fontSize={18}
-                            fontWeight={'bold'}
-                            backgroundColor={'white'}
-                            color={'primary.main'}
-                            borderRadius={1}
-                        >
+                        <Typography sx={BacklogTextOption}>
                             SFデータ
                             <br />
                             {SFDatas.length}
                         </Typography>
 
-                        <Typography
-                            width={100}
-                            fontSize={18}
-                            fontWeight={'bold'}
-                            backgroundColor={'white'}
-                            color={'primary.main'}
-                            borderRadius={1}
-                        >
+                        <Typography sx={BacklogTextOption}>
                             未処理
                             <br />
                             {logDatas.length}
@@ -184,7 +143,7 @@ const SuperMarket = (props) => {
                     selectDate={selectDate}
                 />
             </Dialog>
-        </>
+        </Box>
     );
 };
 

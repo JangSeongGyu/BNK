@@ -11,6 +11,11 @@ const SelectDateCard = (props) => {
     const selectDate = props.selectDate;
     const pageType = props.pageType;
     const navigate = useNavigate();
+
+    const DetailClick = () => {
+        localStorage.setItem('LastSelectDate', selectDate);
+        navigate(`/${pageType}/detail/${selectDate}`);
+    };
     return (
         <Box mt={1} width={'100%'} sx={BorderOption}>
             <Typography sx={ListTitleOption}>
@@ -26,12 +31,7 @@ const SelectDateCard = (props) => {
                     {selectDate}
                 </Typography>
                 <Box ml={2}>
-                    <Button
-                        onClick={() =>
-                            navigate(`/${pageType}/detail/${selectDate}`)
-                        }
-                        sx={BtnOption}
-                    >
+                    <Button onClick={() => DetailClick()} sx={BtnOption}>
                         明細
                     </Button>
                 </Box>

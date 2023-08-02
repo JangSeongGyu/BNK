@@ -4,7 +4,6 @@ import Header from '../components/Header';
 import {
     BtnOption,
     CheckingListInputOption,
-    BorderOption,
     CheckingListBoxOption,
     CheckingOutputBoxOption,
     CheckingListResultOption,
@@ -114,7 +113,7 @@ const Checking2 = (props) => {
             });
     };
 
-    const is_nuer = (text) => {
+    const is_number = (text) => {
         const regex = /^[0-9]+$/;
         if (regex.test(text)) {
             return true;
@@ -191,7 +190,7 @@ const Checking2 = (props) => {
                 <Box
                     width={'100%'}
                     px={4}
-                    height={'8%'}
+                    height={'10%'}
                     display={'flex'}
                     alignItems={'center'}
                 >
@@ -218,7 +217,14 @@ const Checking2 = (props) => {
 
                 <Divider variant="middle" />
                 {/* MIDDLE LIST */}
-                <Box height={'10%'} gap={2} mx={4} my={2} display={'flex'}>
+                <Box
+                    height={'10%'}
+                    gap={2}
+                    mx={4}
+                    mt={1}
+                    mb={2}
+                    display={'flex'}
+                >
                     <Box minWidth={200} width={'15%'}>
                         <Typography>注文明細No</Typography>
                         <Box sx={CheckingOutputBoxOption}>{detailNo}</Box>

@@ -8,6 +8,7 @@ import { Dialog, Divider, Typography, Button, Box } from '@mui/material';
 import { grey, pink, red } from '@mui/material/colors';
 import { toast } from 'react-hot-toast';
 import { BtnOption } from '../Design/DesignOption';
+import { paddingNum } from '../components/GlobalComponent';
 
 const SuperMarket = (props) => {
     const pageType = props.pageType;
@@ -56,10 +57,8 @@ const SuperMarket = (props) => {
 
     const thisMonth = () => {
         const today = new Date();
-        return `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(
-            2,
-            '0'
-        )}`;
+        const month = paddingNum(String(today.getMonth() + 1), 2);
+        return `${today.getFullYear()}-${month}`;
     };
 
     const handleClose = (res) => {

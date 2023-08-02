@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef, forwardRef } from 'react';
 import { Grid, Modal, Typography, Box, Button, CardMedia } from '@mui/material';
 import axios from 'axios';
+import { paddingNum } from './GlobalComponent';
 
 const MainWidth = 1080;
 const MainHeight = MainWidth * 1.4142;
@@ -118,7 +119,7 @@ const LabelLayout = forwardRef((props, ref) => {
 
     const LabelCard = (number) => {
         let currentData = labelData[number];
-        let paddingNumber = currentData.同梱連番.toString().padStart(3, '0');
+        let bundledNumber = paddingNum(currentData.同梱連番, 3);
         return (
             <Box width={420} height={343} border={3}>
                 <Box sx={MainBoxOption} height={'21.5%'}>
@@ -178,7 +179,7 @@ const LabelLayout = forwardRef((props, ref) => {
                             textAlign={'center'}
                         >
                             *{currentData.問い合わせ番号}
-                            {paddingNumber}*
+                            {bundledNumber}*
                         </Box>
                         <Box
                             pr={2}
@@ -189,7 +190,7 @@ const LabelLayout = forwardRef((props, ref) => {
                             fontFamily={'MS PGothic'}
                         >
                             {currentData.問い合わせ番号}
-                            {paddingNumber}
+                            {bundledNumber}
                         </Box>
                     </Box>
                     <Box

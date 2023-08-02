@@ -1,15 +1,10 @@
 import { useEffect, useState, useRef } from 'react';
 import { Grid, Modal, Typography, Box, Button } from '@mui/material';
 import { BtnOption } from '../Design/DesignOption';
-import { red } from '@mui/material/colors';
 import axios from 'axios';
 import ExcelJS from 'exceljs';
 import { toast } from 'react-hot-toast';
-import { saveAs } from 'file-saver';
-import JSZip from 'jszip';
-
-import * as zip from '@zip.js/zip.js';
-import ZipDownload from './ZipDownload';
+import { ZipDownload, paddingNum } from './GlobalComponent';
 
 const QRBtn = (props) => {
     const selectDate = props.selectDate;
@@ -62,7 +57,6 @@ const QRBtn = (props) => {
             // BODY
             for (let i = 0; i < qrData.length; i++) {
                 let sheetRow = worksheet.getRow(cnt++);
-
                 // CONTENT　HEADER
                 sheetRow.getCell(2).value = qrData[i].ショップ名;
                 sheetRow.getCell(4).value = 1;
@@ -102,10 +96,6 @@ const QRBtn = (props) => {
         let excelFile = await workbook.xlsx.writeBuffer(); //xlsxの場合
         console.log('Original', [excelFile]);
         console.log(ZipDownload([excelFile], `QR`));
-    };
-
-    const paddingNum = (data, index) => {
-        return data.toString().padStart(index, '0');
     };
 
     return (

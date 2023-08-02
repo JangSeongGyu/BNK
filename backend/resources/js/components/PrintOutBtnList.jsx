@@ -84,11 +84,11 @@ const PrintOutBtnList = (props) => {
                     selectDate={selectDate}
                     ref={YamaRef}
                 />
-                {/* <JobTicketLayout
+                <JobTicketLayout
                     pageType={pageType}
                     selectDate={selectDate}
                     ref={JobRef}
-                /> */}
+                />
             </Box>
         </Box>
     );

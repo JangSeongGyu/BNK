@@ -19,6 +19,7 @@ import 'dayjs/locale/ja';
 import { dialogYes, dialogNo } from '../Design/DesignOption';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import { paddingNum } from './GlobalComponent';
 
 const BtnOption = {
     width: 100,
@@ -73,7 +74,8 @@ const MasterMonthDialog = forwardRef((props, ref) => {
     };
 
     const dateformatting = (year, month) => {
-        return `${year}-${String(month).padStart(2, '0')}`;
+        const pmonth = paddingNum(String(month), 2);
+        return `${year}-${pmonth}`;
     };
 
     const clickCreate = () => {

@@ -1,15 +1,15 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Grid, Modal, Typography, Box, Button } from '@mui/material';
-import DesignOption from '../../Design/DesignOption';
+import {
+    BorderOption,
+    BtnOption,
+    calendarBoxTypo,
+} from '../../Design/DesignOption';
 import { blue, grey, pink, red } from '@mui/material/colors';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
 import BizlogiImportBtn from './BizlogiImportBtn';
 import Encoding, { convert } from 'encoding-japanese';
-
-const BorderOption = DesignOption('BorderOption');
-const BtnOption = DesignOption('BtnOption');
-const calendarBoxTypo = DesignOption('calendarBoxTypo');
 
 const BizlogiBtnList = (props) => {
     const selectDate = props.selectDate;

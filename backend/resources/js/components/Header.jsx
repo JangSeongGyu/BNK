@@ -44,7 +44,6 @@ const Header = (props) => {
         if (pageType == 'supermarket') SetTitle('スーパーマーケット');
         else if (pageType == 'taxi') SetTitle('タクシー');
         else if (pageType == 'eagles') SetTitle('イーグルス');
-        console.log(pageType);
     }, []);
 
     return (

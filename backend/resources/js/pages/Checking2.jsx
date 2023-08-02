@@ -1,23 +1,22 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Typography, Box, Button, Divider, TextField } from '@mui/material';
 import Header from '../components/Header';
-import DesignOption from '../Design/DesignOption';
+import {
+    BtnOption,
+    insTFOption,
+    BorderOption,
+    insListOption,
+    insOutputOption,
+    insListResultOption,
+    insListResultTypoOption,
+} from '../Design/DesignOption';
 import ForwardIcon from '@mui/icons-material/Forward';
 import { green, grey, pink, red } from '@mui/material/colors';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
 
-const BorderOption = DesignOption('BorderOption');
-const insListOption = DesignOption('insListOption');
-const insOutputOption = DesignOption('insOutputOption');
-const insListResultOption = DesignOption('insListResultOption');
-const BtnOption = DesignOption('BtnOption');
-
 const Checking2 = (props) => {
-    const insListResultTypoOption = DesignOption('insListResultTypoOption');
-    const insTFOption = DesignOption('insTFOption');
-
     const [MsgBox, SetMsgBox] = useState({
         0: '未完了',
         1: '未完了',
@@ -97,32 +96,21 @@ const Checking2 = (props) => {
         inputRef.current[nuer].focus();
     };
 
-    const GetNuerData = () => {
+    const GetNumberData = () => {
         axios
             .get(
-                `/api/${pageType}/checkingdata/${selectDate}/${inputData['0']}`
+                `/api/${pageType}/checkingdata/${selectDate}/${inputData['0']}?type=2`
             )
             .then((res) => {
-                console.log(res.data);
-                if (res.data.length == 0) {
-                    ResultError(`入力番号:${inputData['0']}
-                    データがありません。`);
-                } else if (res.data[0].一次梱包フラグ == 0) {
-                    ResultError('一次梱包されていない番号です。');
-                } else {
-                    if (res.data[0].二次梱包フラグ == 1)
-                        ResultError('梱包した問い合わせ番号です。');
-                    else {
-                        SetSceneName(res.data[0].シーン名);
-                        SetDetailNo(res.data[0].注文明細No);
-                        SetAddress(res.data[0].納品先住所);
-                        ResultOK();
-                    }
-                }
+                SetSceneName(res.data[0].シーン名);
+                SetDetailNo(res.data[0].注文明細No);
+                SetAddress(res.data[0].納品先住所);
+                ResultOK();
             })
             .catch((e) => {
+                let errMsg = ErrorCheck(e);
                 ResultError(`入力番号:${inputData['0']}
-                ${e.response.data.message}`);
+                ${errMsg}`);
             });
     };
 
@@ -146,13 +134,13 @@ const Checking2 = (props) => {
                 [taskCnt]: 'サーバ接続中…',
             }));
 
-            if (taskCnt == 0) GetNuerData();
+            if (taskCnt == 0) GetNumberData();
             else if (taskCnt == 1) {
-                if (inputData['0'] == inputData['1']) {
+                if (inputData['0'].slice(0, -3) == inputData['1']) {
                     const toastid = toast.loading('出荷処理中...');
                     axios
                         .put(
-                            `/api/${pageType}/secondpacking/${selectDate}/${inputData['0']}`
+                            `/api/${pageType}/secondpacking/${selectDate}/${inputData['0']}?type=2`
                         )
                         .then((res) => {
                             toast.success('検品処理完了しました。', {
@@ -162,10 +150,9 @@ const Checking2 = (props) => {
                             dataClear();
                         })
                         .catch((e) => {
-                            ResultError(e.response.current.message);
-                            toast.error('出荷処理に失敗しました。', {
-                                id: toastid,
-                            });
+                            let errMsg = ErrorCheck(e);
+                            ResultError(errMsg);
+                            toast.error('エラー発生', { id: toastid });
                         });
                 } else {
                     ResultError(`入力番号:${inputData['1']}
@@ -221,7 +208,7 @@ const Checking2 = (props) => {
                             出荷日 : {selectDate}
                         </Typography>
 
-                        <Box ref={btnRef} width={'30%'} mt={-1}>
+                        <Box ref={btnRef} width={300}>
                             <Button onClick={() => dataClear()} sx={BtnOption}>
                                 データクリア
                             </Button>
@@ -362,3 +349,11 @@ const Checking2 = (props) => {
     );
 };
 export default Checking2;
+
+function ErrorCheck(e) {
+    let errMsg = '';
+    let status = e.response.status;
+    errMsg = e.response.data.message;
+
+    return errMsg;
+}

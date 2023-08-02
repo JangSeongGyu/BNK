@@ -16,12 +16,10 @@ import { blue, grey, lightGreen, pink, red } from '@mui/material/colors';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import 'dayjs/locale/ja';
-import DesignOption from '../Design/DesignOption';
+import { dialogYes, dialogNo } from '../Design/DesignOption';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 
-const dialogYes = DesignOption('dialogYes');
-const dialogNo = DesignOption('dialogNo');
 const BtnOption = {
     width: 100,
     border: 1,
@@ -86,7 +84,7 @@ const MasterMonthDialog = forwardRef((props, ref) => {
                 year_month: selectDate,
             })
             .then((res) => {
-                console.log(res.data);
+                console.log('MonthDialog', res.data);
                 // SetMonthlyData(res.data);
                 callMonthlyData();
                 toast.success('登録完了。', { id: toastId });
@@ -100,7 +98,6 @@ const MasterMonthDialog = forwardRef((props, ref) => {
         const eventId = event.target.id;
         const eventValue = event.target.value;
         SetTextData(eventValue);
-        console.log(textData);
     };
 
     const handleClose = () => {

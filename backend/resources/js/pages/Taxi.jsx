@@ -7,15 +7,14 @@ import MarketShipmentDialog from '../components/MarketShipmentDialog';
 import { Dialog, Divider, Typography, Button, Box } from '@mui/material';
 import { grey, pink, red } from '@mui/material/colors';
 import { toast } from 'react-hot-toast';
-import DesignOption from '../Design/DesignOption';
-
-const BtnOption = DesignOption('BtnOption');
+import { BtnOption } from '../Design/DesignOption';
 
 const Taxi = (props) => {
     const pageType = props.pageType;
     const [selectDate, SetSelectDate] = useState('');
     const [open, SetOpen] = useState(false);
     const [logDatas, SetLogDatas] = useState('');
+    const [pouchDatas, SetPouchDatas] = useState('');
     const [SFDatas, SetSFDatas] = useState('');
     const [dailyData, SetDailyData] = useState([]);
     const [clickType, SetClickType] = useState('');
@@ -41,7 +40,8 @@ const Taxi = (props) => {
         axios
             .post(`/api/${pageType}/order/`)
             .then((res) => {
-                console.log(res.data);
+                callBacklog();
+                SetSFDatas('');
             })
             .catch((e) => {});
     };
@@ -50,6 +50,7 @@ const Taxi = (props) => {
         axios
             .get(`/api/${pageType}/backlogdata/`)
             .then((res) => {
+                console.log(res.data);
                 SetLogDatas(res.data);
                 SetSelectDate(data.selectDate);
             })

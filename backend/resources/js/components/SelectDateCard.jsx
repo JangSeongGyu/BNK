@@ -1,11 +1,11 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Grid, Modal, Typography, Box, Button } from '@mui/material';
-import DesignOption from '../Design/DesignOption';
+import {
+    BorderOption,
+    BtnOption,
+    calendarBoxTypo,
+} from '../Design/DesignOption';
 import { Navigate, useNavigate } from 'react-router-dom';
-
-const BorderOption = DesignOption('BorderOption');
-const BtnOption = DesignOption('BtnOption');
-const calendarBoxTypo = DesignOption('calendarBoxTypo');
 
 const SelectDateCard = (props) => {
     const selectDate = props.selectDate;

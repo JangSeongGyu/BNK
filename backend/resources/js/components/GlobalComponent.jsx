@@ -1,7 +1,7 @@
 import { saveAs } from 'file-saver';
 import JSZip from 'jszip';
 
-const ZipDownload = (files, title) => {
+export const ZipDownload = () => {
     const today = new Date();
     const year = String(today.getFullYear()).slice(-2);
     const month = String(today.getMonth() + 1).padStart(2, '0');
@@ -25,4 +25,15 @@ const ZipDownload = (files, title) => {
     return 'end';
 };
 
-export default ZipDownload;
+export const Today = () => {
+    const today = new Date();
+    const year = String(today.getFullYear()).slice(-2);
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+    const hours = String(today.getHours()).padStart(2, '0');
+    const minute = String(today.getMinutes()).padStart(2, '0');
+
+    const nowTime = year + month + day + hours + minute;
+
+    return nowTime;
+};

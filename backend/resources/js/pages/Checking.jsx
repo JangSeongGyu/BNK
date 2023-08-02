@@ -1,7 +1,15 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Typography, Box, Button, Divider, TextField } from '@mui/material';
 import Header from '../components/Header';
-import DesignOption from '../Design/DesignOption';
+import {
+    BtnOption,
+    insTFOption,
+    BorderOption,
+    insListOption,
+    insOutputOption,
+    insListResultOption,
+    insListResultTypoOption,
+} from '../Design/DesignOption';
 import ForwardIcon from '@mui/icons-material/Forward';
 import { green, grey, pink, red } from '@mui/material/colors';
 import { useParams } from 'react-router-dom';
@@ -9,16 +17,7 @@ import barcode from '../images/barcode.png';
 import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
 
-const BorderOption = DesignOption('BorderOption');
-const insListOption = DesignOption('insListOption');
-const insOutputOption = DesignOption('insOutputOption');
-const insListResultOption = DesignOption('insListResultOption');
-const BtnOption = DesignOption('BtnOption');
-
 const Checking = (props) => {
-    const insListResultTypoOption = DesignOption('insListResultTypoOption');
-    const insTFOption = DesignOption('insTFOption');
-
     const pageType = props.pageType;
     const [MsgBox, SetMsgBox] = useState({
         0: '未完了',
@@ -165,8 +164,8 @@ const Checking = (props) => {
                         .catch((e) => {
                             let errMsg = ErrorCheck(e);
 
-                            ResultError('エラー：' + errMsg);
-                            toast.error('error', { id: toastid });
+                            ResultError(errMsg);
+                            toast.error('エラー発生', { id: toastid });
                         });
                 } else {
                     ResultError(
@@ -404,14 +403,9 @@ const Checking = (props) => {
 export default Checking;
 
 function ErrorCheck(e) {
-    let errMsg = e.response.data.message;
+    let errMsg = '';
     let status = e.response.status;
-    if (status == 500) errMsg = e.response.data.message;
-    else if (status == 410) {
-        errMsg = e.response.data.message;
-    } else if (status == 409) {
-        errMsg = e.response.data.message;
-    } else errMsg = e.response.data.message;
+    errMsg = e.response.data.message;
 
     return errMsg;
 }

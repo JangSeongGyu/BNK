@@ -1,22 +1,10 @@
 import React, { useEffect, useState, useRef } from 'react';
 import SelectDateCard from './SelectDateCard';
 import { Box, Button, Dialog, Typography } from '@mui/material';
-import DesignOption from '../Design/DesignOption';
+import { dialogYes, dialogNo } from '../Design/DesignOption';
 import axios from 'axios';
 import { green, red } from '@mui/material/colors';
 import toast, { Toaster } from 'react-hot-toast';
-
-// const http = axios.create({
-//     baseURL: 'http://192.168.150.196:8080/',
-//     withCredentials: true,
-// });
-
-// axios.get('/sanctum/csrf-cookie').then((res) => {
-//     console.log(res);
-// });
-
-const dialogYes = DesignOption('dialogYes');
-const dialogNo = DesignOption('dialogNo');
 
 const MarketOutSideList = (props) => {
     const selectDate = props.selectDate;
@@ -31,7 +19,6 @@ const MarketOutSideList = (props) => {
     const ShipmentClick = () => {
         if (pageType == 'supermarket') SPAxios();
         else if (pageType == 'taxi') TXAxios();
-        else if (pageType == 'eagles') TXAxios();
     };
 
     const SPAxios = () => {
@@ -40,28 +27,25 @@ const MarketOutSideList = (props) => {
             .put(`/api/${pageType}/shipment/` + selectDate)
             .then((res) => {
                 toast.success('出荷処理しました。', { id: toastid });
-                props.handleClose('ok');
+                props.handleClose(false);
             })
             .catch((e) => {
                 toast.error('出荷処理に失敗しました。', { id: toastid });
             });
     };
 
-    // const TXAxios = () => {
-    //     const toastid = toast.loading('サーバ接続中...');
-    //     axios
-    //         .put(
-    //                 `/api/${pageType}/shipment/` +
-    //                 selectDate
-    //         )
-    //         .then((res) => {
-    //             toast.success('出荷処理しました。', { id: toastid });
-    //             props.handleClose();
-    //         })
-    //         .catch((e) => {
-    //             toast.error('出荷処理に失敗しました。', { id: toastid });
-    //         });
-    // };
+    const TXAxios = () => {
+        const toastid = toast.loading('サーバ接続中...');
+        axios
+            .put(`/api/${pageType}/shipment/` + selectDate)
+            .then((res) => {
+                toast.success('出荷処理しました。', { id: toastid });
+                props.handleClose(false);
+            })
+            .catch((e) => {
+                toast.error('出荷処理に失敗しました。', { id: toastid });
+            });
+    };
 
     const ConfirmBox = () => {
         return (
@@ -77,9 +61,9 @@ const MarketOutSideList = (props) => {
                         出荷日：{selectDate}
                         <br />
                         未処理案件：{logDatas}件
-                        {/* <br />
-                        情報: {pageType}{' '}
-                        {selectOption != '' && <>,{selectOption}</>} */}
+                        <br />
+                        {/* 情報: {pageType}{' '} */}
+                        {selectOption != '' && <>{selectOption}</>}
                     </Typography>
                     <Box
                         display={'flex'}
@@ -106,7 +90,7 @@ const MarketOutSideList = (props) => {
                         </Button>
                         <Button
                             sx={dialogNo}
-                            onClick={() => props.handleClose('exit')}
+                            onClick={() => props.handleClose(true)}
                         >
                             戻る
                         </Button>
@@ -154,7 +138,7 @@ const MarketOutSideList = (props) => {
                     <Button
                         mt={1}
                         sx={dialogNo}
-                        onClick={() => props.handleClose()}
+                        onClick={() => props.handleClose(true)}
                     >
                         戻る
                     </Button>
@@ -164,14 +148,11 @@ const MarketOutSideList = (props) => {
     };
 
     const ClickPouch = () => {
-        console.log('ClickPouch');
         SetSelectOption('パウチ');
         SetBoxCount(boxCount + 1);
     };
 
     const ClickNotPouch = () => {
-        console.log('ClickNotPouch');
-        cd;
         SetSelectOption('通常');
         SetBoxCount(boxCount + 1);
     };

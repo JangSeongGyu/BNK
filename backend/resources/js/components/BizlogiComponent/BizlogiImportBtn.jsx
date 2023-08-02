@@ -1,12 +1,10 @@
 import { Button } from '@mui/material';
-import DesignOption from '../../Design/DesignOption';
+import { BtnOption } from '../../Design/DesignOption';
 import React, { useEffect, useState, useRef } from 'react';
 import WaitCircle from '../WaitCircle';
 import ImportDialog from '../../Beauty/Import/ImportDialog';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
-
-const BtnOption = DesignOption('BtnOption');
 
 const BizlogiImportBtn = (props) => {
     const selectDate = props.selectDate;

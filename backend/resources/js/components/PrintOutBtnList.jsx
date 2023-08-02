@@ -1,6 +1,10 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Grid, Modal, Typography, Box, Button } from '@mui/material';
-import DesignOption from '../Design/DesignOption';
+import {
+    BorderOption,
+    calendarBoxTypo,
+    BtnOption,
+} from '../Design/DesignOption';
 import { red } from '@mui/material/colors';
 import ReactToPrint, { useReactToPrint } from 'react-to-print';
 import LabelLayout from './LabelLayout';
@@ -8,10 +12,6 @@ import YamaLayout from './YamaComponent/YamaLayout';
 import JobTicketLayout from './JobTicketLayout';
 import axios from 'axios';
 import QRBtn from './QRBtn';
-
-const BorderOption = DesignOption('BorderOption');
-const BtnOption = DesignOption('BtnOption');
-const calendarBoxTypo = DesignOption('calendarBoxTypo');
 
 const PrintOutBtnList = (props) => {
     const selectDate = props.selectDate;
@@ -51,12 +51,7 @@ const PrintOutBtnList = (props) => {
                 >
                     <ReactToPrint
                         trigger={() => (
-                            <Button
-                                onClick={() => console.log('dd')}
-                                sx={BtnOption}
-                            >
-                                JOBチケット
-                            </Button>
+                            <Button sx={BtnOption}>JOBチケット</Button>
                         )}
                         pageStyle="
                         @media print {
@@ -89,11 +84,11 @@ const PrintOutBtnList = (props) => {
                     selectDate={selectDate}
                     ref={YamaRef}
                 />
-                <JobTicketLayout
+                {/* <JobTicketLayout
                     pageType={pageType}
                     selectDate={selectDate}
                     ref={JobRef}
-                />
+                /> */}
             </Box>
         </Box>
     );

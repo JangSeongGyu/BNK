@@ -7,7 +7,6 @@ import jaLocale from '@fullcalendar/core/locales/ja';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import tippy from 'tippy.js';
 import axios from 'axios';
-import DesignOption from '../Design/DesignOption';
 import { red } from '@mui/material/colors';
 import { toast } from 'react-hot-toast';
 
@@ -45,12 +44,10 @@ const CalendarList = (props) => {
     useEffect(() => {
         if (pageType != null) {
             // parent Ref
-            console.log(props.UpdateRef);
             props.UpdateRef.current = {
                 event: updateCalendar,
                 side: SetSideList,
             };
-            console.log(props.UpdateRef);
             //first Get Data
             updateCalendar();
         }
@@ -60,7 +57,6 @@ const CalendarList = (props) => {
     useEffect(() => {
         if (selectDate != '') {
             if (CheckDate(selectDate)) {
-                console.log('isData');
                 props.CallSelectDate({
                     selectDate: selectDate,
                     isData: true,
@@ -80,15 +76,13 @@ const CalendarList = (props) => {
         let endDate = CreateDate(calref.current.calendar.view.activeEnd);
         SetCurrentDate(CreateDate(calref.current.calendar.getDate()));
 
-        console.log(startDate, endDate);
-
         axios
             .get(`/api/${pageType}/betweencount/${startDate}/${endDate}`)
             .then((res) => {
                 toast.success('カレンダー情報更新完了。', {
                     id: toastid,
                 });
-                console.log(res.data);
+                console.log('Calendar Data', res.data);
                 SetEventList(res.data);
             })
             .catch((e) => {
@@ -138,7 +132,6 @@ const CalendarList = (props) => {
     };
 
     const SetSideList = (date) => {
-        console.log('selectData', date);
         SetSelectDate(date);
         props.CallSelectDate({
             selectDate: date,

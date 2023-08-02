@@ -7,9 +7,7 @@ import MarketShipmentDialog from '../components/MarketShipmentDialog';
 import { Dialog, Divider, Typography, Button, Box } from '@mui/material';
 import { grey, pink, red } from '@mui/material/colors';
 import { toast } from 'react-hot-toast';
-import DesignOption from '../Design/DesignOption';
-
-const BtnOption = DesignOption('BtnOption');
+import { BtnOption } from '../Design/DesignOption';
 
 const SuperMarket = (props) => {
     const pageType = props.pageType;
@@ -17,12 +15,11 @@ const SuperMarket = (props) => {
     const [open, SetOpen] = useState(false);
     const [logDatas, SetLogDatas] = useState('');
     const [SFDatas, SetSFDatas] = useState('');
-    const [dailyData, SetDailyData] = useState([]);
-    const [clickType, SetClickType] = useState('');
     const [isData, SetIsData] = useState(false);
     const UpdateRef = useRef(null);
 
     useEffect(() => {
+        // console.log();
         CallSFData();
         callBacklog();
     }, []);
@@ -41,6 +38,8 @@ const SuperMarket = (props) => {
         axios
             .post(`/api/${pageType}/order/`)
             .then((res) => {
+                callBacklog();
+                SetSFDatas('');
                 console.log(res.data);
             })
             .catch((e) => {});
@@ -51,7 +50,6 @@ const SuperMarket = (props) => {
             .get(`/api/${pageType}/backlogdata/`)
             .then((res) => {
                 SetLogDatas(res.data);
-                SetSelectDate(data.selectDate);
             })
             .catch((e) => {});
     };
@@ -65,7 +63,7 @@ const SuperMarket = (props) => {
     };
 
     const handleClose = (res) => {
-        if (res == 'ok') {
+        if (res == false) {
             callBacklog();
             UpdateRef.current.event();
             UpdateRef.current.side(selectDate);
@@ -179,7 +177,7 @@ const SuperMarket = (props) => {
                     )}
                 </Box>
             </Box>
-            <Dialog onClose={() => handleClose('exit')} open={open}>
+            <Dialog onClose={() => handleClose(false)} open={open}>
                 <MarketShipmentDialog
                     pageType={pageType}
                     handleClose={handleClose}

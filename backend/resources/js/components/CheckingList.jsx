@@ -1,15 +1,15 @@
 import { Grid, Modal, Typography, Box, Button } from '@mui/material';
-import DesignOption from '../Design/DesignOption';
+import {
+    BorderOption,
+    BtnOption,
+    calendarBoxTypo,
+} from '../Design/DesignOption';
 import { useNavigate } from 'react-router-dom';
 import { red } from '@mui/material/colors';
 
 const CheckingList = (props) => {
-    var selectDate = props.selectDate;
     const pageType = props.pageType;
-    const BorderOption = DesignOption('BorderOption');
-    const BtnOption = DesignOption('BtnOption');
-    const calendarBoxTypo = DesignOption('calendarBoxTypo');
-
+    const selectDate = props.selectDate;
     let navigate = useNavigate();
     const CheckingBtnClick = () => {
         navigate('checking/' + selectDate);

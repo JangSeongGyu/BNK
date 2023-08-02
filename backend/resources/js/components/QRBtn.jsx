@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 import { Grid, Modal, Typography, Box, Button } from '@mui/material';
-import DesignOption from '../Design/DesignOption';
+import { BtnOption } from '../Design/DesignOption';
 import { red } from '@mui/material/colors';
 import axios from 'axios';
 import ExcelJS from 'exceljs';
@@ -10,8 +10,6 @@ import JSZip from 'jszip';
 
 import * as zip from '@zip.js/zip.js';
 import ZipDownload from './ZipDownload';
-
-const BtnOption = DesignOption('BtnOption');
 
 const QRBtn = (props) => {
     const selectDate = props.selectDate;
@@ -23,7 +21,7 @@ const QRBtn = (props) => {
         axios
             .get(`/api/${pageType}/qrdata/${selectDate}`)
             .then((res) => {
-                console.log(res.data);
+                console.log('QR Data', res.data);
                 const sorted = [...res.data].sort((a, b) => {
                     return b.問い合わせ番号 - a.問い合わせ番号;
                 });
@@ -37,13 +35,12 @@ const QRBtn = (props) => {
     };
 
     useEffect(() => {
-        console.log('qrData', qrData);
         if (qrData.length > 0) {
             let workbook = new ExcelJS.Workbook();
             let worksheet = workbook.addWorksheet('DTF連携', {});
             let cnt = 2;
-            console.log(qrData);
-            console.log(qrData.sort(qrData.問い合わせ番号));
+
+            qrData.sort(qrData.問い合わせ番号);
 
             // HEADER
             let headerData = [
@@ -101,24 +98,10 @@ const QRBtn = (props) => {
     }, [qrData]);
 
     const download = async (workbook) => {
-        // console.log('download');
-
-        // // // Xlsx
+        // Xlsx
         let excelFile = await workbook.xlsx.writeBuffer(); //xlsxの場合
         console.log('Original', [excelFile]);
         console.log(ZipDownload([excelFile], `QR`));
-
-        // var zip = new JSZip();
-        // let blob = new Blob([excelFile], {
-        //     type: 'application/octet-binary',
-        // });
-        // console.log(excelFile);
-
-        // zip.file(`QR_${selectDate}.xlsx`, excelFile);
-
-        // zip.generateAsync({ type: 'blob' }).then(function (content) {
-        //     saveAs(content, `QR_${selectDate}.zip`);
-        // });
     };
 
     const paddingNum = (data, index) => {

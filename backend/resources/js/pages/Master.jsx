@@ -13,7 +13,7 @@ import {
 import { green, grey, pink, red } from '@mui/material/colors';
 import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
-import DesignOption from '../Design/DesignOption';
+import { BtnOption } from '../Design/DesignOption';
 import Header from '../components/Header';
 import MasterMonthDialog from '../components/MasterMonthDialog';
 
@@ -25,8 +25,6 @@ const InputOption = () => {
         // width: 500,
     };
 };
-
-const BtnOption = DesignOption('BtnOption');
 
 const Master = (props) => {
     const pageType = props.pageType;

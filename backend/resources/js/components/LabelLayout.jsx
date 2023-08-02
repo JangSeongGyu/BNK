@@ -63,14 +63,15 @@ const LabelLayout = forwardRef((props, ref) => {
         let html = [];
         let cardList = [];
         let i = 0;
+        let keyCnt = 0;
         let count = labelData.length;
         for (i = 0; i < count; i++) {
-            cardList.push(LabelCard(i));
+            cardList.push(<Box key={keyCnt++}>{LabelCard(i)}</Box>);
 
             if ((i + 1) % 6 == 0 && i != 0) {
                 html.push(
                     <Box
-                        key={i}
+                        key={keyCnt++}
                         display={'flex'}
                         flexWrap={'wrap'}
                         gap={10}
@@ -91,11 +92,14 @@ const LabelLayout = forwardRef((props, ref) => {
         // 余白処理
         if (count % 6 != 0)
             for (i = 0; i < 6 - (count % 6); i++) {
-                cardList.push(<Box key={i} width={420} height={343}></Box>);
+                cardList.push(
+                    <Box key={keyCnt++} width={420} height={343}></Box>
+                );
             }
         if (cardList.length > 0)
             html.push(
                 <Box
+                    ket={keyCnt++}
                     display={'flex'}
                     flexWrap={'wrap'}
                     gap={10}
@@ -115,10 +119,8 @@ const LabelLayout = forwardRef((props, ref) => {
     const LabelCard = (number) => {
         let currentData = labelData[number];
         let paddingNumber = currentData.同梱連番.toString().padStart(3, '0');
-
-        console.log(paddingNumber);
         return (
-            <Box key={number} width={420} height={343} border={3}>
+            <Box width={420} height={343} border={3}>
                 <Box sx={MainBoxOption} height={'21.5%'}>
                     <Box sx={LeftBoxOption}>
                         <Typography sx={LeftTypoOption}>店舗名</Typography>

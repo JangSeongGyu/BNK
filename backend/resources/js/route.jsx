@@ -23,6 +23,7 @@ const Router = () => {
         <BrowserRouter>
             <Routes>
                 <Route path={`home`} element={<Home />} />
+                {/*============ SuperMarket ======================================================*/}
                 <Route
                     exact
                     path={`/supermarket`}
@@ -70,8 +71,7 @@ const Router = () => {
                     }
                 />
 
-                <Route exact path="/test" element={<YamaLayout />}></Route>
-
+                {/*============ Taxi ======================================================*/}
                 <Route
                     exact
                     path={`/taxi`}
@@ -87,7 +87,7 @@ const Router = () => {
                     path={`/taxi/master`}
                     element={
                         <ThemeProvider theme={TXTheme}>
-                            <Taxi pageType="taxi" />
+                            <Master pageType="taxi" />
                         </ThemeProvider>
                     }
                 />
@@ -101,6 +101,7 @@ const Router = () => {
                     }
                 />
 
+                <Route exact path="/test" element={<YamaLayout />}></Route>
                 <Route exact path={`/beauty`} element={<Beauty />}>
                     <Route index element={<BeautyImport />} />
                     <Route path={`import`} element={<BeautyImport />} />

@@ -44,7 +44,13 @@ const Master = (props) => {
                 boxShadow={1}
                 borderRadius={2}
             >
-                <Typography fontSize={40} fontWeight={'bold'}>
+                <Typography
+                    borderBottom={1}
+                    borderColor={grey[400]}
+                    fontSize={40}
+                    fontWeight={'bold'}
+                    mb={2}
+                >
                     マスタ登録
                 </Typography>
                 <Box width={200}>

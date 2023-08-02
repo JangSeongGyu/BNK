@@ -33,6 +33,7 @@ const Checking = (props) => {
     const btnRef = useRef();
     const { selectDate } = useParams();
     const [searchData, SetSearchData] = useState([]);
+    const [completeText, SetCompleteText] = useState('');
     const maxTask = 3;
 
     const dataClear = () => {
@@ -80,6 +81,7 @@ const Checking = (props) => {
                     inputLock();
                     SetTaskCnt(5);
                     console.log(btnRef);
+                    SetCompleteText('完了');
                     btnRef.current.hidden = 'true';
                 }
             })
@@ -97,10 +99,11 @@ const Checking = (props) => {
     const GetNumberData = () => {
         axios
             .get(
-                `/api/${pageType}/checkingdata/${selectDate}/${inputData['0']}`
+                `/api/${pageType}/checkingdata/${selectDate}/${inputData['0']}?type=1`
             )
             .then((res) => {
                 SetSearchData(res.data[0]);
+                ResultOK();
             })
             .catch((e) => {
                 let errMsg = ErrorCheck(e);
@@ -122,7 +125,7 @@ const Checking = (props) => {
         if (event.key === 'Enter') {
             // 入力データがない時
             if (inputData[taskCnt] == '' || inputData[taskCnt] == null) {
-                ResultError('入力してください');
+                ResultError('内容を入力してください');
                 return;
             }
 
@@ -170,7 +173,7 @@ const Checking = (props) => {
                 } else {
                     ResultError(
                         `入力数量:${inputData['2']} 
-                        入力数量数量が違います。`
+                        入力数量が違います。`
                     );
                 }
             }
@@ -206,7 +209,7 @@ const Checking = (props) => {
                 <Box
                     width={'100%'}
                     px={4}
-                    height={'8%'}
+                    height={'10%'}
                     display={'flex'}
                     alignItems={'center'}
                 >
@@ -222,8 +225,19 @@ const Checking = (props) => {
                         <Typography fontSize={24} ml={4} fontWeight={'bold'}>
                             出荷日 : {selectDate}
                         </Typography>
-
-                        <Box ref={btnRef} width={'20%'}>
+                        {completeText != '' && (
+                            <Typography
+                                border={2}
+                                borderRadius={2}
+                                px={2}
+                                color={red[400]}
+                                fontWeight={'bold'}
+                                fontSize={32}
+                            >
+                                {completeText}
+                            </Typography>
+                        )}{' '}
+                        <Box ref={btnRef} width={300}>
                             <Button onClick={() => dataClear()} sx={BtnOption}>
                                 データクリア
                             </Button>
@@ -233,7 +247,14 @@ const Checking = (props) => {
 
                 <Divider variant="middle" />
                 {/* MIDDLE LIST */}
-                <Box height={'10%'} gap={2} mx={4} my={2} display={'flex'}>
+                <Box
+                    height={'10%'}
+                    gap={2}
+                    mx={4}
+                    mt={1}
+                    mb={2}
+                    display={'flex'}
+                >
                     <Box minWidth={200} width={'15%'}>
                         <Typography>注文明細No</Typography>
                         <Box sx={CheckingOutputBoxOption}>
@@ -276,7 +297,7 @@ const Checking = (props) => {
                 <Divider variant="middle" />
                 <Box
                     height={'80%'}
-                    width={'100%'}
+                    minWidth={1200}
                     alignItems={'center'}
                     display={'flex'}
                     justifyContent={'center'}
@@ -284,7 +305,7 @@ const Checking = (props) => {
                 >
                     <Box
                         height={'80%'}
-                        width={'90%'}
+                        width={'100%'}
                         mx={4}
                         mt={2}
                         display={'flex'}
@@ -411,7 +432,8 @@ export default Checking;
 function ErrorCheck(e) {
     let errMsg = '';
     let status = e.response.status;
-    errMsg = e.response.data.message;
+    if ((status = 409)) errMsg = '出荷済みの問い合わせ番号です';
+    else errMsg = e.response.data.message;
 
     return errMsg;
 }

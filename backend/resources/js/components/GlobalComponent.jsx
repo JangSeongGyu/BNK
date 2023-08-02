@@ -22,7 +22,6 @@ export const fileToday = () => {
     const day = paddingNum(today.getDate(), 2);
     const hours = paddingNum(today.getHours(), 2);
     const minute = paddingNum(today.getMinutes(), 2);
-
     const nowTime = year + month + day + hours + minute;
 
     return nowTime;

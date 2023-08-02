@@ -35,7 +35,7 @@ export const BtnOption = () => {
 };
 export const CheckingListBoxOption = () => {
     return {
-        minWidth: 350,
+        minWidth: 300,
         borderRadius: 2,
         height: '100%',
         boxShadow: 5,

@@ -65,6 +65,11 @@ const JobTicketLayout = forwardRef((props, ref) => {
                 name: 'スーパー' + [selectDate] + '発注分',
                 contentId: 'DD109842-01-003',
             });
+        } else if (pageType == 'taxi') {
+            SetBasicData({
+                name: 'タクシー' + [selectDate] + '発注分',
+                contentId: 'まだ',
+            });
         }
 
         axios.get(`/api/${pageType}/jobticket/` + selectDate).then((res) => {
@@ -213,15 +218,9 @@ const JobTicketLayout = forwardRef((props, ref) => {
         );
     };
 
-    return (
-        <>
-            <Box
-                // gap={3}
-                p={4}
-                width={MainWidth}
-                height={MainHeight}
-                ref={ref}
-            >
+    const Pages = () => {
+        return (
+            <Box p={4} width={MainWidth} height={MainHeight}>
                 <Box
                     display={'flex'}
                     flexDirection={'column'}
@@ -247,7 +246,13 @@ const JobTicketLayout = forwardRef((props, ref) => {
                     <ScheduleLayout />
                 </Box>
             </Box>
-        </>
+        );
+    };
+
+    return (
+        <Box ref={ref}>
+            <Pages />
+        </Box>
     );
 });
 export default JobTicketLayout;

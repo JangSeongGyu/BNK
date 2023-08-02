@@ -5,6 +5,8 @@ import { dialogYes, dialogNo } from '../Design/DesignOption';
 import axios from 'axios';
 import { green, red } from '@mui/material/colors';
 import toast, { Toaster } from 'react-hot-toast';
+import ArrowBackRoundedIcon from '@mui/icons-material/ArrowBackRounded';
+import SaveRoundedIcon from '@mui/icons-material/SaveRounded';
 
 const MarketOutSideList = (props) => {
     const selectDate = props.selectDate;
@@ -86,13 +88,15 @@ const MarketOutSideList = (props) => {
                                 },
                             }}
                         >
+                            <SaveRoundedIcon />
                             出荷処理
                         </Button>
                         <Button
                             sx={dialogNo}
                             onClick={() => props.handleClose(true)}
                         >
-                            戻る
+                            <ArrowBackRoundedIcon />
+                            <Typography>戻る</Typography>
                         </Button>
                     </Box>
                 </Box>
@@ -125,14 +129,14 @@ const MarketOutSideList = (props) => {
                             disabled={pouchCnt == 0 ? true : false}
                             sx={dialogYes}
                         >
-                            パウチ
+                            <Typography>パウチ</Typography>
                         </Button>
                         <Button
                             disabled={normalCnt == 0 ? true : false}
                             sx={dialogYes}
                             onClick={ClickNotPouch}
                         >
-                            通常
+                            <Typography>通常</Typography>
                         </Button>
                     </Box>
                     <Button
@@ -140,7 +144,9 @@ const MarketOutSideList = (props) => {
                         sx={dialogNo}
                         onClick={() => props.handleClose(true)}
                     >
-                        戻る
+                        <ArrowBackRoundedIcon />
+
+                        <Typography>戻る</Typography>
                     </Button>
                 </Box>
             </Box>

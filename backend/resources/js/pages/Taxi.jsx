@@ -4,10 +4,8 @@ import axios from 'axios';
 import CalendarList from '../components/CalendarList';
 import MarketSideList from '../components/MarketSideList';
 import MarketShipmentDialog from '../components/MarketShipmentDialog';
-import { Dialog, Divider, Typography, Button, Box } from '@mui/material';
-import { grey, pink, red } from '@mui/material/colors';
+import { Dialog, Typography, Button, Box } from '@mui/material';
 import { toast } from 'react-hot-toast';
-import { BtnOption } from '../Design/DesignOption';
 
 const Taxi = (props) => {
     const pageType = props.pageType;
@@ -37,13 +35,17 @@ const Taxi = (props) => {
     };
 
     const ClickSFData = () => {
+        toast.loading('サーバ接続中...');
         axios
             .post(`/api/${pageType}/order/`)
             .then((res) => {
                 callBacklog();
                 SetSFDatas('');
+                toast.success('SFデータ取得完了。');
             })
-            .catch((e) => {});
+            .catch((e) => {
+                toast.success(e.response.current);
+            });
     };
 
     const callBacklog = () => {
@@ -156,7 +158,20 @@ const Taxi = (props) => {
                             color={'primary.main'}
                             borderRadius={1}
                         >
-                            未処理
+                            パウチ
+                            <br />
+                            {logDatas.length}
+                        </Typography>
+                        <Typography
+                            width={110}
+                            fontSize={20}
+                            fontWeight={'bold'}
+                            white
+                            backgroundColor={'white'}
+                            color={'primary.main'}
+                            borderRadius={1}
+                        >
+                            通常
                             <br />
                             {logDatas.length}
                         </Typography>

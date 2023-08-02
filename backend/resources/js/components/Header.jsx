@@ -12,6 +12,7 @@ import LocalTaxiIcon from '@mui/icons-material/LocalTaxi';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { useNavigate } from 'react-router-dom';
 
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 const Header = (props) => {
     let navigate = useNavigate();
     const pageType = props.pageType;
@@ -20,10 +21,7 @@ const Header = (props) => {
     const disableList = props.disableList;
     const [open, setOpen] = useState(false);
 
-    const menuItemOption = (menuType) => {
-        let selectMenu;
-        if (pageType == menuType) selectMenu = grey[200];
-        else selectMenu = 'white';
+    const menuItemOption = () => {
         return {
             borderBottom: 1,
             borderColor: grey[400],
@@ -31,8 +29,17 @@ const Header = (props) => {
             alignItems: 'center',
             px: 2,
             height: 60,
-            backgroundColor: selectMenu,
             ':hover': { backgroundColor: grey[200] },
+        };
+    };
+
+    const menuItemTextOption = (menuType) => {
+        let selectMenu;
+        if (pageType == menuType) selectMenu = blue[500];
+        else selectMenu = 'black';
+
+        return {
+            color: selectMenu,
         };
     };
 
@@ -74,36 +81,57 @@ const Header = (props) => {
             </AppBar>
 
             <Drawer open={open} onClose={() => close()}>
-                <Box width={300}>
-                    <Typography
+                <Box height={'100%'} width={300}>
+                    <Box
+                        onClick={() => close()}
                         backgroundColor={pink[500]}
-                        color={'white'}
-                        textAlign={'center'}
                         py={2}
-                        fontSize={28}
+                        boxShadow={2}
                         fontWeight={'bold'}
+                        color={'white'}
+                        display={'flex'}
+                        alignItems={'center'}
+                        sx={{
+                            ':hover': { background: pink[400] },
+                        }}
                     >
-                        楽天業務システム
-                    </Typography>
+                        <ArrowBackIosNewIcon sx={{ fontSize: 30 }} />
+                        <Typography
+                            width={'88%'}
+                            textAlign={'center'}
+                            fontSize={24}
+                        >
+                            {/* 楽天業務システム */}
+                        </Typography>
+                    </Box>
                     <Box
                         onClick={() => navigate('/supermarket')}
-                        sx={menuItemOption('supermarket')}
+                        sx={menuItemOption()}
                     >
                         <ShoppingCartIcon
                             sx={{ color: pink[500], fontSize: 30, mr: 1 }}
                         />
-                        <Typography textAlign={'center'} my={2} fontSize={24}>
+                        <Typography
+                            sx={menuItemTextOption('supermarket')}
+                            textAlign={'center'}
+                            my={2}
+                            fontSize={24}
+                        >
                             スーパーマーケット
                         </Typography>
                     </Box>
                     <Box
                         onClick={() => navigate('/taxi')}
-                        sx={menuItemOption('taxi')}
+                        sx={menuItemOption()}
                     >
                         <LocalTaxiIcon
                             sx={{ color: orange[600], fontSize: 30, mr: 1 }}
                         />
-                        <Typography textAlign={'center'} my={2} fontSize={24}>
+                        <Typography
+                            textAlign={menuItemTextOption('taxi')}
+                            my={2}
+                            fontSize={24}
+                        >
                             タクシー
                         </Typography>
                     </Box>

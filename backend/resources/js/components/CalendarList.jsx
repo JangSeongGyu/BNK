@@ -1,14 +1,16 @@
 import React, { useEffect, useState, useRef } from 'react';
 import styled from '@emotion/styled';
-import { Grid, Modal, Typography, Box } from '@mui/material';
-import FullCalendar from '@fullcalendar/react';
-import interactionPlugin from '@fullcalendar/interaction';
-import jaLocale from '@fullcalendar/core/locales/ja';
-import dayGridPlugin from '@fullcalendar/daygrid';
+import { Grid, Modal, Typography, Box, Dialog } from '@mui/material';
 import tippy from 'tippy.js';
 import axios from 'axios';
 import { red } from '@mui/material/colors';
 import { toast } from 'react-hot-toast';
+
+import FullCalendar from '@fullcalendar/react';
+import interactionPlugin from '@fullcalendar/interaction';
+import jaLocale from '@fullcalendar/core/locales/ja';
+import dayGridPlugin from '@fullcalendar/daygrid';
+import CalendarChangeDialog from './CalendarChangeDialog';
 
 const CalendarList = (props) => {
     const pageType = props.pageType;
@@ -18,6 +20,8 @@ const CalendarList = (props) => {
     const [currentDate, SetCurrentDate] = useState(props.Today);
     const calref = useRef(null);
     const [eventDates, SetEventDates] = useState({});
+    const dialogRef = useRef('null');
+
     const StyleWrapper = styled.div`
         margin: 0 10px;
         width: 100%;
@@ -105,7 +109,7 @@ const CalendarList = (props) => {
         datas.forEach((data) => {
             strData.push({
                 date: data.出荷日,
-                title: '出荷 : ' + data.件数 + '件',
+                title: '出荷 ' + data.件数 + '件',
             });
             SetEventDates((prevState) => ({ ...prevState, [data.出荷日]: 1 }));
         });
@@ -138,7 +142,11 @@ const CalendarList = (props) => {
             isData: true,
         });
     };
-
+    const EventDrop = (dropInfo) => {
+        const start = dropInfo.oldEvent.startStr;
+        const end = dropInfo.event.startStr;
+        dialogRef.current.ChangeDate(dropInfo, start, end);
+    };
     const handleDateClick = (dateClickInfo) => {
         SetSelectDate(dateClickInfo.dateStr);
         if (!CheckDate(dateClickInfo.dateStr)) props.handleOpen();
@@ -158,16 +166,19 @@ const CalendarList = (props) => {
                 marginTop: 2,
             }}
         >
+            <CalendarChangeDialog ref={dialogRef} />
             <StyleWrapper>
                 <FullCalendar
                     ref={calref}
                     plugins={[dayGridPlugin, interactionPlugin]}
                     initialView="dayGridMonth"
                     initialDate={currentDate}
+                    droppable={true}
+                    editable={true}
                     locales={[jaLocale]}
                     locale="ja"
                     height={'100%'}
-                    // contentHeight={'auto'}
+                    eventDrop={(dropInfo) => EventDrop(dropInfo)}
                     businessHours={{ daysOfWeek: [1, 2, 3, 4, 5] }}
                     events={eventDatas}
                     dateClick={handleDateClick}

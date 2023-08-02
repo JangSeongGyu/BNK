@@ -131,8 +131,8 @@ const SuperMarket = (props) => {
                             SFデータ取得
                         </Button>
                         <Typography
-                            width={110}
-                            fontSize={20}
+                            width={100}
+                            fontSize={18}
                             fontWeight={'bold'}
                             backgroundColor={'white'}
                             color={'primary.main'}
@@ -144,8 +144,8 @@ const SuperMarket = (props) => {
                         </Typography>
 
                         <Typography
-                            width={110}
-                            fontSize={20}
+                            width={100}
+                            fontSize={18}
                             fontWeight={'bold'}
                             backgroundColor={'white'}
                             color={'primary.main'}

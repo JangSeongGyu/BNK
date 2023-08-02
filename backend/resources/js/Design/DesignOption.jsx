@@ -9,7 +9,7 @@ export const BorderOption = () => {
     };
 };
 
-export const calendarBoxTypo = () => {
+export const ListTitleOption = () => {
     return {
         fontSize: 24,
         fontWeight: 'bold',
@@ -33,7 +33,7 @@ export const BtnOption = () => {
         },
     };
 };
-export const insListOption = () => {
+export const CheckingListBoxOption = () => {
     return {
         minWidth: 350,
         borderRadius: 2,
@@ -46,7 +46,7 @@ export const insListOption = () => {
         alignItems: 'center',
     };
 };
-export const insListResultOption = () => {
+export const CheckingListResultOption = () => {
     return {
         height: '40%',
         marginTop: 'auto',
@@ -56,17 +56,16 @@ export const insListResultOption = () => {
         backgroundColor: grey[300],
     };
 };
-export const insListResultTypoOption = () => {
+export const CheckingListResultTextOption = () => {
     return {
         fontSize: 20,
         textAlign: 'center',
         alignSelf: 'center',
-        mx: auto,
-
+        mx: 'auto',
         fontWeight: 'bold',
     };
 };
-export const insOutputOption = () => {
+export const CheckingOutputBoxOption = () => {
     return {
         px: 1,
         py: 1,
@@ -77,7 +76,7 @@ export const insOutputOption = () => {
         backgroundColor: grey[100],
     };
 };
-export const insTFOption = () => {
+export const CheckingListInputOption = () => {
     return {
         variant: 'filled',
         backgroundColor: 'white',

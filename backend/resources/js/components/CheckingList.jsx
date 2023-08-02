@@ -2,7 +2,7 @@ import { Grid, Modal, Typography, Box, Button } from '@mui/material';
 import {
     BorderOption,
     BtnOption,
-    calendarBoxTypo,
+    ListTitleOption,
 } from '../Design/DesignOption';
 import { useNavigate } from 'react-router-dom';
 import { red } from '@mui/material/colors';
@@ -27,18 +27,18 @@ const CheckingList = (props) => {
         );
     };
 
-    const CheckCheck2Btn = () => {
+    const Checking2Btn = () => {
         if (pageType == 'supermarket') return <Check2Btn />;
     };
     return (
         <Box my={1} width={'100%'} sx={BorderOption}>
-            <Typography sx={calendarBoxTypo}>検品</Typography>
+            <Typography sx={ListTitleOption}>検品</Typography>
             <Box mt={1} mb={1}>
                 <Button sx={BtnOption} onClick={() => CheckingBtnClick()}>
                     一次検品
                 </Button>
             </Box>
-            <CheckCheck2Btn />
+            <Checking2Btn />
         </Box>
     );
 };

@@ -3,12 +3,12 @@ import { Typography, Box, Button, Divider, TextField } from '@mui/material';
 import Header from '../components/Header';
 import {
     BtnOption,
-    insTFOption,
+    CheckingListInputOption,
     BorderOption,
-    insListOption,
-    insOutputOption,
-    insListResultOption,
-    insListResultTypoOption,
+    CheckingListBoxOption,
+    CheckingOutputBoxOption,
+    CheckingListResultOption,
+    CheckingListResultTextOption,
 } from '../Design/DesignOption';
 import ForwardIcon from '@mui/icons-material/Forward';
 import { green, grey, pink, red } from '@mui/material/colors';
@@ -236,21 +236,27 @@ const Checking = (props) => {
                 <Box height={'10%'} gap={2} mx={4} my={2} display={'flex'}>
                     <Box minWidth={200} width={'15%'}>
                         <Typography>注文明細No</Typography>
-                        <Box sx={insOutputOption}>{searchData.注文No}</Box>
+                        <Box sx={CheckingOutputBoxOption}>
+                            {searchData.注文No}
+                        </Box>
                     </Box>
                     <Box minWidth={250} width={'25%'}>
                         <Typography>宛名</Typography>
-                        <Box sx={insOutputOption}>{searchData.シーン名}</Box>
+                        <Box sx={CheckingOutputBoxOption}>
+                            {searchData.シーン名}
+                        </Box>
                     </Box>
                     <Box minWidth={500} width={'45%'}>
                         <Typography>納品先住所</Typography>
-                        <Box sx={insOutputOption}>{searchData.納品先住所}</Box>
+                        <Box sx={CheckingOutputBoxOption}>
+                            {searchData.納品先住所}
+                        </Box>
                     </Box>
                     <Box minWidth={150} width={'10%'}>
                         <Typography>作業進捗</Typography>
                         <Box
                             justifyContent={'center'}
-                            sx={insOutputOption}
+                            sx={CheckingOutputBoxOption}
                             display={'flex'}
                         >
                             <Typography
@@ -285,7 +291,7 @@ const Checking = (props) => {
                     >
                         {/* バーコードリスト 1 */}
                         <Box
-                            sx={insListOption}
+                            sx={CheckingListBoxOption}
                             border={2}
                             borderColor={taskCnt == 0 ? red[500] : grey[500]}
                         >
@@ -304,17 +310,17 @@ const Checking = (props) => {
                                 inputRef={(ref) => inputRef.current.push(ref)}
                                 id="0"
                                 label="問い合わせNo"
-                                sx={insTFOption}
+                                sx={CheckingListInputOption}
                             />
                             <Box
                                 ref={(ref) => boxRef.current.push(ref)}
-                                sx={insListResultOption}
+                                sx={CheckingListResultOption}
                                 backgroundColor={grey[400]}
                                 height={100}
                             >
                                 <Typography
                                     whiteSpace={'pre-line'}
-                                    sx={insListResultTypoOption}
+                                    sx={CheckingListResultTextOption}
                                 >
                                     {MsgBox['0']}
                                 </Typography>
@@ -323,7 +329,7 @@ const Checking = (props) => {
                         <ForwardIcon sx={{ fontSize: 100, height: '100%' }} />
                         {/* バーコードリスト 2 */}
                         <Box
-                            sx={insListOption}
+                            sx={CheckingListBoxOption}
                             border={2}
                             borderColor={taskCnt == 1 ? red[500] : grey[500]}
                         >
@@ -342,16 +348,16 @@ const Checking = (props) => {
                                 inputRef={(ref) => inputRef.current.push(ref)}
                                 id="1"
                                 label="問い合わせNo"
-                                sx={insTFOption}
+                                sx={CheckingListInputOption}
                             />
                             <Box
                                 ref={(ref) => boxRef.current.push(ref)}
-                                sx={insListResultOption}
+                                sx={CheckingListResultOption}
                                 backgroundColor={grey[400]}
                             >
                                 <Typography
                                     whiteSpace={'pre-line'}
-                                    sx={insListResultTypoOption}
+                                    sx={CheckingListResultTextOption}
                                 >
                                     {MsgBox['1']}
                                 </Typography>
@@ -360,7 +366,7 @@ const Checking = (props) => {
                         <ForwardIcon sx={{ fontSize: 100, height: '100%' }} />
                         {/* 数量入力 */}
                         <Box
-                            sx={insListOption}
+                            sx={CheckingListBoxOption}
                             border={2}
                             borderColor={taskCnt == 2 ? red[500] : grey[500]}
                         >
@@ -380,15 +386,15 @@ const Checking = (props) => {
                                 inputRef={(ref) => inputRef.current.push(ref)}
                                 value={inputData['2']}
                                 id="2"
-                                sx={insTFOption}
+                                sx={CheckingListInputOption}
                             />
                             <Box
                                 ref={(ref) => boxRef.current.push(ref)}
-                                sx={insListResultOption}
+                                sx={CheckingListResultOption}
                             >
                                 <Typography
                                     whiteSpace={'pre-line'}
-                                    sx={insListResultTypoOption}
+                                    sx={CheckingListResultTextOption}
                                 >
                                     {MsgBox['2']}
                                 </Typography>

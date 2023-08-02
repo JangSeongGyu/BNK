@@ -3,7 +3,7 @@ import { Grid, Modal, Typography, Box, Button } from '@mui/material';
 import {
     BorderOption,
     BtnOption,
-    calendarBoxTypo,
+    ListTitleOption,
 } from '../Design/DesignOption';
 import { Navigate, useNavigate } from 'react-router-dom';
 
@@ -13,7 +13,7 @@ const SelectDateCard = (props) => {
     const navigate = useNavigate();
     return (
         <Box mt={1} width={'100%'} sx={BorderOption}>
-            <Typography sx={calendarBoxTypo}>
+            <Typography sx={ListTitleOption}>
                 出荷日 <br />
             </Typography>
             <Box

@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { Grid, Modal, Typography, Box, Button } from '@mui/material';
 import {
     BorderOption,
-    calendarBoxTypo,
+    ListTitleOption,
     BtnOption,
 } from '../Design/DesignOption';
 import { red } from '@mui/material/colors';
@@ -21,12 +21,19 @@ const PrintOutBtnList = (props) => {
     const JobRef = useRef();
     const [clickedBtn, SetClickedBtn] = useState('');
 
+    const fileDate = () => {
+        const year = String(selectDate).slice(0, 4);
+        const month = String(selectDate).slice(5, 7);
+        const date = String(selectDate).slice(8, 10);
+        return year + month + date;
+    };
+
     const LabelBtn = () => {
         return (
             <ReactToPrint
                 trigger={() => <Button sx={BtnOption}>梱包ラベル</Button>}
                 content={() => LabelRef.current}
-                documentTitle={`梱包ラベル_${selectDate}`}
+                documentTitle={`梱包ラベル_${fileDate()}`}
             />
         );
     };
@@ -37,7 +44,7 @@ const PrintOutBtnList = (props) => {
 
     return (
         <Box mt={1} width={'100%'} sx={BorderOption}>
-            <Typography sx={calendarBoxTypo}>帳票出力</Typography>
+            <Typography sx={ListTitleOption}>帳票出力</Typography>
             <Box>
                 <Box sx={{ display: 'flex', mb: 1 }}>
                     <QRBtn selectDate={selectDate} pageType={pageType} />
@@ -59,7 +66,7 @@ const PrintOutBtnList = (props) => {
                                 }
                         @page { size: A4 landscape; margin: 0; }"
                         content={() => JobRef.current}
-                        documentTitle={`Jobチケット_${selectDate}`}
+                        documentTitle={`Jobチケット_${fileDate()}`}
                     />
                     <CheckLabelBtn />
                     <ReactToPrint
@@ -67,7 +74,7 @@ const PrintOutBtnList = (props) => {
                             <Button sx={BtnOption}>山出しリスト</Button>
                         )}
                         content={() => YamaRef.current}
-                        documentTitle={`山出リスト_${selectDate}`}
+                        documentTitle={`山出リスト_${fileDate()}`}
                     />
                 </Box>
             </Box>

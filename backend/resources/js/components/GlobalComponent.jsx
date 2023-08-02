@@ -1,16 +1,16 @@
 import { saveAs } from 'file-saver';
 import JSZip from 'jszip';
 
-export const ZipDownload = (files, title) => {
+export const ZipDownload = (files, zipTitle) => {
     const today = fileToday();
-
-    var zip = new JSZip();
+    let zip = new JSZip();
 
     files.forEach((file, index) => {
-        zip.file(`DTF連携用_${today}.xlsx`, file);
+        let fileTitle = Object.keys(files[index]);
+        zip.file(`${fileTitle}_${today}.xlsx`, file[fileTitle]);
     });
     zip.generateAsync({ type: 'blob' }).then((content) => {
-        saveAs(content, title + '_' + today);
+        saveAs(content, zipTitle + '_' + today);
     });
     return 'end';
 };

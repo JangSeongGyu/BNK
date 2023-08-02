@@ -3,7 +3,7 @@ import { Grid, Modal, Typography, Box, Button } from '@mui/material';
 import {
     BorderOption,
     BtnOption,
-    calendarBoxTypo,
+    ListTitleOption,
 } from '../../Design/DesignOption';
 import { blue, grey, pink, red } from '@mui/material/colors';
 import axios from 'axios';
@@ -73,7 +73,7 @@ const BizlogiBtnList = (props) => {
 
     return (
         <Box mt={1} width={'100%'} sx={BorderOption}>
-            <Typography sx={calendarBoxTypo}>Bizlogi処理</Typography>
+            <Typography sx={ListTitleOption}>Bizlogi処理</Typography>
             <Box
                 gap={0.5}
                 sx={{

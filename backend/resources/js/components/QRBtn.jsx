@@ -94,8 +94,8 @@ const QRBtn = (props) => {
     const download = async (workbook) => {
         // Xlsx
         let excelFile = await workbook.xlsx.writeBuffer(); //xlsxの場合
-        console.log('Original', [excelFile]);
-        console.log(ZipDownload([excelFile], `QR`));
+
+        ZipDownload([{ DTF連携用: excelFile }], `QR`);
     };
 
     return (

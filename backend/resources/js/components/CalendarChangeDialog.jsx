@@ -35,31 +35,26 @@ const CalendarChangeDialog = forwardRef((props, ref) => {
     return (
         <Dialog open={open} onClose={() => ResultNo()}>
             <Box p={2} width={600} height={350} backgroundColor="white">
-                <Typography
-                    // borderBottom={1}
-                    // borderColor={grey[400]}
-                    fontSize={40}
-                    fontWeight={'bold'}
-                >
+                <Typography fontSize={40} fontWeight={'bold'}>
                     出荷日修正
                 </Typography>
 
-                <Box px={2} py={4} mb={1} border={1} borderColor={grey[400]}>
+                <Box px={2} py={4} mb={3} border={1} borderColor={grey[400]}>
                     <Box display={'flex'} mb={1}>
-                        <Typography fontSize={24} fontWeight={'bold'}>
+                        <Typography fontSize={20} fontWeight={'bold'}>
                             イベント：
                         </Typography>
-                        <Typography fontSize={24}>{title}</Typography>
+                        <Typography fontSize={20}>{title}</Typography>
                     </Box>
                     <Box display={'flex'} alignItems={'center'}>
-                        <Typography fontSize={24} fontWeight={'bold'}>
+                        <Typography fontSize={20} fontWeight={'bold'}>
                             修正日付：
                         </Typography>
                         <Typography
                             backgroundColor={grey[300]}
                             borderRadius={2}
                             p={1}
-                            fontSize={24}
+                            fontSize={20}
                         >
                             {start}
                         </Typography>
@@ -68,7 +63,7 @@ const CalendarChangeDialog = forwardRef((props, ref) => {
                             backgroundColor={green[200]}
                             borderRadius={2}
                             p={1}
-                            fontSize={24}
+                            fontSize={20}
                         >
                             {end}
                         </Typography>
@@ -86,11 +81,11 @@ const CalendarChangeDialog = forwardRef((props, ref) => {
                 <Box display={'flex'} gap={2}>
                     <Button sx={dialogNo} onClick={() => ResultNo()}>
                         <ArrowBackRoundedIcon />
-                        戻る
+                        <Typography>戻る</Typography>
                     </Button>
                     <Button sx={dialogYes} onClick={() => ResultOK()}>
                         <SaveAsRoundedIcon />
-                        確定
+                        <Typography>確定</Typography>
                     </Button>
                 </Box>
             </Box>

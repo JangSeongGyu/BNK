@@ -52,7 +52,6 @@ const PrintOutBtnList = (props) => {
                 <Box
                     sx={{
                         display: 'flex',
-                        flexDirection: { xs: 'column', lg: 'row' },
                         gap: 1,
                     }}
                 >

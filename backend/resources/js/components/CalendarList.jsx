@@ -1,9 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import styled from '@emotion/styled';
 import { Grid, Modal, Typography, Box, Dialog } from '@mui/material';
-import tippy from 'tippy.js';
 import axios from 'axios';
-import { red } from '@mui/material/colors';
 import { toast } from 'react-hot-toast';
 
 import FullCalendar from '@fullcalendar/react';
@@ -11,6 +9,7 @@ import interactionPlugin from '@fullcalendar/interaction';
 import jaLocale from '@fullcalendar/core/locales/ja';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import CalendarChangeDialog from './CalendarChangeDialog';
+import { grey } from '@mui/material/colors';
 
 const CalendarList = (props) => {
     const pageType = props.pageType;
@@ -52,6 +51,7 @@ const CalendarList = (props) => {
                 event: updateCalendar,
                 side: SetSideList,
             };
+
             //first Get Data
             updateCalendar();
         }
@@ -160,10 +160,17 @@ const CalendarList = (props) => {
     return (
         <Box
             sx={{
+                border: 1,
+                borderRadius: 2,
+                borderColor: grey[400],
+                boxShadow: 2,
+                p: 1,
+                backgroundColor: 'white',
                 width: '100%',
                 display: 'flex',
                 height: '100%',
                 marginTop: 2,
+                ml: 1,
             }}
         >
             <CalendarChangeDialog ref={dialogRef} />

@@ -4,8 +4,11 @@ export const BorderOption = () => {
     return {
         border: 1,
         boxShadow: 1,
-        p: 1,
+        p: 1.5,
         borderRadius: 2,
+        borderColor: grey[400],
+        backgroundColor: 'white',
+        boxShadow: 2,
     };
 };
 
@@ -23,7 +26,7 @@ export const BtnOption = () => {
         border: 1,
         borderColor: 'primary.font',
         color: 'primary.font',
-        fontSize: 18,
+        fontSize: { lg: 18, md: 16 },
         fontWeight: 'bold',
         fontFamily: '游ゴシック',
         backgroundColor: 'white',
@@ -33,12 +36,20 @@ export const BtnOption = () => {
         },
     };
 };
-export const CheckingListBoxOption = () => {
+export const CheckingListBoxOption = (taskCnt, id) => {
+    let border = 1;
+    let borderColor = grey[400];
+    if (taskCnt == id) {
+        border = 2;
+        borderColor = red[500];
+    }
     return {
+        border: border,
         minWidth: 300,
+        borderColor: borderColor,
         borderRadius: 2,
         height: '100%',
-        boxShadow: 5,
+        boxShadow: 2,
         width: '100%',
         backgroundColor: 'white',
         display: 'flex',

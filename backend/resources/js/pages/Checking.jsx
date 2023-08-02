@@ -4,7 +4,6 @@ import Header from '../components/Header';
 import {
     BtnOption,
     CheckingListInputOption,
-    BorderOption,
     CheckingListBoxOption,
     CheckingOutputBoxOption,
     CheckingListResultOption,
@@ -311,11 +310,7 @@ const Checking = (props) => {
                         display={'flex'}
                     >
                         {/* バーコードリスト 1 */}
-                        <Box
-                            sx={CheckingListBoxOption}
-                            border={2}
-                            borderColor={taskCnt == 0 ? red[500] : grey[500]}
-                        >
+                        <Box sx={CheckingListBoxOption(taskCnt, 0)}>
                             <Typography
                                 my={2}
                                 fontSize={20}
@@ -349,11 +344,7 @@ const Checking = (props) => {
                         </Box>
                         <ForwardIcon sx={{ fontSize: 100, height: '100%' }} />
                         {/* バーコードリスト 2 */}
-                        <Box
-                            sx={CheckingListBoxOption}
-                            border={2}
-                            borderColor={taskCnt == 1 ? red[500] : grey[500]}
-                        >
+                        <Box sx={CheckingListBoxOption(taskCnt, 1)}>
                             <Typography
                                 my={2}
                                 fontSize={20}
@@ -386,11 +377,7 @@ const Checking = (props) => {
                         </Box>
                         <ForwardIcon sx={{ fontSize: 100, height: '100%' }} />
                         {/* 数量入力 */}
-                        <Box
-                            sx={CheckingListBoxOption}
-                            border={2}
-                            borderColor={taskCnt == 2 ? red[500] : grey[500]}
-                        >
+                        <Box sx={CheckingListBoxOption(taskCnt, 2)}>
                             <Typography
                                 my={2}
                                 fontSize={20}

@@ -7,6 +7,13 @@ import MarketShipmentDialog from '../components/MarketShipmentDialog';
 import { Dialog, Typography, Button, Box } from '@mui/material';
 import { toast } from 'react-hot-toast';
 
+const BacklogTextOption = {
+    width: 100,
+    fontSize: 18,
+    fontWeight: 'bold',
+    borderRadius: 1,
+};
+
 const Taxi = (props) => {
     const pageType = props.pageType;
     const [selectDate, SetSelectDate] = useState('');
@@ -108,8 +115,8 @@ const Taxi = (props) => {
                 <Box sx={{ width: '60%', height: '100%' }}>
                     <Box
                         sx={{
-                            left: 160,
-                            top: 110,
+                            left: 170,
+                            top: 120,
                             gap: 1,
                             position: 'absolute',
                             display: 'flex',
@@ -136,41 +143,18 @@ const Taxi = (props) => {
                         >
                             SFデータ取得
                         </Button>
-                        <Typography
-                            width={110}
-                            fontSize={20}
-                            fontWeight={'bold'}
-                            backgroundColor={'white'}
-                            color={'primary.main'}
-                            borderRadius={1}
-                        >
+                        <Typography sx={BacklogTextOption}>
                             SFデータ
                             <br />
                             {SFDatas.length}
                         </Typography>
 
-                        <Typography
-                            width={110}
-                            fontSize={20}
-                            fontWeight={'bold'}
-                            white
-                            backgroundColor={'white'}
-                            color={'primary.main'}
-                            borderRadius={1}
-                        >
+                        <Typography sx={BacklogTextOption}>
                             パウチ
                             <br />
                             {logDatas.length}
                         </Typography>
-                        <Typography
-                            width={110}
-                            fontSize={20}
-                            fontWeight={'bold'}
-                            white
-                            backgroundColor={'white'}
-                            color={'primary.main'}
-                            borderRadius={1}
-                        >
+                        <Typography sx={BacklogTextOption}>
                             通常
                             <br />
                             {logDatas.length}

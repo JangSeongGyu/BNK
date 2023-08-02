@@ -78,7 +78,6 @@ const BizlogiBtnList = (props) => {
                 gap={0.5}
                 sx={{
                     display: 'flex',
-                    flexDirection: { xs: 'column', lg: 'row' },
                 }}
                 justifyContent={'space-between'}
             >

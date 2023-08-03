@@ -57,13 +57,17 @@ const SuperMarket = (props) => {
 
     // Get Side List Data
     const callDailyData = (date) => {
+        const toastId = toast.loading(date + 'データ取得中...');
         axios
             .get(`/api/${pageType}/dailydata/${date}`)
             .then((res) => {
+                toast.success('データ取得完了。', { id: toastId });
                 SetIsData(true);
                 console.log(res.data);
             })
             .catch((e) => {
+                errMsg = e.response.data.message;
+                toast.error(errMsg, { id: toastId });
                 // SetIsData(false);
             });
     };

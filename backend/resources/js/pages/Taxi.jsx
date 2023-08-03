@@ -6,6 +6,7 @@ import MarketSideList from '../components/MarketSideList';
 import MarketShipmentDialog from '../components/MarketShipmentDialog';
 import { Dialog, Typography, Button, Box } from '@mui/material';
 import { toast } from 'react-hot-toast';
+import { grey } from '@mui/material/colors';
 
 const BacklogTextOption = {
     width: 100,
@@ -96,19 +97,22 @@ const Taxi = (props) => {
     };
 
     const callDailyData = (date) => {
+        const toastId = toast.loading(date + 'データ取得中...');
         axios
             .get(`/api/${pageType}/dailydata/${date}`)
             .then((res) => {
+                toast.success('データ取得完了。', { id: toastId });
                 SetIsData(true);
                 console.log(res.data);
             })
             .catch((e) => {
-                // SetIsData(false);
+                errMsg = e.response.data.message;
+                toast.error(errMsg, { id: toastId });
             });
     };
 
     return (
-        <>
+        <Box height={'100%'} backgroundColor={grey[200]}>
             <Header page={0} pageType={pageType} />
 
             <Box height={'80%'} sx={{ display: 'flex' }}>
@@ -188,7 +192,7 @@ const Taxi = (props) => {
                     selectDate={selectDate}
                 />
             </Dialog>
-        </>
+        </Box>
     );
 };
 

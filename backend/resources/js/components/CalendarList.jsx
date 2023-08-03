@@ -20,6 +20,7 @@ const CalendarList = (props) => {
     const calref = useRef(null);
     const [eventDates, SetEventDates] = useState({});
     const dialogRef = useRef('null');
+    const [rightList, SetRightList] = useState('');
 
     const StyleWrapper = styled.div`
         margin: 0 10px;
@@ -59,6 +60,11 @@ const CalendarList = (props) => {
 
     // Get Select Date Data
     useEffect(() => {
+        props.CallSelectDate({
+            selectDate: selectDate,
+            isData: false,
+        });
+
         if (selectDate != '') {
             if (CheckDate(selectDate)) {
                 props.CallSelectDate({
@@ -75,6 +81,7 @@ const CalendarList = (props) => {
     }, [selectDate]);
 
     const updateCalendar = () => {
+        SetRightList('');
         const toastid = toast.loading('カレンダー情報更新中...');
         let startDate = CreateDate(calref.current.calendar.view.activeStart);
         let endDate = CreateDate(calref.current.calendar.view.activeEnd);
@@ -83,6 +90,7 @@ const CalendarList = (props) => {
         axios
             .get(`/api/${pageType}/betweencount/${startDate}/${endDate}`)
             .then((res) => {
+                SetRightList('prevBtn nextBtn');
                 toast.success('カレンダー情報更新完了。', {
                     id: toastid,
                 });
@@ -90,6 +98,7 @@ const CalendarList = (props) => {
                 SetEventList(res.data);
             })
             .catch((e) => {
+                SetRightList('prevBtn nextBtn');
                 if (e.response == null) {
                     toast.error('カレンダー更新失敗。', {
                         id: toastid,
@@ -207,7 +216,7 @@ const CalendarList = (props) => {
                     }}
                     headerToolbar={{
                         left: 'title',
-                        right: 'prevBtn nextBtn',
+                        right: rightList,
                     }}
                 />
             </StyleWrapper>

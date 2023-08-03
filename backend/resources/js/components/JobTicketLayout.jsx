@@ -54,35 +54,24 @@ const ListBodyOption = () => {
 const JobTicketLayout = forwardRef((props, ref) => {
     const selectDate = props.selectDate;
     const pageType = props.pageType;
-    const [ticketData, SetTicketData] = useState([]);
-    const [basicData, SetBasicData] = useState({});
-    const [count, SetCount] = useState(0);
+    const jobData = props.jobData;
+    const jobCount = props.jobCount;
 
-    useEffect(() => {
-        let cnt = 0;
+    const TopLayout = (title) => {
+        let basicData = {};
+        const name = title + [selectDate] + '発注分';
         if (pageType == 'supermarket') {
-            SetBasicData({
-                name: 'スーパー' + [selectDate] + '発注分',
+            basicData = {
+                name: name,
                 contentId: 'DD109842-01-003',
-            });
+            };
         } else if (pageType == 'taxi') {
-            SetBasicData({
-                name: 'タクシー' + [selectDate] + '発注分',
-                contentId: 'まだ',
-            });
+            basicData = {
+                name: name,
+                contentId: '?',
+            };
         }
 
-        axios.get(`/api/${pageType}/jobticket/` + selectDate).then((res) => {
-            SetTicketData(res.data);
-
-            res.data.forEach((data) => {
-                cnt += parseInt(data.数量);
-            });
-            SetCount(cnt + res.data.length);
-        });
-    }, []);
-
-    const TopLayout = () => {
         return (
             <>
                 <Grid sx={MainBoxOption} width={'100%'} container>
@@ -103,10 +92,10 @@ const JobTicketLayout = forwardRef((props, ref) => {
                         {basicData.name}
                     </Grid>
                     <Grid sx={ListBodyOption} item xs={2}>
-                        {count}
-                    </Grid>{' '}
+                        {jobData.length + jobCount}
+                    </Grid>
                     <Grid sx={ListBodyOption} item xs={2}>
-                        {ticketData.length}
+                        {jobData.length}
                     </Grid>
                     <Grid sx={ListBodyOption} item xs={2}>
                         210×297
@@ -124,7 +113,7 @@ const JobTicketLayout = forwardRef((props, ref) => {
                             {basicData.contentId}
                         </Grid>
                         <Grid sx={ListBodyOption} item xs={6}>
-                            {ticketData.length > 0 && ticketData[0].受注番号}
+                            {jobData.length > 0 && jobData[0].受注番号}
                         </Grid>
                     </Grid>
                 </Grid>
@@ -218,7 +207,7 @@ const JobTicketLayout = forwardRef((props, ref) => {
         );
     };
 
-    const Pages = () => {
+    const Cards = (title, data) => {
         return (
             <Box p={4} width={MainWidth} height={MainHeight}>
                 <Box
@@ -233,7 +222,7 @@ const JobTicketLayout = forwardRef((props, ref) => {
                         Jobチケット
                     </Box>
                     <Box sx={DividerOption}>情報</Box>
-                    <TopLayout />
+                    {TopLayout(title)}
                     <Box sx={DividerOption}>生産</Box>
                     <BottomLayout />
 
@@ -247,6 +236,19 @@ const JobTicketLayout = forwardRef((props, ref) => {
                 </Box>
             </Box>
         );
+    };
+
+    const Pages = () => {
+        if (pageType == 'supermarket') return <>{Cards('スーパー', [])}</>;
+        else if (pageType == 'taxi')
+            return (
+                <>
+                    <>
+                        {Cards('タクシー', [])}
+                        {Cards('イーグルス', [])}
+                    </>
+                </>
+            );
     };
 
     return (

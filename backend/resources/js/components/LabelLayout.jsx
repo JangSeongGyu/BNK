@@ -56,8 +56,8 @@ const RightTypoOption = () => {
 };
 
 const LabelLayout = forwardRef((props, ref) => {
+    const labelData = props.labelData;
     const selectDate = props.selectDate;
-    const [labelData, SetLabelData] = useState([]);
     const pageType = props.pageType;
 
     const Cards = () => {
@@ -206,12 +206,12 @@ const LabelLayout = forwardRef((props, ref) => {
             </Box>
         );
     };
-    useEffect(() => {
-        axios.get(`/api/${pageType}/label/` + selectDate).then((res) => {
-            console.log(res.data);
-            SetLabelData(res.data);
-        });
-    }, []);
+    // useEffect(() => {
+    //     axios.get(`/api/${pageType}/label/` + selectDate).then((res) => {
+    //         console.log(res.data);
+    //         SetLabelData(res.data);
+    //     });
+    // }, []);
 
     return (
         <Box ref={ref}>

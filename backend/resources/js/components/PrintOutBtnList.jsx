@@ -12,6 +12,7 @@ import YamaLayout from './YamaComponent/YamaLayout';
 import JobTicketLayout from './JobTicketLayout';
 import axios from 'axios';
 import QRBtn from './QRBtn';
+import { toast } from 'react-hot-toast';
 
 const PrintOutBtnList = (props) => {
     const selectDate = props.selectDate;
@@ -19,7 +20,13 @@ const PrintOutBtnList = (props) => {
     const LabelRef = useRef();
     const YamaRef = useRef();
     const JobRef = useRef();
-    const [clickedBtn, SetClickedBtn] = useState('');
+    const promiseLabelRef = useRef();
+    const promiseJobRef = useRef();
+    const promiseYamaRef = useRef();
+    const [labelData, SetLabelData] = useState([]);
+    const [yamaData, SetYamaData] = useState([]);
+    const [jobData, SetJobData] = useState([]);
+    const [jobCount, SetJobCount] = useState(0);
 
     const fileDate = () => {
         const year = String(selectDate).slice(0, 4);
@@ -33,10 +40,94 @@ const PrintOutBtnList = (props) => {
             <ReactToPrint
                 trigger={() => <Button sx={BtnOption}>梱包ラベル</Button>}
                 content={() => LabelRef.current}
+                onBeforeGetContent={() => {
+                    return new Promise((resolve) => {
+                        promiseLabelRef.current = resolve;
+                        LabelPrinting();
+                    });
+                }}
                 documentTitle={`梱包ラベル_${fileDate()}`}
             />
         );
     };
+
+    const LabelPrinting = () => {
+        const toastId = toast.loading('梱包ラベル出力中...');
+        axios
+            .get(`/api/${pageType}/label/` + selectDate)
+            .then((res) => {
+                console.log(res.data);
+                SetLabelData(res.data);
+
+                toast.success('梱包ラベル出力完了。', { id: toastId });
+            })
+            .catch((e) => {
+                errMsg = e.response.data.message;
+                toast.error(errMsg, { id: toastId });
+            });
+    };
+    const YamaPrinting = () => {
+        const toastId = toast.loading('山出しリスト出力中...');
+        axios
+            .get(`/api/${pageType}/totalpick/` + selectDate)
+            .then((res) => {
+                let groupData = {};
+                res.data.forEach((data) => {
+                    let key = data.納品先会社名;
+                    if (!groupData[key]) {
+                        groupData[key] = [];
+                    }
+                    groupData[key].push(data);
+                });
+
+                console.log('group', groupData);
+                SetYamaData(groupData);
+                toast.success('山出しリスト出力完了。', { id: toastId });
+            })
+            .catch((e) => {
+                errMsg = e.response.data.message;
+                toast.error(errMsg, { id: toastId });
+            });
+    };
+    const JobPrinting = () => {
+        const toastId = toast.loading('Jobチケット出力中...');
+        let cnt = 0;
+        axios
+            .get(`/api/${pageType}/label/` + selectDate)
+            .then((res) => {
+                console.log(res.data);
+                SetJobData(res.data);
+
+                res.data.forEach((data) => {
+                    cnt += parseInt(data.数量);
+                });
+                SetJobCount(cnt);
+                toast.success('Jobチケット出力完了。', { id: toastId });
+            })
+            .catch((e) => {
+                errMsg = e.response.data.message;
+                toast.error(errMsg, { id: toastId });
+            });
+    };
+
+    // Print After - Promise
+    useEffect(() => {
+        if (labelData && promiseLabelRef.current) {
+            promiseLabelRef.current();
+        }
+    }, [labelData]);
+
+    useEffect(() => {
+        if (yamaData && promiseYamaRef.current) {
+            promiseYamaRef.current();
+        }
+    }, [yamaData]);
+
+    useEffect(() => {
+        if (jobData && promiseJobRef.current) {
+            promiseJobRef.current();
+        }
+    }, [jobData]);
 
     const CheckLabelBtn = () => {
         if (pageType == 'supermarket') return <LabelBtn />;
@@ -66,6 +157,12 @@ const PrintOutBtnList = (props) => {
                         @page { size: A4 landscape; margin: 0; }"
                         content={() => JobRef.current}
                         documentTitle={`Jobチケット_${fileDate()}`}
+                        onBeforeGetContent={() => {
+                            return new Promise((resolve) => {
+                                promiseJobRef.current = resolve;
+                                JobPrinting();
+                            });
+                        }}
                     />
                     <CheckLabelBtn />
                     <ReactToPrint
@@ -74,6 +171,12 @@ const PrintOutBtnList = (props) => {
                         )}
                         content={() => YamaRef.current}
                         documentTitle={`山出リスト_${fileDate()}`}
+                        onBeforeGetContent={() => {
+                            return new Promise((resolve) => {
+                                promiseYamaRef.current = resolve;
+                                YamaPrinting();
+                            });
+                        }}
                     />
                 </Box>
             </Box>
@@ -81,18 +184,22 @@ const PrintOutBtnList = (props) => {
             {/* Printing Page  */}
             <Box display={'none'}>
                 <LabelLayout
+                    labelData={labelData}
                     pageType={pageType}
                     selectDate={selectDate}
                     ref={LabelRef}
                 />
                 <YamaLayout
+                    yamaData={yamaData}
                     pageType={pageType}
                     selectDate={selectDate}
                     ref={YamaRef}
                 />
                 <JobTicketLayout
+                    jobData={jobData}
                     pageType={pageType}
                     selectDate={selectDate}
+                    jobCount={jobCount}
                     ref={JobRef}
                 />
             </Box>

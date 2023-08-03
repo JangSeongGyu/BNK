@@ -33,6 +33,7 @@ const Checking2 = (props) => {
     const [sceneName, SetSceneName] = useState('');
     const [detailNo, SetDetailNo] = useState('');
     const [address, SetAddress] = useState('');
+    const [completeText, SetCompleteText] = useState('');
 
     const maxTask = 2;
     const dataClear = () => {
@@ -78,6 +79,7 @@ const Checking2 = (props) => {
 
                 SetWorkCount(cnt);
                 if (cnt == res.data.length) {
+                    SetCompleteText('完了');
                     inputLock();
                     SetTaskCnt(5);
                     console.log(btnRef);
@@ -206,7 +208,18 @@ const Checking2 = (props) => {
                         <Typography fontSize={24} ml={4} fontWeight={'bold'}>
                             出荷日 : {selectDate}
                         </Typography>
-
+                        {completeText != '' && (
+                            <Typography
+                                border={2}
+                                borderRadius={2}
+                                px={2}
+                                color={red[400]}
+                                fontWeight={'bold'}
+                                fontSize={32}
+                            >
+                                {completeText}
+                            </Typography>
+                        )}
                         <Box ref={btnRef} width={300}>
                             <Button onClick={() => dataClear()} sx={BtnOption}>
                                 データクリア

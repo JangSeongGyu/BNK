@@ -33,48 +33,47 @@ const YamaLayout = forwardRef((props, ref) => {
             />
         );
 
-        for (let i = 0; i < 2; i++)
-            keys.forEach((key, index) => {
-                let length = groupData[key].length;
+        keys.forEach((key, index) => {
+            let length = groupData[key].length;
 
-                insertHeight = 86 + length * 40;
-                if (heightCnt + insertHeight > MainHeight - 80) {
-                    // ページ　余白処理
-                    html.push(
-                        <Box
-                            key={cnt++}
-                            borderBottom={1}
-                            // mb={5}
-                            borderColor={grey[400]}
-                            height={MainHeight - heightCnt + 32}
-                        />
-                    );
-                    heightCnt = 32;
-                }
-
-                // 送り先　Header
+            insertHeight = 86 + length * 40;
+            if (heightCnt + insertHeight > MainHeight - 80) {
+                // ページ　余白処理
                 html.push(
-                    <ListHeader
+                    <Box
                         key={cnt++}
-                        data={groupData[key]}
-                        selectDate={selectDate}
+                        borderBottom={1}
+                        // mb={5}
+                        borderColor={grey[400]}
+                        height={MainHeight - heightCnt + 32}
                     />
                 );
+                heightCnt = 32;
+            }
 
-                // 送り先　Data
-                for (let i = 0; i < length; i++)
-                    if (pageType == 'supermarket')
-                        html.push(
-                            <SPSceneCard key={cnt++} data={groupData[key][i]} />
-                        );
-                    else if (pageType == 'taxi')
-                        html.push(
-                            <TXSceneCard key={cnt++} data={groupData[key][i]} />
-                        );
-                heightCnt += insertHeight;
-                console.log(heightCnt);
-                insertHeight = 0;
-            });
+            // 送り先　Header
+            html.push(
+                <ListHeader
+                    key={cnt++}
+                    data={groupData[key]}
+                    selectDate={selectDate}
+                />
+            );
+
+            // 送り先　Data
+            for (let i = 0; i < length; i++)
+                if (pageType == 'supermarket')
+                    html.push(
+                        <SPSceneCard key={cnt++} data={groupData[key][i]} />
+                    );
+                else if (pageType == 'taxi')
+                    html.push(
+                        <TXSceneCard key={cnt++} data={groupData[key][i]} />
+                    );
+            heightCnt += insertHeight;
+            console.log(heightCnt);
+            insertHeight = 0;
+        });
 
         // 2枚のために最後に余白追加
         console.log(MainHeight, heightCnt);

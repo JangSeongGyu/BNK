@@ -12,7 +12,7 @@ import {
     TextField,
     Dialog,
 } from '@mui/material';
-import { blue, grey, lightGreen, pink, red } from '@mui/material/colors';
+import { blue, green, grey, lightGreen, pink, red } from '@mui/material/colors';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import 'dayjs/locale/ja';
@@ -22,10 +22,14 @@ import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import { paddingNum } from './GlobalComponent';
 
 const BtnOption = {
-    width: 100,
+    width: 60,
+    height: 60,
     border: 1,
-    borderColor: 'primary.main',
-    ':hover': { backgroundColor: 'primary.main', color: 'white' },
+    borderRadius: '50%',
+    color: 'white',
+    backgroundColor: grey[700],
+    borderColor: grey[700],
+    ':hover': { backgroundColor: grey[900] },
 };
 
 const MasterMonthDialog = forwardRef((props, ref) => {
@@ -138,7 +142,7 @@ const MasterMonthDialog = forwardRef((props, ref) => {
                             selectDate == currentMonth ? red[500] : grey[500]
                         }
                         sx={{
-                            ':hover': { backgroundColor: grey[200] },
+                            ':hover': { backgroundColor: lightGreen[200] },
                         }}
                     >
                         <Typography display={'hidden'} fontWeight={'bold'}>
@@ -176,6 +180,7 @@ const MasterMonthDialog = forwardRef((props, ref) => {
                     boxShadow={2}
                     backgroundColor="white"
                     border={1}
+                    borderColor={grey[400]}
                     borderRadius={2}
                     p={2}
                     gap={2}
@@ -253,6 +258,7 @@ const MasterMonthDialog = forwardRef((props, ref) => {
                     backgroundColor="white"
                     border={1}
                     borderRadius={2}
+                    borderColor={grey[400]}
                     p={2}
                     gap={2}
                     width={'60%'}
@@ -277,7 +283,9 @@ const MasterMonthDialog = forwardRef((props, ref) => {
                                         SetCalendarYear(calendarYear - 1)
                                     }
                                 >
-                                    <ArrowBackIosNewIcon />
+                                    <ArrowBackIosNewIcon
+                                        sx={{ fontSize: 36 }}
+                                    />
                                 </Button>
                                 <Box>
                                     <Typography
@@ -293,7 +301,9 @@ const MasterMonthDialog = forwardRef((props, ref) => {
                                         SetCalendarYear(calendarYear + 1)
                                     }
                                 >
-                                    <ArrowForwardIosIcon />
+                                    <ArrowForwardIosIcon
+                                        sx={{ fontSize: 36 }}
+                                    />
                                 </Button>
                             </Box>
                         </Box>

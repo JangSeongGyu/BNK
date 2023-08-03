@@ -42,8 +42,10 @@ const PrintOutBtnList = (props) => {
                 content={() => LabelRef.current}
                 onBeforeGetContent={() => {
                     return new Promise((resolve) => {
-                        promiseLabelRef.current = resolve;
-                        LabelPrinting();
+                        if (labelData.length == 0) {
+                            promiseLabelRef.current = resolve;
+                            LabelPrinting();
+                        } else return resolve();
                     });
                 }}
                 documentTitle={`梱包ラベル_${fileDate()}`}
@@ -62,8 +64,13 @@ const PrintOutBtnList = (props) => {
                 toast.success('梱包ラベル出力完了。', { id: toastId });
             })
             .catch((e) => {
-                errMsg = e.response.data.message;
-                toast.error(errMsg, { id: toastId });
+                if (e == null) {
+                    toast.error('サーバ接続失敗。', { id: toastId });
+                } else {
+                    errMsg = e.response.data.message;
+
+                    toast.error(errMsg, { id: toastId });
+                }
             });
     };
     const YamaPrinting = () => {
@@ -159,8 +166,11 @@ const PrintOutBtnList = (props) => {
                         documentTitle={`Jobチケット_${fileDate()}`}
                         onBeforeGetContent={() => {
                             return new Promise((resolve) => {
-                                promiseJobRef.current = resolve;
-                                JobPrinting();
+                                console.log('jobData', jobData);
+                                if (jobData.length == 0) {
+                                    promiseJobRef.current = resolve;
+                                    JobPrinting();
+                                } else return resolve();
                             });
                         }}
                     />
@@ -173,8 +183,10 @@ const PrintOutBtnList = (props) => {
                         documentTitle={`山出リスト_${fileDate()}`}
                         onBeforeGetContent={() => {
                             return new Promise((resolve) => {
-                                promiseYamaRef.current = resolve;
-                                YamaPrinting();
+                                if (yamaData.length == 0) {
+                                    promiseYamaRef.current = resolve;
+                                    YamaPrinting();
+                                } else return resolve();
                             });
                         }}
                     />

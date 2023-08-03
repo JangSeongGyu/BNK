@@ -122,6 +122,11 @@ const Checking = (props) => {
     const handleKeyPress = (e) => {
         const event = e;
         if (event.key === 'Enter') {
+            SetMsgBox((prevState) => ({
+                ...prevState,
+                [taskCnt]: 'サーバ接続中…',
+            }));
+
             // 入力データがない時
             if (inputData[taskCnt] == '' || inputData[taskCnt] == null) {
                 ResultError('内容を入力してください');
@@ -143,11 +148,6 @@ const Checking = (props) => {
                     ResultError('数量を入力してください');
                     return;
                 }
-
-                SetMsgBox((prevState) => ({
-                    ...prevState,
-                    [taskCnt]: 'サーバ接続中…',
-                }));
 
                 // 数量がデータベースと同じだったら実行
                 if (searchData.数量 == inputData['2']) {

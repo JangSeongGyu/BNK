@@ -9,7 +9,7 @@ import { toast } from 'react-hot-toast';
 import { grey } from '@mui/material/colors';
 
 const BacklogTextOption = {
-    width: 100,
+    width: 80,
     fontSize: 18,
     fontWeight: 'bold',
     borderRadius: 1,

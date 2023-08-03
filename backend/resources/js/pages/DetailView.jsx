@@ -57,11 +57,20 @@ const DetailView = (props) => {
         rowWidth.forEach((w) => {
             maxWidth += w;
         });
+        const toastId = toast.loading('明細データ取得中...');
+        axios
+            .get(`/api/${pageType}/dailydata/${selectDate}`)
+            .then((res) => {
+                console.log(res.data);
+                SetTableDatas(res.data);
 
-        axios.get(`/api/${pageType}/dailydata/${selectDate}`).then((res) => {
-            console.log(res.data);
-            SetTableDatas(res.data);
-        });
+                toast.success('明細データ取得完了。', { id: toastId });
+            })
+            .catch((e) => {
+                errMsg = e.response.data.message;
+                if (!e) toast.error('サーバ接続失敗', { id: toastId });
+                else toast.error(errMsg, { id: toastId });
+            });
     }, []);
 
     const openRow = (index) => {

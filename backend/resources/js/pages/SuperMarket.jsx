@@ -1,9 +1,9 @@
 import { useEffect, useState, useRef } from 'react';
-import Header from '../components/Header';
+import Header from '../components/HeaderCompnent/Header';
 import axios from 'axios';
 import CalendarList from '../components/CalendarList';
 import MarketSideList from '../components/MarketSideList';
-import MarketShipmentDialog from '../components/MarketShipmentDialog';
+import ShipmentDialog from '../components/ShipmentComponent/ShipmentDialog';
 import { Dialog, Divider, Typography, Button, Box } from '@mui/material';
 import { grey, pink, red } from '@mui/material/colors';
 import { toast } from 'react-hot-toast';
@@ -19,10 +19,14 @@ const SuperMarket = (props) => {
     const pageType = props.pageType;
     const [selectDate, SetSelectDate] = useState('');
     const [open, SetOpen] = useState(false);
-    const [logDatas, SetLogDatas] = useState('');
+    const [logDatas, SetLogDatas] = useState([]);
     const [SFDatas, SetSFDatas] = useState('');
     const [isData, SetIsData] = useState(false);
     const UpdateRef = useRef(null);
+
+    useEffect(() => {
+        callBacklog();
+    }, []);
 
     const thisMonth = () => {
         const today = new Date();
@@ -31,12 +35,24 @@ const SuperMarket = (props) => {
             const date = localStorage.getItem('LastSelectDate');
             return date;
         }
+
         localStorage.removeItem('LastSelectDate');
         return `${today.getFullYear()}-${month}`;
     };
 
+    const callBacklog = () => {
+        axios
+            .get(`/api/${pageType}/backlogdata/`)
+            .then((res) => {
+                console.log(res.data);
+                SetLogDatas(res.data[0]);
+                SetSelectDate(data.selectDate);
+            })
+            .catch((e) => {});
+    };
+
     const handleClose = (res) => {
-        if (res == false) {
+        if (res) {
             callBacklog();
             UpdateRef.current.event();
             UpdateRef.current.side(selectDate);
@@ -44,8 +60,12 @@ const SuperMarket = (props) => {
         SetOpen(false);
     };
     const handleOpen = () => {
-        if (logDatas.length == 0) toast.error('出荷する案件がありません。');
-        else SetOpen(true);
+        console.log(logDatas);
+        if (logDatas.件数 == 0 || logDatas.length == 0) {
+            toast.error('処理するデータがありません');
+        } else {
+            SetOpen(true);
+        }
     };
 
     // Get Calender -> selectDate
@@ -66,9 +86,13 @@ const SuperMarket = (props) => {
                 console.log(res.data);
             })
             .catch((e) => {
-                errMsg = e.response.data.message;
+                let errMsg = '';
+                if (e.response == null) {
+                    errMsg = 'サーバー接続失敗。';
+                } else {
+                    errMsg = e.response.data.message;
+                }
                 toast.error(errMsg, { id: toastId });
-                // SetIsData(false);
             });
     };
 
@@ -76,10 +100,10 @@ const SuperMarket = (props) => {
         <Box height={'100%'} backgroundColor={grey[200]}>
             <Header page={0} pageType={pageType} />
             <Box height={'80%'} sx={{ display: 'flex' }}>
-                <Box sx={{ width: '60%', height: '100%' }}>
+                <Box sx={{ width: '60%', height: '100%', minWidth: 700 }}>
                     <Box
                         sx={{
-                            left: 170,
+                            left: 180,
                             top: 120,
                             gap: 1,
                             position: 'absolute',
@@ -114,9 +138,9 @@ const SuperMarket = (props) => {
                         </Typography>
 
                         <Typography sx={BacklogTextOption}>
-                            未処理
+                            未処理総計
                             <br />
-                            {logDatas.length}
+                            {logDatas.件数 ? logDatas.件数 : 0}
                         </Typography>
                     </Box>
 
@@ -128,22 +152,26 @@ const SuperMarket = (props) => {
                         handleOpen={handleOpen}
                     />
                 </Box>
-                <Box mt={1} sx={{ width: '40%' }} height={'100%'}>
+                <Box
+                    mt={1}
+                    sx={{ width: '40%' }}
+                    minWidth={450}
+                    height={'100%'}
+                >
                     {isData && (
                         <MarketSideList
                             pageType={pageType}
                             selectDate={selectDate}
                             isData={isData}
-                            logDatas={logDatas}
                         />
                     )}
                 </Box>
             </Box>
             <Dialog onClose={() => handleClose(false)} open={open}>
-                <MarketShipmentDialog
+                <ShipmentDialog
                     pageType={pageType}
                     handleClose={handleClose}
-                    logDatas={logDatas.length}
+                    logDatas={logDatas}
                     selectDate={selectDate}
                 />
             </Dialog>

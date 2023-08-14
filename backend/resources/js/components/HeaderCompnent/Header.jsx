@@ -5,10 +5,7 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
-import FunctionList from '../components/FunctionList';
-import { blue, grey, orange, pink } from '@mui/material/colors';
-import { Divider, Drawer } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import FunctionList from './FunctionList';
 import HeaderDrawer from './HeaderDrawer';
 
 const Header = (props) => {
@@ -47,7 +44,9 @@ const Header = (props) => {
                         Rakuten業務SYS {title}
                     </Typography>
                 </Toolbar>
-                {disableList != 'false' && (
+                {disableList == true ? (
+                    <></>
+                ) : (
                     <FunctionList pageType={pageType} page={page} />
                 )}
             </AppBar>

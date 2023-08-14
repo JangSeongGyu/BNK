@@ -1,9 +1,17 @@
-import { red, grey, pink, green, yellow } from '@mui/material/colors';
+import {
+    red,
+    grey,
+    pink,
+    green,
+    yellow,
+    indigo,
+    lightBlue,
+    blue,
+} from '@mui/material/colors';
 
 export const BorderOption = () => {
     return {
         border: 1,
-        boxShadow: 1,
         p: 1.5,
         borderRadius: 2,
         borderColor: grey[400],
@@ -24,14 +32,14 @@ export const BtnOption = () => {
         width: '100%',
         height: 50,
         border: 1,
-        borderColor: 'primary.font',
-        color: 'primary.font',
+        borderColor: 'primary.main',
+        color: 'primary.main',
         fontSize: { lg: 18, md: 16 },
         fontWeight: 'bold',
         fontFamily: '游ゴシック',
         backgroundColor: 'white',
         '&:hover': {
-            backgroundColor: 'primary.font',
+            backgroundColor: 'primary.main',
             color: 'white',
         },
     };
@@ -116,4 +124,40 @@ export const dialogNo = () => {
             color: 'white',
         },
     };
+};
+
+export const normalBtn = () => {
+    return {
+        width: '100%',
+
+        color: green[600],
+        border: 1,
+        '&:hover': {
+            backgroundColor: green[600],
+            color: 'white',
+        },
+    };
+};
+
+export const UpdateBorderOption = () => {
+    return {
+        border: 1,
+        p: 1,
+        borderRadius: 1,
+        borderColor: grey[400],
+        backgroundColor: grey[200],
+    };
+};
+
+export const pouchColor = () => {
+    return {};
+};
+export const taxiColor = () => {
+    return {};
+};
+export const eagleColor = () => {
+    return {};
+};
+export const normalColor = () => {
+    return {};
 };

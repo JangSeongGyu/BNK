@@ -9,10 +9,16 @@ import { ZipDownload, paddingNum } from './GlobalComponent';
 const QRBtn = (props) => {
     const selectDate = props.selectDate;
     const pageType = props.pageType;
-    const [qrData, SetQrData] = useState([]);
 
     const ButtonClick = async () => {
         const toastId = toast.loading('QRエクスポート中...');
+        if (pageType == 'supermarket') {
+            SMAxios(toastId);
+        } else if (pageType == 'taxi') {
+            TXAxios(toastId);
+        }
+    };
+    const SMAxios = (toastId) => {
         axios
             .get(`/api/${pageType}/qrdata/${selectDate}`)
             .then((res) => {
@@ -20,82 +26,120 @@ const QRBtn = (props) => {
                 const sorted = [...res.data].sort((a, b) => {
                     return b.問い合わせ番号 - a.問い合わせ番号;
                 });
-
-                SetQrData(sorted);
                 toast.success('エクスポート完了。', { id: toastId });
+                download({ supermarket: MakeExcel(sorted) });
             })
             .catch((e) => {
-                toast.error(e.response.message, { id: toastId });
+                let errMsg = '';
+                if (e.response == null) {
+                    errMsg = 'サーバー接続失敗。';
+                } else {
+                    errMsg = e.response.data.message;
+                }
+                toast.custom(errMsg, { type: 'closeError', id: toastId });
             });
     };
 
-    useEffect(() => {
-        if (qrData.length > 0) {
-            let workbook = new ExcelJS.Workbook();
-            let worksheet = workbook.addWorksheet('DTF連携', {});
-            let cnt = 2;
+    const TXAxios = (toastId) => {
+        let workbooks = {};
+        axios
+            .get(`/api/${pageType}/qrdata/${selectDate}`)
+            .then((res) => {
+                const qrData = res.data;
+                Object.keys(qrData).forEach((key) => {
+                    if (qrData[key].length == 0) return;
+                    let data = qrData[key];
+                    const sorted = data.sort((a, b) => {
+                        return b.問い合わせ番号 - a.問い合わせ番号;
+                    });
+                    workbooks[key] = MakeExcel(sorted);
+                });
+                download(workbooks);
 
-            qrData.sort(qrData.問い合わせ番号);
-
-            // HEADER
-            let headerData = [
-                '印字コード',
-                '印字名称',
-                '画像データ名',
-                '間紙フラグ',
-                '納品数量',
-                '間紙バーコード',
-                'つぶし',
-                '連番',
-            ];
-
-            let headerRow = worksheet.getRow(1);
-            headerData.forEach((data, index) => {
-                headerRow.getCell(index + 1).value = data;
-            });
-
-            // BODY
-            for (let i = 0; i < qrData.length; i++) {
-                let sheetRow = worksheet.getRow(cnt++);
-                // CONTENT　HEADER
-                sheetRow.getCell(2).value = qrData[i].ショップ名;
-                sheetRow.getCell(4).value = 1;
-                sheetRow.getCell(5).value = qrData[i].数量;
-                sheetRow.getCell(6).value =
-                    'a' +
-                    qrData[i].問い合わせ番号 +
-                    paddingNum(qrData[i].同梱連番, 3) +
-                    'a';
-
-                sheetRow.getCell(7).value = qrData[i].つぶし;
-
-                sheetRow.getCell(8).value =
-                    paddingNum(qrData[i].数量, 4) +
-                    '/' +
-                    paddingNum(qrData[i].数量, 4);
-
-                // CONTENT　BODY
-                for (let j = 1; j <= qrData[i].数量; j++) {
-                    let secondRow = worksheet.getRow(cnt++);
-                    secondRow.getCell(1).value =
-                        qrData[i].ショップコード + qrData[i].シーンコード;
-                    secondRow.getCell(2).value = qrData[i].シーン名;
-                    secondRow.getCell(3).value = qrData[i].URL;
-                    secondRow.getCell(7).value = qrData[i].つぶし;
-                    secondRow.getCell(8).value =
-                        paddingNum(j, 4) + '/' + paddingNum(qrData[i].数量, 4);
+                toast.success('エクスポート完了。', { id: toastId });
+            })
+            .catch((e) => {
+                let errMsg = '';
+                if (e.response == null) {
+                    errMsg = 'サーバー接続失敗。';
+                } else {
+                    errMsg = e.response.data.message;
                 }
+                toast.custom(errMsg, { type: 'closeError', id: toastId });
+            });
+    };
+
+    const MakeExcel = (qrDatas) => {
+        console.log('MakeExcel', qrDatas);
+        let workbook = new ExcelJS.Workbook();
+        let worksheet = workbook.addWorksheet('DTF連携', {});
+        let cnt = 2;
+
+        // qrData.sort(qrData.問い合わせ番号);
+
+        // HEADER
+        let headerData = [
+            '印字コード',
+            '印字名称',
+            '画像データ名',
+            '間紙フラグ',
+            '納品数量',
+            '間紙バーコード',
+            'つぶし',
+            '連番',
+        ];
+
+        let headerRow = worksheet.getRow(1);
+        headerData.forEach((data, index) => {
+            headerRow.getCell(index + 1).value = data;
+        });
+
+        // BODY
+        for (let i = 0; i < qrDatas.length; i++) {
+            let sheetRow = worksheet.getRow(cnt++);
+            // CONTENT　HEADER
+            sheetRow.getCell(2).value = qrDatas[i].ショップ名;
+            sheetRow.getCell(4).value = 1;
+            sheetRow.getCell(5).value = qrDatas[i].数量;
+            sheetRow.getCell(6).value =
+                'a' +
+                qrDatas[i].問い合わせ番号 +
+                paddingNum(qrDatas[i].同梱連番, 3) +
+                'a';
+
+            sheetRow.getCell(7).value = qrDatas[i].つぶし;
+
+            sheetRow.getCell(8).value =
+                paddingNum(qrDatas[i].数量, 4) +
+                '/' +
+                paddingNum(qrDatas[i].数量, 4);
+
+            // CONTENT　BODY
+            for (let j = 1; j <= qrDatas[i].数量; j++) {
+                let secondRow = worksheet.getRow(cnt++);
+                secondRow.getCell(1).value =
+                    qrDatas[i].ショップコード + qrDatas[i].シーンコード;
+                secondRow.getCell(2).value = qrDatas[i].シーン名;
+                secondRow.getCell(3).value = qrDatas[i].URL;
+                secondRow.getCell(7).value = qrDatas[i].つぶし;
+                secondRow.getCell(8).value =
+                    paddingNum(j, 4) + '/' + paddingNum(qrDatas[i].数量, 4);
             }
-
-            download(workbook);
         }
-    }, [qrData]);
+        return workbook;
+    };
 
-    const download = async (workbook) => {
-        // Xlsx
-        let excelFile = await workbook.xlsx.writeBuffer(); //xlsxの場合
-
-        ZipDownload([{ DTF連携用: excelFile }], `QR`);
+    const download = async (workbooks) => {
+        const excelFiles = [];
+        Object.keys(workbooks).forEach(async (key) => {
+            const workbook = workbooks[key];
+            let excelFile = await workbook.xlsx.writeBuffer();
+            excelFiles.push({ [key]: excelFile });
+            if (excelFiles.length == Object.keys(workbooks).length) {
+                console.log('Download', excelFiles);
+                ZipDownload(excelFiles, `QR`);
+            }
+        });
     };
 
     return (

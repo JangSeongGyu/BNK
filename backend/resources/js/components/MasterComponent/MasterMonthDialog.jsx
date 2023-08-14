@@ -16,16 +16,15 @@ import { blue, green, grey, lightGreen, pink, red } from '@mui/material/colors';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import 'dayjs/locale/ja';
-import { dialogYes, dialogNo } from '../Design/DesignOption';
+import { dialogYes, dialogNo } from '../../Design/DesignOption';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
-import { paddingNum } from './GlobalComponent';
+import { paddingNum } from '../GlobalComponent';
 
 const BtnOption = {
-    width: 60,
-    height: 60,
+    height: 50,
     border: 1,
-    borderRadius: '50%',
+    // borderRadius: '100%',
     color: 'white',
     backgroundColor: grey[700],
     borderColor: grey[700],
@@ -96,7 +95,13 @@ const MasterMonthDialog = forwardRef((props, ref) => {
                 toast.success('登録完了。', { id: toastId });
             })
             .catch((e) => {
-                toast.error(e.response.data.message, { id: toastId });
+                let errMsg = '';
+                if (e.response == null) {
+                    errMsg = 'サーバー接続失敗。';
+                } else {
+                    errMsg = e.response.data.message;
+                }
+                toast.custom(errMsg, { type: 'closeError', id: toastId });
             });
     };
 
@@ -142,7 +147,11 @@ const MasterMonthDialog = forwardRef((props, ref) => {
                             selectDate == currentMonth ? red[500] : grey[500]
                         }
                         sx={{
-                            ':hover': { backgroundColor: lightGreen[200] },
+                            ':hover': {
+                                backgroundColor: monthlyData[currentMonth]
+                                    ? lightGreen[200]
+                                    : grey[200],
+                            },
                         }}
                     >
                         <Typography display={'hidden'} fontWeight={'bold'}>
@@ -241,10 +250,13 @@ const MasterMonthDialog = forwardRef((props, ref) => {
                         <Box gap={2} display={'flex'}>
                             <Button
                                 disabled={textData == '' ? true : false}
+                                l
                                 onClick={() => clickCreate()}
                                 sx={dialogYes}
                             >
-                                {monthlyData[selectDate] ? '修正' : '登録'}
+                                <Typography fontWeight={'bold'}>
+                                    {monthlyData[selectDate] ? '修正' : '登録'}
+                                </Typography>
                             </Button>
                             <Button onClick={() => handleClose()} sx={dialogNo}>
                                 戻る

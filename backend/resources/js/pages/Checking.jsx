@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Typography, Box, Button, Divider, TextField } from '@mui/material';
-import Header from '../components/Header';
 import {
     BtnOption,
     CheckingListInputOption,
@@ -15,6 +14,7 @@ import { useParams } from 'react-router-dom';
 import barcode from '../images/barcode.png';
 import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
+import Header from '../components/HeaderCompnent/Header';
 
 const Checking = (props) => {
     const pageType = props.pageType;
@@ -62,12 +62,12 @@ const Checking = (props) => {
 
     const getWorkCount = () => {
         let cnt = 0;
-        const toastid = toast.loading('作業進捗更新中...');
+        const toastId = toast.loading('作業進捗更新中...');
         SetWorkCount(0);
         axios
             .get(`/api/${pageType}/dailydata/${selectDate}`)
             .then((res) => {
-                toast.success('作業進捗更新できました。', { id: toastid });
+                toast.success('作業進捗更新できました。', { id: toastId });
                 SetMaxWorkCount(res.data.length);
                 res.data.forEach((data) => {
                     if (data.一次梱包フラグ == 1 || data.二次梱包フラグ == 1) {
@@ -85,7 +85,13 @@ const Checking = (props) => {
                 }
             })
             .catch((e) => {
-                toast.error('作業進捗更新できませんでした。', { id: toastid });
+                let errMsg = '';
+                if (e.response == null) {
+                    errMsg = '作業進捗サーバー接続失敗。';
+                } else {
+                    errMsg = e.response.data.message;
+                }
+                toast.custom(errMsg, { type: 'closeError', id: toastId });
             });
     };
 
@@ -151,23 +157,18 @@ const Checking = (props) => {
 
                 // 数量がデータベースと同じだったら実行
                 if (searchData.数量 == inputData['2']) {
-                    const toastid = toast.loading('出荷処理中...');
                     axios
                         .put(
                             `/api/${pageType}/firstpacking/${selectDate}/${inputData['0']}`
                         )
                         .then((res) => {
-                            toast.success('検品処理完了しました。', {
-                                id: toastid,
-                            });
+                            toast.success('検品処理完了しました。');
                             getWorkCount();
                             dataClear();
                         })
                         .catch((e) => {
                             let errMsg = ErrorCheck(e);
-
                             ResultError(errMsg);
-                            toast.error('エラー発生', { id: toastid });
                         });
                 } else {
                     ResultError(
@@ -203,7 +204,7 @@ const Checking = (props) => {
 
     return (
         <>
-            <Header pageType={pageType} disableList="false" />
+            <Header pageType={pageType} disableList={true} />
             <Box height={'90%'}>
                 <Box
                     width={'100%'}
@@ -235,7 +236,7 @@ const Checking = (props) => {
                             >
                                 {completeText}
                             </Typography>
-                        )}{' '}
+                        )}
                         <Box ref={btnRef} width={300}>
                             <Button onClick={() => dataClear()} sx={BtnOption}>
                                 データクリア
@@ -418,9 +419,8 @@ export default Checking;
 
 function ErrorCheck(e) {
     let errMsg = '';
-    let status = e.response.status;
-    if ((status = 409)) errMsg = '出荷済みの問い合わせ番号です';
+    if (e.response == null) errMsg = 'サーバー接続失敗';
+    else if (e.response.status == 409) errMsg = '出荷済みの問い合わせ番号です';
     else errMsg = e.response.data.message;
-
     return errMsg;
 }

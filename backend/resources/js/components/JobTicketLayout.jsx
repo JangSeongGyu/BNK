@@ -9,7 +9,6 @@ import {
     CardMedia,
 } from '@mui/material';
 import { grey, red } from '@mui/material/colors';
-import axios from 'axios';
 
 const MainHeight = 1080;
 const MainWidth = MainHeight * 1.42;
@@ -55,23 +54,105 @@ const JobTicketLayout = forwardRef((props, ref) => {
     const selectDate = props.selectDate;
     const pageType = props.pageType;
     const jobData = props.jobData;
-    const jobCount = props.jobCount;
+    const dateName = selectDate + '発注分';
 
-    const TopLayout = (title) => {
-        let basicData = {};
-        const name = title + [selectDate] + '発注分';
-        if (pageType == 'supermarket') {
-            basicData = {
-                name: name,
-                contentId: 'DD109842-01-003',
-            };
-        } else if (pageType == 'taxi') {
-            basicData = {
-                name: name,
-                contentId: '?',
-            };
-        }
+    const taxiPaper = 'OKエルカードKY14　4才　POD在庫紙';
+    const taxiColor = '4c/1c';
+    const taxiDivide = true;
 
+    const BasicData = {
+        supermarket: {
+            title: 'スーパー_' + dateName,
+            contentId: 'DD109842-01-003',
+            size: '210×297',
+            paper: 'アートRt-K　A4　POD保管B22025174',
+            color: '4c/0c',
+            divide: false,
+            divideCnt: 1,
+        },
+        normalA6: {
+            title: 'パウチなし_タクシーA6_' + dateName,
+            contentId: 'DD108564-01-001',
+            size: '148×105',
+            paper: taxiPaper,
+            color: taxiColor,
+            divide: taxiDivide,
+            divideCnt: 8,
+            pouch: false,
+        },
+        normalA6P: {
+            title: 'パウチあり_タクシーA6_' + dateName,
+            contentId: 'DD108564-01-001',
+            size: '148×105',
+            paper: taxiPaper,
+            color: taxiColor,
+            divide: taxiDivide,
+            divideCnt: 8,
+            pouch: true,
+        },
+        normal10: {
+            title: 'パウチなし_タクシー10×10_' + dateName,
+            contentId: 'DD108460-01-001',
+            size: '100×100',
+            paper: taxiPaper,
+            color: taxiColor,
+            divide: taxiDivide,
+            divideCnt: 12,
+            pouch: false,
+        },
+        normal10P: {
+            title: 'パウチあり_タクシー10×10_' + dateName,
+            contentId: 'DD108460-01-001',
+            size: '100×100',
+            paper: taxiPaper,
+            color: taxiColor,
+            divide: taxiDivide,
+            divideCnt: 12,
+            pouch: true,
+        },
+        eaglesA6: {
+            title: 'パウチなし_イーグルスA6_' + dateName,
+            contentId: 'DD107768-01-002',
+            size: '148×105',
+            paper: taxiPaper,
+            color: taxiColor,
+            divide: taxiDivide,
+            divideCnt: 8,
+            pouch: false,
+        },
+        eaglesA6P: {
+            title: 'パウチあり_イーグルスA6_' + dateName,
+            contentId: 'DD107768-01-002',
+            size: '148×105',
+            paper: taxiPaper,
+            color: taxiColor,
+            divide: taxiDivide,
+            divideCnt: 8,
+            pouch: true,
+        },
+        eagles10: {
+            title: 'パウチなし_イーグルス10x10_' + dateName,
+            contentId: 'DD107769-01-002',
+            size: '100×100',
+            paper: taxiPaper,
+            color: taxiColor,
+            divide: taxiDivide,
+            divideCnt: 12,
+            pouch: false,
+        },
+        eagles10P: {
+            title: 'パウチあり_イーグルス10x10_' + dateName,
+            contentId: 'DD107769-01-002',
+            size: '100×100',
+            paper: taxiPaper,
+            color: taxiColor,
+            divide: taxiDivide,
+            divideCnt: 12,
+            pouch: true,
+        },
+    };
+
+    const TopLayout = (basicData, groupData) => {
         return (
             <>
                 <Grid sx={MainBoxOption} width={'100%'} container>
@@ -89,16 +170,16 @@ const JobTicketLayout = forwardRef((props, ref) => {
                     </Grid>
                     {/* BODY ----------------------------------------------- */}
                     <Grid sx={ListBodyOption} fontSize={28} item xs={6}>
-                        {basicData.name}
+                        {basicData.title}
                     </Grid>
                     <Grid sx={ListBodyOption} item xs={2}>
-                        {jobData.length + jobCount}
+                        {groupData['paperCount'] + groupData['shopCount']}
                     </Grid>
                     <Grid sx={ListBodyOption} item xs={2}>
-                        {jobData.length}
+                        {groupData['shopCount']}
                     </Grid>
                     <Grid sx={ListBodyOption} item xs={2}>
-                        210×297
+                        {basicData.size}
                     </Grid>
                     {/* ----------------------------------------------------- */}
                     <Grid container>
@@ -113,7 +194,7 @@ const JobTicketLayout = forwardRef((props, ref) => {
                             {basicData.contentId}
                         </Grid>
                         <Grid sx={ListBodyOption} item xs={6}>
-                            {jobData.length > 0 && jobData[0].受注番号}
+                            {groupData.detailNumber}
                         </Grid>
                     </Grid>
                 </Grid>
@@ -122,7 +203,7 @@ const JobTicketLayout = forwardRef((props, ref) => {
         );
     };
 
-    const BottomLayout = () => {
+    const BottomLayout = (basicData) => {
         return (
             <Grid sx={MainBoxOption} width={'100%'} container>
                 <Grid sx={ListHeaderOption} item xs={4}>
@@ -142,11 +223,11 @@ const JobTicketLayout = forwardRef((props, ref) => {
                 </Grid>
 
                 <Grid sx={ListBodyOption} item xs={4}>
-                    4c/0c
+                    {basicData.color}
                 </Grid>
 
                 <Grid sx={ListBodyOption} item xs={4}>
-                    1
+                    {basicData.divideCnt}
                 </Grid>
                 <Grid container>
                     <Grid sx={ListHeaderOption} item xs={6}>
@@ -155,16 +236,18 @@ const JobTicketLayout = forwardRef((props, ref) => {
                     <Grid sx={ListHeaderOption} item xs={6}>
                         用紙
                     </Grid>
-                    <Grid sx={ListBodyOption} item xs={6}></Grid>
                     <Grid sx={ListBodyOption} item xs={6}>
-                        アートRt-K　A4　POD保管B22025174
+                        {basicData.divide && '断裁'}
+                    </Grid>
+                    <Grid sx={ListBodyOption} item xs={6}>
+                        {basicData.paper}
                     </Grid>
                 </Grid>
             </Grid>
         );
     };
 
-    const ScheduleLayout = () => {
+    const ScheduleLayout = (basicData) => {
         return (
             <Grid sx={MainBoxOption} width={'100%'} container>
                 <Grid sx={ListHeaderOption} item xs={2}>
@@ -193,21 +276,23 @@ const JobTicketLayout = forwardRef((props, ref) => {
                 <Grid sx={ListBodyOption} item xs={2}>
                     金曜日
                 </Grid>
-                <Grid sx={ListBodyOption} item xs={2}></Grid>
                 <Grid sx={ListBodyOption} item xs={2}>
-                    月曜日
+                    {basicData.divide && '金曜日'}
                 </Grid>
                 <Grid sx={ListBodyOption} item xs={2}>
                     月曜日
                 </Grid>
                 <Grid sx={ListBodyOption} item xs={2}>
                     月曜日
+                </Grid>
+                <Grid sx={ListBodyOption} item xs={2}>
+                    {basicData.pouch ? '火曜日' : '月曜日'}
                 </Grid>
             </Grid>
         );
     };
 
-    const Cards = (title, data) => {
+    const Cards = (basicData, groupData) => {
         return (
             <Box p={4} width={MainWidth} height={MainHeight}>
                 <Box
@@ -222,9 +307,9 @@ const JobTicketLayout = forwardRef((props, ref) => {
                         Jobチケット
                     </Box>
                     <Box sx={DividerOption}>情報</Box>
-                    {TopLayout(title)}
+                    {TopLayout(basicData, groupData)}
                     <Box sx={DividerOption}>生産</Box>
-                    <BottomLayout />
+                    {BottomLayout(basicData)}
 
                     <Box display={'flex'}>
                         <Box sx={DividerOption}>基本スケジュール</Box>{' '}
@@ -232,23 +317,58 @@ const JobTicketLayout = forwardRef((props, ref) => {
                             基本毎週水曜入稿、金曜13時下版、月出荷　祝日、長期休みの変動あり
                         </Box>
                     </Box>
-                    <ScheduleLayout />
+                    {ScheduleLayout(basicData)}
                 </Box>
             </Box>
         );
     };
 
     const Pages = () => {
-        if (pageType == 'supermarket') return <>{Cards('スーパー', [])}</>;
-        else if (pageType == 'taxi')
-            return (
-                <>
-                    <>
-                        {Cards('タクシー', [])}
-                        {Cards('イーグルス', [])}
-                    </>
-                </>
-            );
+        //
+        if (pageType == 'supermarket') {
+            if (jobData.length > 0) {
+                let countData = {
+                    paperCount: 0,
+                    shopCount: 0,
+                    detailNumber: jobData[0].受注番号,
+                };
+                jobData.forEach((data) => {
+                    countData['paperCount'] += parseInt(data.数量);
+                    countData['shopCount'] += 1;
+                });
+                return <>{Cards(BasicData['supermarket'], countData)}</>;
+            }
+        } else if (pageType == 'taxi') {
+            let html = [];
+            let groupData = {};
+
+            // Grouping
+            Object.keys(jobData).forEach((key) => {
+                if (jobData[key].length == 0) return;
+                jobData[key].forEach((data) => {
+                    let basicKey = key;
+                    if (data.パウチ == 1) basicKey += 'P';
+
+                    console.log(basicKey, data);
+                    if (!groupData[basicKey])
+                        groupData[basicKey] = {
+                            paperCount: 0,
+                            shopCount: 0,
+                            detailNumber: data.受注番号,
+                        };
+
+                    groupData[basicKey]['paperCount'] += parseInt(data.数量);
+                    groupData[basicKey]['shopCount'] += 1;
+                });
+            });
+
+            console.log('groupData', groupData);
+
+            Object.keys(groupData).forEach((key) => {
+                html.push(Cards(BasicData[key], groupData[key]));
+            });
+            return html;
+        }
     };
 
     return (

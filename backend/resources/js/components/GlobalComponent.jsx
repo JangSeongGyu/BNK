@@ -17,7 +17,7 @@ export const ZipDownload = (files, zipTitle) => {
 
 export const fileToday = () => {
     const today = new Date();
-    const year = String(today.getFullYear()).slice(-2);
+    const year = today.getFullYear();
     const month = paddingNum(today.getMonth() + 1, 2);
     const day = paddingNum(today.getDate(), 2);
     const hours = paddingNum(today.getHours(), 2);
@@ -27,7 +27,18 @@ export const fileToday = () => {
     return nowTime;
 };
 
+export const Today = () => {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = paddingNum(today.getMonth() + 1, 2);
+    const day = paddingNum(today.getDate(), 2);
+
+    const nowTime = `${year}-${month}-${day}`;
+
+    return nowTime;
+};
+
 export const paddingNum = (data, index) => {
-    const paddingNum = data.toString().padStart(index, '0');
+    const paddingNum = String(data).toString().padStart(index, '0');
     return paddingNum;
 };

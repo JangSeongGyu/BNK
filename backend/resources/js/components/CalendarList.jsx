@@ -10,6 +10,7 @@ import jaLocale from '@fullcalendar/core/locales/ja';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import CalendarChangeDialog from './CalendarChangeDialog';
 import { grey } from '@mui/material/colors';
+import { Today } from './GlobalComponent';
 
 const CalendarList = (props) => {
     const pageType = props.pageType;
@@ -82,7 +83,7 @@ const CalendarList = (props) => {
 
     const updateCalendar = () => {
         SetRightList('');
-        const toastid = toast.loading('カレンダー情報更新中...');
+        const toastId = toast.loading('カレンダー情報更新中...');
         let startDate = CreateDate(calref.current.calendar.view.activeStart);
         let endDate = CreateDate(calref.current.calendar.view.activeEnd);
         SetCurrentDate(CreateDate(calref.current.calendar.getDate()));
@@ -92,24 +93,24 @@ const CalendarList = (props) => {
             .then((res) => {
                 SetRightList('prevBtn nextBtn');
                 toast.success('カレンダー情報更新完了。', {
-                    id: toastid,
+                    id: toastId,
                 });
                 console.log('Calendar Data', res.data);
                 SetEventList(res.data);
             })
             .catch((e) => {
                 SetRightList('prevBtn nextBtn');
+
+                let errMsg = '';
                 if (e.response == null) {
-                    toast.error('カレンダー更新失敗。', {
-                        id: toastid,
-                    });
+                    errMsg = 'カレンダーサーバー接続失敗';
                 } else if (e.response.status == '410') {
-                    toast.success('カレンダー情報更新完了。', {
-                        id: toastid,
-                    });
+                    toast.success('カレンダー情報更新完了', { id: toastId });
+                    return;
                 } else {
-                    toast.error(e.response.message, { id: toastid });
+                    errMsg = e.response.data.message;
                 }
+                toast.error(errMsg, { id: toastId });
             });
     };
 
@@ -152,13 +153,19 @@ const CalendarList = (props) => {
         });
     };
     const EventDrop = (dropInfo) => {
-        const start = dropInfo.oldEvent.startStr;
-        const end = dropInfo.event.startStr;
-        dialogRef.current.ChangeDate(dropInfo, start, end);
+        const originalDate = dropInfo.oldEvent.startStr;
+        const changeDate = dropInfo.event.startStr;
+
+        console.log(dropInfo);
+        dialogRef.current.ChangeDate(dropInfo, originalDate, changeDate);
     };
     const handleDateClick = (dateClickInfo) => {
         SetSelectDate(dateClickInfo.dateStr);
-        if (!CheckDate(dateClickInfo.dateStr)) props.handleOpen();
+        if (!CheckDate(dateClickInfo.dateStr)) {
+            if (dateClickInfo.dateStr < Today())
+                toast.error('出荷日は本日より前日に設定することは出来ません');
+            else props.handleOpen();
+        }
         SetCssStr(`
             outline: 2px solid red;
             outline-offset: -2px;
@@ -182,7 +189,7 @@ const CalendarList = (props) => {
                 ml: 1,
             }}
         >
-            <CalendarChangeDialog ref={dialogRef} />
+            <CalendarChangeDialog pageType={pageType} ref={dialogRef} />
             <StyleWrapper>
                 <FullCalendar
                     ref={calref}
@@ -190,7 +197,10 @@ const CalendarList = (props) => {
                     initialView="dayGridMonth"
                     initialDate={currentDate}
                     droppable={true}
+                    dragScroll={false}
                     editable={true}
+                    eventOverlap={false}
+                    eventDurationEditable={false}
                     locales={[jaLocale]}
                     locale="ja"
                     height={'100%'}

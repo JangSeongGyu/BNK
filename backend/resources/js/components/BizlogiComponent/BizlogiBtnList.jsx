@@ -20,7 +20,7 @@ const BizlogiBtnList = (props) => {
         CallData();
     };
 
-    const ExportData = (resData, toastid) => {
+    const ExportData = (resData, toastId) => {
         let hcsv = '';
 
         let keys = Object.keys(resData[0]);
@@ -53,21 +53,25 @@ const BizlogiBtnList = (props) => {
         element.download = 'bizlogi_' + selectDate + '.csv';
         document.body.appendChild(element);
         element.click();
-        toast.success('エクスポートします。', { id: toastid });
+        toast.success('エクスポートします。', { id: toastId });
     };
 
     const CallData = () => {
-        let toastid = toast.loading('エクスポート中です。');
+        let toastId = toast.loading('エクスポート中です。');
         axios
             .get(`/api/${pageType}/bizlogi/` + selectDate)
             .then((res) => {
                 console.log(res.data);
-                ExportData(res.data, toastid);
+                ExportData(res.data, toastId);
             })
             .catch((e) => {
-                toast.error('エクスポートデータがありません。', {
-                    id: toastid,
-                });
+                let errMsg = '';
+                if (e.response == null) {
+                    errMsg = 'サーバー接続失敗。';
+                } else {
+                    errMsg = e.response.data.message;
+                }
+                toast.custom(errMsg, { type: 'closeError', id: toastId });
             });
     };
 

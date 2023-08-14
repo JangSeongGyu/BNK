@@ -32,9 +32,14 @@ const BizlogiImportBtn = (props) => {
                     inquiry_no: inquiry_no,
                     shipment_no: shipment_no,
                 })
-                .then((response) => {})
                 .catch((e) => {
-                    toast.error(e.response.data.message);
+                    let errMsg = '';
+                    if (e.response == null) {
+                        errMsg = 'サーバー接続失敗。';
+                    } else {
+                        errMsg = e.response.data.message;
+                    }
+                    toast.custom(errMsg, { type: 'closeError' });
                     return (errCnt += 1);
                 })
                 .finally(() => {});
@@ -46,12 +51,11 @@ const BizlogiImportBtn = (props) => {
             });
             tsubushi();
         } else {
-            toast.error(`${maxCnt - errCnt}件成功、${errCnt}件エラー`, {
+            toast.custom(`${maxCnt - errCnt}件成功、${errCnt}件エラー`, {
+                type: 'closeError',
                 id: toastId,
             });
         }
-
-        // toast.error(errCnt, { id: toastId });
 
         setJson(null);
     };

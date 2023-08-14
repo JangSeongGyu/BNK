@@ -4,7 +4,6 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { ThemeProvider } from '@mui/material/styles';
 import App from './App';
 import Theme from './SPTheme';
-import axios from 'axios';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 

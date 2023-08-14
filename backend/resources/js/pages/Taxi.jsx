@@ -1,15 +1,15 @@
-import React, { useEffect, useState, useRef } from 'react';
-import Header from '../components/Header';
+import { useEffect, useState, useRef } from 'react';
+import Header from '../components/HeaderCompnent/Header';
 import axios from 'axios';
 import CalendarList from '../components/CalendarList';
 import MarketSideList from '../components/MarketSideList';
-import MarketShipmentDialog from '../components/MarketShipmentDialog';
-import { Dialog, Typography, Button, Box } from '@mui/material';
+import ShipmentDialog from '../components/ShipmentComponent/ShipmentDialog';
+import { Dialog, Typography, Button, Box, Tooltip } from '@mui/material';
 import { toast } from 'react-hot-toast';
 import { grey } from '@mui/material/colors';
 
 const BacklogTextOption = {
-    width: 80,
+    width: 100,
     fontSize: 18,
     fontWeight: 'bold',
     borderRadius: 1,
@@ -19,7 +19,7 @@ const Taxi = (props) => {
     const pageType = props.pageType;
     const [selectDate, SetSelectDate] = useState('');
     const [open, SetOpen] = useState(false);
-    const [logDatas, SetLogDatas] = useState('');
+    const [logDatas, SetLogDatas] = useState([]);
     const [pouchDatas, SetPouchDatas] = useState('');
     const [SFDatas, SetSFDatas] = useState('');
     const [dailyData, SetDailyData] = useState([]);
@@ -61,7 +61,7 @@ const Taxi = (props) => {
             .get(`/api/${pageType}/backlogdata/`)
             .then((res) => {
                 console.log(res.data);
-                SetLogDatas(res.data);
+                SetLogDatas(res.data[0]);
                 SetSelectDate(data.selectDate);
             })
             .catch((e) => {});
@@ -69,6 +69,11 @@ const Taxi = (props) => {
 
     const thisMonth = () => {
         const today = new Date();
+        if (localStorage.getItem('LastSelectDate')) {
+            const date = localStorage.getItem('LastSelectDate');
+            return date;
+        }
+        localStorage.removeItem('LastSelectDate');
         return `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(
             2,
             '0'
@@ -76,7 +81,7 @@ const Taxi = (props) => {
     };
 
     const handleClose = (res) => {
-        if (res == 'ok') {
+        if (res) {
             callBacklog();
             UpdateRef.current.event();
             UpdateRef.current.side(selectDate);
@@ -84,7 +89,15 @@ const Taxi = (props) => {
         SetOpen(false);
     };
     const handleOpen = () => {
-        if (logDatas.length == 0) toast.error('出荷する案件がありません。');
+        const logDataSum =
+            parseInt(logDatas.イーグルス) +
+            parseInt(logDatas.イーグルスP) +
+            parseInt(logDatas.通常) +
+            parseInt(logDatas.通常P);
+
+        console.log(logDatas);
+        if (logDataSum == 0 || logDatas.length == 0)
+            toast.error('処理するデータがありません');
         else SetOpen(true);
     };
 
@@ -106,7 +119,12 @@ const Taxi = (props) => {
                 console.log(res.data);
             })
             .catch((e) => {
-                errMsg = e.response.data.message;
+                let errMsg = '';
+                if (e.response == null) {
+                    errMsg = 'サーバー接続失敗。';
+                } else {
+                    errMsg = e.response.data.message;
+                }
                 toast.error(errMsg, { id: toastId });
             });
     };
@@ -114,12 +132,11 @@ const Taxi = (props) => {
     return (
         <Box height={'100%'} backgroundColor={grey[200]}>
             <Header page={0} pageType={pageType} />
-
             <Box height={'80%'} sx={{ display: 'flex' }}>
-                <Box sx={{ width: '60%', height: '100%' }}>
+                <Box sx={{ width: '60%', height: '100%', minWidth: 700 }}>
                     <Box
                         sx={{
-                            left: 170,
+                            left: 180,
                             top: 120,
                             gap: 1,
                             position: 'absolute',
@@ -152,17 +169,34 @@ const Taxi = (props) => {
                             <br />
                             {SFDatas.length}
                         </Typography>
-
-                        <Typography sx={BacklogTextOption}>
-                            パウチ
-                            <br />
-                            {logDatas.length}
-                        </Typography>
-                        <Typography sx={BacklogTextOption}>
-                            通常
-                            <br />
-                            {logDatas.length}
-                        </Typography>
+                        <Tooltip
+                            title={
+                                <Typography>
+                                    タクシー：{logDatas.通常}
+                                    <br />
+                                    タクシーパウチ：{logDatas.通常P}
+                                    <br />
+                                    イーグルス：{logDatas.イーグルス}
+                                    <br />
+                                    イーグルスパウチ：{logDatas.イーグルスP}
+                                </Typography>
+                            }
+                        >
+                            <Typography sx={BacklogTextOption}>
+                                未処理総計
+                                <br />
+                                {logDatas.通常 ? (
+                                    <>
+                                        {parseInt(logDatas.通常) +
+                                            parseInt(logDatas.通常P) +
+                                            parseInt(logDatas.イーグルス) +
+                                            parseInt(logDatas.イーグルスP)}
+                                    </>
+                                ) : (
+                                    '0'
+                                )}
+                            </Typography>
+                        </Tooltip>
                     </Box>
 
                     <CalendarList
@@ -173,7 +207,12 @@ const Taxi = (props) => {
                         handleOpen={handleOpen}
                     />
                 </Box>
-                <Box mt={1} sx={{ width: '40%' }} height={'100%'}>
+                <Box
+                    mt={1}
+                    sx={{ width: '40%' }}
+                    minWidth={450}
+                    height={'100%'}
+                >
                     {isData && (
                         <MarketSideList
                             pageType={pageType}
@@ -184,11 +223,11 @@ const Taxi = (props) => {
                     )}
                 </Box>
             </Box>
-            <Dialog onClose={() => handleClose('exit')} open={open}>
-                <MarketShipmentDialog
+            <Dialog onClose={() => handleClose(false)} open={open}>
+                <ShipmentDialog
                     pageType={pageType}
                     handleClose={handleClose}
-                    logDatas={logDatas.length}
+                    logDatas={logDatas}
                     selectDate={selectDate}
                 />
             </Dialog>

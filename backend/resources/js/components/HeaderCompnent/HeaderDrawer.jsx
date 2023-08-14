@@ -50,7 +50,7 @@ const HeaderDrawer = forwardRef((props, ref) => {
                 <Box
                     onClick={() => setOpen(false)}
                     backgroundColor={pink[500]}
-                    py={2}
+                    py={1}
                     boxShadow={2}
                     fontWeight={'bold'}
                     color={'white'}
@@ -61,6 +61,9 @@ const HeaderDrawer = forwardRef((props, ref) => {
                     }}
                 >
                     <ArrowBackIosNewIcon sx={{ fontSize: 30 }} />
+                    <Typography textAlign={'center'} width={800} fontSize={24}>
+                        楽天業務システム
+                    </Typography>
                     <Typography
                         width={'88%'}
                         textAlign={'center'}

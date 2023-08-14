@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Typography, Box, Button, Divider, TextField } from '@mui/material';
-import Header from '../components/Header';
 import {
     BtnOption,
     CheckingListInputOption,
@@ -14,6 +13,7 @@ import { green, grey, pink, red } from '@mui/material/colors';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
+import Header from '../components/HeaderCompnent/Header';
 
 const Checking2 = (props) => {
     const [MsgBox, SetMsgBox] = useState({
@@ -65,12 +65,12 @@ const Checking2 = (props) => {
 
     const getWorkCount = () => {
         let cnt = 0;
-        const toastid = toast.loading('作業進捗更新中...');
+        const toastId = toast.loading('作業進捗更新中...');
         SetWorkCount(0);
         axios
             .get(`/api/${pageType}/dailydata/` + selectDate)
             .then((res) => {
-                toast.success('作業進捗更新できました。', { id: toastid });
+                toast.success('作業進捗更新できました。', { id: toastId });
                 SetMaxWorkCount(res.data.length);
                 res.data.forEach((data) => {
                     if (data.二次梱包フラグ == 1) cnt++;
@@ -87,7 +87,13 @@ const Checking2 = (props) => {
                 }
             })
             .catch((e) => {
-                toast.error('作業進捗更新できました。', { id: toastid });
+                let errMsg = '';
+                if (e.response == null) {
+                    errMsg = 'サーバー接続失敗。';
+                } else {
+                    errMsg = e.response.data.message;
+                }
+                toast.custom(errMsg, { type: 'closeError', id: toastId });
             });
     };
 
@@ -138,22 +144,18 @@ const Checking2 = (props) => {
             if (taskCnt == 0) GetNumberData();
             else if (taskCnt == 1) {
                 if (inputData['0'].slice(0, -3) == inputData['1']) {
-                    const toastid = toast.loading('出荷処理中...');
                     axios
                         .put(
                             `/api/${pageType}/secondpacking/${selectDate}/${inputData['0']}?type=2`
                         )
                         .then((res) => {
-                            toast.success('検品処理完了しました。', {
-                                id: toastid,
-                            });
+                            toast.success('検品処理完了しました。');
                             getWorkCount();
                             dataClear();
                         })
                         .catch((e) => {
                             let errMsg = ErrorCheck(e);
                             ResultError(errMsg);
-                            toast.error('エラー発生', { id: toastid });
                         });
                 } else {
                     ResultError(`入力番号:${inputData['1']}
@@ -363,8 +365,8 @@ export default Checking2;
 
 function ErrorCheck(e) {
     let errMsg = '';
-    let status = e.response.status;
-    errMsg = e.response.data.message;
-
+    if (e.response == null) errMsg = 'サーバー接続失敗';
+    else if (e.response.status == 409) errMsg = '出荷済みの問い合わせ番号です';
+    else errMsg = e.response.data.message;
     return errMsg;
 }

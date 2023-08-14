@@ -26,7 +26,6 @@ const PrintOutBtnList = (props) => {
     const [labelData, SetLabelData] = useState([]);
     const [yamaData, SetYamaData] = useState([]);
     const [jobData, SetJobData] = useState([]);
-    const [jobCount, SetJobCount] = useState(0);
 
     const fileDate = () => {
         const year = String(selectDate).slice(0, 4);
@@ -64,13 +63,13 @@ const PrintOutBtnList = (props) => {
                 toast.success('梱包ラベル出力完了。', { id: toastId });
             })
             .catch((e) => {
-                if (e == null) {
-                    toast.error('サーバ接続失敗。', { id: toastId });
+                let errMsg = '';
+                if (e.response == null) {
+                    errMsg = 'サーバー接続失敗。';
                 } else {
                     errMsg = e.response.data.message;
-
-                    toast.error(errMsg, { id: toastId });
                 }
+                toast.custom(errMsg, { type: 'closeError', id: toastId });
             });
     };
     const YamaPrinting = () => {
@@ -78,42 +77,42 @@ const PrintOutBtnList = (props) => {
         axios
             .get(`/api/${pageType}/totalpick/` + selectDate)
             .then((res) => {
-                let groupData = {};
-                res.data.forEach((data) => {
-                    let key = data.納品先会社名;
-                    if (!groupData[key]) {
-                        groupData[key] = [];
-                    }
-                    groupData[key].push(data);
-                });
+                console.log(res.data);
+                console.log({ supermarket: res.data });
+                if (pageType == 'supermarket')
+                    SetYamaData({ supermarket: res.data });
+                else SetYamaData(res.data);
 
-                console.log('group', groupData);
-                SetYamaData(groupData);
                 toast.success('山出しリスト出力完了。', { id: toastId });
             })
             .catch((e) => {
-                errMsg = e.response.data.message;
-                toast.error(errMsg, { id: toastId });
+                let errMsg = '';
+                if (e.response == null) {
+                    errMsg = 'サーバー接続失敗。';
+                } else {
+                    errMsg = e.response.data.message;
+                }
+                toast.custom(errMsg, { type: 'closeError', id: toastId });
             });
     };
     const JobPrinting = () => {
         const toastId = toast.loading('Jobチケット出力中...');
         let cnt = 0;
         axios
-            .get(`/api/${pageType}/label/` + selectDate)
+            .get(`/api/${pageType}/jobticket/` + selectDate)
             .then((res) => {
                 console.log(res.data);
                 SetJobData(res.data);
-
-                res.data.forEach((data) => {
-                    cnt += parseInt(data.数量);
-                });
-                SetJobCount(cnt);
                 toast.success('Jobチケット出力完了。', { id: toastId });
             })
             .catch((e) => {
-                errMsg = e.response.data.message;
-                toast.error(errMsg, { id: toastId });
+                let errMsg = '';
+                if (e.response == null) {
+                    errMsg = 'サーバー接続失敗。';
+                } else {
+                    errMsg = e.response.data.message;
+                }
+                toast.custom(errMsg, { type: 'closeError', id: toastId });
             });
     };
 
@@ -211,7 +210,6 @@ const PrintOutBtnList = (props) => {
                     jobData={jobData}
                     pageType={pageType}
                     selectDate={selectDate}
-                    jobCount={jobCount}
                     ref={JobRef}
                 />
             </Box>

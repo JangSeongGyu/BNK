@@ -14,15 +14,16 @@ const MainHeight = 1497;
 const YamaLayout = forwardRef((props, ref) => {
     const pageType = props.pageType;
     const selectDate = props.selectDate;
-    const groupData = props.yamaData;
+    const yamaData = props.yamaData;
 
-    const Cards = (title, data) => {
+    const Cards = (title, groupData) => {
         let html = [];
         let heightCnt = 342;
         let insertHeight = 0;
         let cnt = 0;
         let keys = Object.keys(groupData);
 
+        console.log('Cards', groupData);
         // Header ======================
         html.push(
             <CardHeader
@@ -76,7 +77,6 @@ const YamaLayout = forwardRef((props, ref) => {
         });
 
         // 2枚のために最後に余白追加
-        console.log(MainHeight, heightCnt);
         html.push(
             <Box
                 key={cnt++}
@@ -89,23 +89,42 @@ const YamaLayout = forwardRef((props, ref) => {
     };
 
     const Pages = () => {
-        if (pageType == 'supermarket')
-            return (
+        let groupData = {};
+        let html = [];
+
+        Object.keys(yamaData).forEach((key) => {
+            let countData = {};
+            if (yamaData[key].length == 0) return;
+            // 納品先　グループ化
+            yamaData[key].forEach((data) => {
+                let companyname = data.納品先会社名;
+                if (!countData[companyname]) {
+                    countData[companyname] = [];
+                }
+                countData[companyname].push(data);
+            });
+
+            //  グループ化した納品先を入れる
+            let groupKey = '';
+            if (key == 'supermarket') groupKey = 'スーパーマーケット';
+            else if (key == 'eagles') groupKey = 'イーグルス';
+            else if (key == 'normal') groupKey = 'タクシー';
+
+            if (!groupData[groupKey]) {
+                groupData[groupKey] = [];
+            }
+            groupData[groupKey].push(countData);
+        });
+
+        Object.keys(groupData).forEach((key) => {
+            html.push(
                 <Box px={4} pt={4}>
-                    {Cards('楽天スーパーマーケットQR', [])}
+                    {Cards(key, groupData[key][0])}
                 </Box>
             );
-        if (pageType == 'taxi')
-            return (
-                <>
-                    <Box px={4} pt={4}>
-                        {Cards('楽天タクシーQR', [])}
-                    </Box>
-                    <Box px={4} pt={4}>
-                        {Cards('楽天イーグルスQR', [])}
-                    </Box>
-                </>
-            );
+        });
+
+        return html;
     };
 
     return (

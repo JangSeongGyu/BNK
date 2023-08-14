@@ -17,10 +17,7 @@ const ShipmentConfirmBox = (props) => {
     const ShipmentClick = () => {
         const toastId = toast.loading('サーバ接続中...');
         axios
-            .put(
-                `http://192.168.150.196:8081/api/${pageType}/shipment/` +
-                    selectDate
-            )
+            .put(`/api/${pageType}/shipment/` + selectDate)
             .then((res) => {
                 toast.success('出荷処理しました。', { id: toastId });
                 props.handleClose(true);

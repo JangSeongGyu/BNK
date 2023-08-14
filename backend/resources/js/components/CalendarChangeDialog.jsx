@@ -40,12 +40,9 @@ const CalendarChangeDialog = forwardRef((props, ref) => {
     const ResultOK = () => {
         const toastId = toast.loading('出荷日修正中...');
         axios
-            .put(
-                `http://192.168.150.196:8081/api/${pageType}/dailydata/${originalDate}`,
-                {
-                    change_date: changeDate,
-                }
-            )
+            .put(`/api/${pageType}/dailydata/${originalDate}`, {
+                change_date: changeDate,
+            })
             .then((res) => {
                 toast.success('修正出来ました。', { id: toastId });
             })

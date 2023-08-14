@@ -17,12 +17,28 @@ import TXTheme from './TXTheme';
 import EGTheme from './EGTheme';
 import DetailView from './pages/DetailView';
 import Master from './pages/Master';
+import ErrorPage from './pages/ErrorPage';
 
 const Router = () => {
     return (
         <BrowserRouter>
             <Routes>
-                <Route path={`home`} element={<Home />} />
+                <Route
+                    path={`home`}
+                    element={
+                        <ThemeProvider theme={SPTheme}>
+                            <Home />
+                        </ThemeProvider>
+                    }
+                />
+                <Route
+                    path={`/`}
+                    element={
+                        <ThemeProvider theme={SPTheme}>
+                            <Home />
+                        </ThemeProvider>
+                    }
+                />
                 {/*============ SuperMarket ======================================================*/}
                 <Route
                     exact
@@ -101,18 +117,29 @@ const Router = () => {
                     }
                 />
 
-                <Route exact path="/test" element={<YamaLayout />}></Route>
+                <Route
+                    exact
+                    path={`/taxi/detail/:selectDate/`}
+                    element={
+                        <ThemeProvider theme={TXTheme}>
+                            <DetailView pageType="taxi" />
+                        </ThemeProvider>
+                    }
+                />
+
+                {/* <Route exact path="/test" element={<YamaLayout />}></Route> */}
+
                 <Route exact path={`/beauty`} element={<Beauty />}>
                     <Route index element={<BeautyImport />} />
                     <Route path={`import`} element={<BeautyImport />} />
                 </Route>
-                <Route path={`/`} element={<Home />} />
+
                 <Route
                     path="*"
                     element={
-                        <main style={{ padding: '1rem' }}>
-                            <p>存在しないページです。</p>
-                        </main>
+                        <ThemeProvider theme={SPTheme}>
+                            <ErrorPage />{' '}
+                        </ThemeProvider>
                     }
                 />
             </Routes>

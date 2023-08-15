@@ -11,7 +11,7 @@ import ImportTableRows from './ImportTableRows';
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     backgroundColor: theme.palette.common.black,
     color: theme.palette.common.white,
-    whiteSpace: 'nowrap',
+    whitespace: 'nowrap',
     zIndex: 1,
     fontSize: 15,
 }));

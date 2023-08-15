@@ -401,7 +401,7 @@ const Checking2 = (props) => {
                                 height={100}
                             >
                                 <Typography
-                                    whiteSpace={'pre-line'}
+                                    whitespace={'pre-line'}
                                     sx={CheckingListResultTextOption}
                                 >
                                     {MsgBox[0]}
@@ -434,7 +434,7 @@ const Checking2 = (props) => {
                                 backgroundColor={grey[400]}
                             >
                                 <Typography
-                                    whiteSpace={'pre-line'}
+                                    whitespace={'pre-line'}
                                     sx={CheckingListResultTextOption}
                                 >
                                     {MsgBox[1]}

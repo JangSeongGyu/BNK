@@ -418,7 +418,7 @@ const Checking = (props) => {
                                 height={100}
                             >
                                 <Typography
-                                    whiteSpace={'pre-line'}
+                                    whitespace={'pre-line'}
                                     sx={CheckingListResultTextOption}
                                 >
                                     {String(MsgBox[0]).replace(/<br>/g, '\n')}
@@ -451,7 +451,7 @@ const Checking = (props) => {
                                 backgroundColor={grey[400]}
                             >
                                 <Typography
-                                    whiteSpace={'pre-line'}
+                                    whitespace={'pre-line'}
                                     sx={CheckingListResultTextOption}
                                 >
                                     {MsgBox[1]}
@@ -484,7 +484,7 @@ const Checking = (props) => {
                                 sx={CheckingListResultOption}
                             >
                                 <Typography
-                                    whiteSpace={'pre-line'}
+                                    whitespace={'pre-line'}
                                     sx={CheckingListResultTextOption}
                                 >
                                     {MsgBox[2]}

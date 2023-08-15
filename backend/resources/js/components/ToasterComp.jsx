@@ -67,7 +67,7 @@ const ToasterComp = () => {
                                     <Button
                                         px={1}
                                         my={1.5}
-                                        whiteSpace={'pre-line'}
+                                        whitespace={'pre-line'}
                                         width={'100%'}
                                         onClick={() => toast.dismiss(t.id)}
                                         sx={CloseBtn}

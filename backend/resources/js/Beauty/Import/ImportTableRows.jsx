@@ -28,14 +28,14 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
     fontSize: 14,
     // backgroundColor: 'red',
     fontColor: 'white',
-    whiteSpace: 'nowrap',
+    whitespace: 'nowrap',
 }));
 const StickyTableCell = styled(TableCell)(({ theme }) => ({
     fontSize: 10,
     position: 'sticky',
     left: 0,
     backgroundColor: 'white',
-    whiteSpace: 'nowrap',
+    whitespace: 'nowrap',
 }));
 const InnerTableCell = styled(TableCell)(({ theme }) => ({
     fontSize: 15,

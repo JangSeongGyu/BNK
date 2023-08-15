@@ -45,11 +45,12 @@ const CalendarChangeDialog = forwardRef((props, ref) => {
             })
             .then((res) => {
                 toast.success('修正出来ました。', { id: toastId });
+                props.updateCalendar();
             })
             .catch((e) => {
                 dropInfo.revert();
                 let errMsg = '';
-                if (e.respone == null) errMsg = '出荷日修正サーバー接続失敗。';
+                if (e.response == null) errMsg = '出荷日修正サーバー接続失敗。';
                 else errMsg = e.response.data.message;
                 toast.custom(errMsg, { type: 'closeError', id: toastId });
             });

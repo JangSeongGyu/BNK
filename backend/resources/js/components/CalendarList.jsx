@@ -190,10 +190,8 @@ const CalendarList = (props) => {
                 p: 1,
                 backgroundColor: 'white',
                 width: '100%',
-                display: 'flex',
                 height: '100%',
-                marginTop: 2,
-                ml: 1,
+                display: 'flex',
             }}
         >
             <CalendarChangeDialog

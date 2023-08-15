@@ -1,15 +1,8 @@
-import {
-    Typography,
-    Box,
-    Button,
-    Divider,
-    TextField,
-    ButtonBase,
-} from '@mui/material';
-import { blue, cyan, grey } from '@mui/material/colors';
+import { Typography, Box } from '@mui/material';
+import { cyan, grey } from '@mui/material/colors';
 
 const MRowBoxOption = {
-    width: 400,
+    width: 350,
     display: 'flex',
     justifyContent: 'center',
     borderBottom: 1,
@@ -26,10 +19,13 @@ const RightContentOption = {
 
 const DetailTXMoreRow = (props) => {
     const data = props.data;
+    const minWidth = props.minWidth;
+    const bgColor = props.bgColor;
     return (
         <Box
-            backgroundColor={cyan[50]}
-            borderBottom={1}
+            minWidth={minWidth}
+            backgroundColor={bgColor}
+            // borderBottom={1}
             borderColor={grey[400]}
         >
             <Box display={'flex'}>

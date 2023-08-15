@@ -11,32 +11,15 @@ import DetailMoreRow from './DetailMoreRow';
 import { useState } from 'react';
 import DetailTXMoreRow from './DetailTXMoreRow';
 
-const rowWidth = [140, 300, 300, 100, 50, 150, 120];
-
-const rowBodyOption = (index) => {
-    return {
-        minWidth: rowWidth[index],
-        width: `${rowWidth[index]}%`,
-        display: 'flex',
-        alignItems: 'center',
-        colorOption: 'black',
-        borderBottom: 1,
-        borderColor: grey[400],
-        py: 2,
-    };
-};
-
 const DetailRow = (props) => {
     const data = props.data;
     const pageType = props.pageType;
+    const rowWidth = props.rowWidth;
+    const minWidth = props.minWidth;
+    const bgColor = props.bgColor;
+
     const [open, setOpen] = useState(false);
     let rowCnt = 0;
-    let maxWidth = 0;
-
-    rowWidth.forEach((w) => {
-        maxWidth += w;
-    });
-    console.log(maxWidth);
 
     const ClickRow = () => {
         if (open == true) setOpen(false);
@@ -44,8 +27,35 @@ const DetailRow = (props) => {
     };
 
     const checkMoreRow = () => {
-        if (pageType == 'supermarket') return <DetailMoreRow data={data} />;
-        else return <DetailTXMoreRow data={data} />;
+        if (pageType == 'supermarket')
+            return (
+                <DetailMoreRow
+                    bgColor={bgColor}
+                    minWidth={minWidth}
+                    data={data}
+                />
+            );
+        else
+            return (
+                <DetailTXMoreRow
+                    bgColor={bgColor}
+                    minWidth={minWidth}
+                    data={data}
+                />
+            );
+    };
+
+    const rowBodyOption = (index) => {
+        return {
+            minWidth: rowWidth[index],
+            width: `${rowWidth[index]}%`,
+            display: 'flex',
+            alignItems: 'center',
+            colorOption: 'black',
+            borderTop: 1,
+            borderColor: grey[400],
+            py: 1,
+        };
     };
 
     return (
@@ -54,9 +64,10 @@ const DetailRow = (props) => {
                 onClick={() => ClickRow()}
                 sx={{
                     display: 'flex',
-                    width: { xs: maxWidth, lg: '100%' },
+                    minWidth: minWidth,
+                    backgroundColor: bgColor,
                     // backgroundColor: yellow[50],
-                    ':hover': { backgroundColor: grey[100] },
+                    ':hover': { backgroundColor: grey[300] },
                 }}
             >
                 <Typography pl={1} sx={rowBodyOption(rowCnt++)}>
@@ -90,4 +101,5 @@ const DetailRow = (props) => {
         </Box>
     );
 };
+
 export default DetailRow;

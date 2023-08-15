@@ -17,7 +17,7 @@ const SelectDateCard = (props) => {
         navigate(`/${pageType}/detail/${selectDate}`);
     };
     return (
-        <Box mt={1} width={'100%'} sx={BorderOption}>
+        <Box width={'100%'} sx={BorderOption}>
             <Typography sx={ListTitleOption}>
                 出荷日 <br />
             </Typography>

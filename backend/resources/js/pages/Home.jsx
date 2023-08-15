@@ -21,19 +21,24 @@ const Home = (props) => {
     let pageType = 'home';
     let navigate = useNavigate();
     return (
-        <Box backgroundColor={grey[200]} height={'100%'}>
+        <Box
+            backgroundColor={grey[200]}
+            height={'100%'}
+            display={'flex'}
+            flexDirection={'column'}
+        >
             <Header pageType={pageType} disableList={true} />
             <Box
+                m={2}
                 p={2}
                 border={1}
                 borderColor={grey[500]}
-                m={2}
-                height={'90%'}
+                height={'100%'}
                 borderRadius={2}
                 backgroundColor={'white'}
                 boxShadow={2}
             >
-                <Box borderBottom={1} borderColor={grey[500]} mb={2}>
+                <Box borderBottom={1} borderColor={grey[400]} mb={2}>
                     <Typography fontSize={32} fontWeight={'bold'}>
                         ショットカット
                     </Typography>

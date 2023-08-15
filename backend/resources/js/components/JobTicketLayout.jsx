@@ -161,7 +161,7 @@ const JobTicketLayout = forwardRef((props, ref) => {
                     </Grid>
                     <Grid sx={ListHeaderOption} item xs={2}>
                         数量
-                    </Grid>{' '}
+                    </Grid>
                     <Grid sx={ListHeaderOption} item xs={2}>
                         頭紙
                     </Grid>

@@ -33,7 +33,7 @@ const MarketSideList = (props) => {
     };
 
     return (
-        <Box sx={{ px: 2 }}>
+        <Box>
             <SideList></SideList>
         </Box>
     );

@@ -44,7 +44,6 @@ const SuperMarket = (props) => {
         axios
             .get(`/api/${pageType}/backlogdata/`)
             .then((res) => {
-                console.log(res.data);
                 SetLogDatas(res.data[0]);
                 SetSelectDate(data.selectDate);
             })
@@ -60,7 +59,6 @@ const SuperMarket = (props) => {
         SetOpen(false);
     };
     const handleOpen = () => {
-        console.log(logDatas);
         if (logDatas.件数 == 0 || logDatas.length == 0) {
             toast.error('処理するデータがありません');
         } else {
@@ -83,7 +81,6 @@ const SuperMarket = (props) => {
             .then((res) => {
                 toast.success('データ取得完了。', { id: toastId });
                 SetIsData(true);
-                console.log(res.data);
             })
             .catch((e) => {
                 let errMsg = '';
@@ -97,9 +94,15 @@ const SuperMarket = (props) => {
     };
 
     return (
-        <Box height={'100%'} backgroundColor={grey[200]}>
+        <Box
+            height={'100%'}
+            display={'flex'}
+            flexDirection={'column'}
+            minWidth={1300}
+            backgroundColor={grey[200]}
+        >
             <Header page={0} pageType={pageType} />
-            <Box height={'80%'} sx={{ display: 'flex' }}>
+            <Box height={'100%'} gap={2} p={2} sx={{ display: 'flex' }}>
                 <Box sx={{ width: '60%', height: '100%', minWidth: 700 }}>
                     <Box
                         sx={{
@@ -152,12 +155,7 @@ const SuperMarket = (props) => {
                         handleOpen={handleOpen}
                     />
                 </Box>
-                <Box
-                    mt={1}
-                    sx={{ width: '40%' }}
-                    minWidth={450}
-                    height={'100%'}
-                >
+                <Box sx={{ width: '40%' }} minWidth={500} height={'100%'}>
                     {isData && (
                         <MarketSideList
                             pageType={pageType}

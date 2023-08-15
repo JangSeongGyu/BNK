@@ -7,27 +7,30 @@ import {
     TextField,
     ButtonBase,
 } from '@mui/material';
-import { grey } from '@mui/material/colors';
+import { cyan, grey, pink } from '@mui/material/colors';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import DetailRow from '../components/DetailComponent/DetailRow';
 
-// const rowWidth = [200, 400, 500, 260, 100, 226, 200];
-const rowWidth = [140, 300, 300, 100, 50, 150, 120];
-let maxWidth = 0;
+const rowWidth = [140, 300, 300, 100, 50, 150, 150];
+let minWidth = 0;
+
+rowWidth.forEach((w) => {
+    minWidth += w;
+});
+
 const rowHeaderOption = (index) => {
     return {
         minWidth: rowWidth[index],
         width: `${rowWidth[index]}%`,
-        // maxWidth: rowWidth[index],
-        fontSize: 18,
+        fontSize: 20,
         py: 1,
-        backgroundColor: grey[600],
-        color: 'white',
-        borderBottom: 1,
-        borderColor: grey[500],
+        fontWeight: 'bold',
+        // color: 'white',
+        // borderBottom: 1,
+        borderColor: grey[600],
     };
 };
 
@@ -44,7 +47,6 @@ const DetailView = (props) => {
         axios
             .get(`/api/${pageType}/dailydata/${selectDate}`)
             .then((res) => {
-                console.log(res.data);
                 SetTableDatas(res.data);
 
                 toast.success('明細データ取得完了。', { id: toastId });
@@ -63,7 +65,15 @@ const DetailView = (props) => {
     const RowHeader = () => {
         let rowCnt = 0;
         return (
-            <Box zIndex={1} position={'sticky'} top={0} display={'flex'}>
+            <Box
+                zIndex={1}
+                backgroundColor={'black'}
+                color={'white'}
+                minWidth={minWidth}
+                position={'sticky'}
+                top={0}
+                display={'flex'}
+            >
                 <Typography pl={1} sx={rowHeaderOption(rowCnt++)}>
                     ショップコード
                 </Typography>
@@ -84,51 +94,35 @@ const DetailView = (props) => {
 
         html.push(RowHeader());
         tableDatas.forEach((data, index) => {
+            let bgColor = 'white';
+            if (index % 2 == 0) bgColor = grey[100];
             html.push(
-                <DetailRow data={data} pageType={pageType} index={index} />
+                <DetailRow
+                    data={data}
+                    bgColor={bgColor}
+                    minWidth={minWidth}
+                    rowWidth={rowWidth}
+                    pageType={pageType}
+                    index={index}
+                />
             );
         });
 
         return html;
     };
 
-    // const ColorList = () => {
-    //     const BoxOption = {
-    //         width: 10,
-    //         height: 10,
-    //         backgroundColor: grey[200],
-    //     };
-    //     const textOption = {
-    //         fontSize: 12,
-    //     };
-    //     return (
-    //         <Box mb={2} display={'flex'} gap={2}>
-    //             <Box display={'flex'}>
-    //                 <Box sx={BoxOption}></Box>
-    //                 <Typography sx={textOption}>タクシー</Typography>
-    //             </Box>
-    //             <Box display={'flex'}>
-    //                 <Box sx={BoxOption}></Box>
-    //                 <Typography sx={textOption}></Typography>
-    //             </Box>{' '}
-    //             <Box display={'flex'}>
-    //                 <Box sx={BoxOption}></Box>
-    //                 <Typography sx={textOption}></Typography>
-    //             </Box>{' '}
-    //             <Box display={'flex'}>
-    //                 <Box sx={BoxOption}></Box>
-    //                 <Typography sx={textOption}></Typography>
-    //             </Box>
-    //         </Box>
-    //     );
-    // };
-
     return (
-        <Box width={'100%'} backgroundColor={grey[200]} height={'100%'}>
+        <Box
+            width={'100%'}
+            backgroundColor={grey[200]}
+            display={'flex'}
+            flexDirection={'column'}
+            height={'100%'}
+        >
             {/* HEADER ======================================== */}
             <Box
                 sx={{
-                    height: '8%',
+                    height: '70',
                     position: 'sticky',
                     top: 0,
                     left: 0,
@@ -167,12 +161,12 @@ const DetailView = (props) => {
             <Box
                 border={1}
                 borderRadius={2}
-                mt={2}
-                mx={2}
+                m={2}
+                // px={2}
                 borderColor={grey[400]}
                 boxShadow={2}
                 backgroundColor={'white'}
-                height={'88%'}
+                height={'100%'}
                 overflow={'auto'}
             >
                 <Rows />

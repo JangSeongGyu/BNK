@@ -14,7 +14,6 @@ import Taxi from './pages/Taxi';
 import SPTheme from './SPTheme';
 import { ThemeProvider } from '@mui/material';
 import TXTheme from './TXTheme';
-import EGTheme from './EGTheme';
 import DetailView from './pages/DetailView';
 import Master from './pages/Master';
 import ErrorPage from './pages/ErrorPage';
@@ -138,7 +137,7 @@ const Router = () => {
                     path="*"
                     element={
                         <ThemeProvider theme={SPTheme}>
-                            <ErrorPage />{' '}
+                            <ErrorPage />
                         </ThemeProvider>
                     }
                 />

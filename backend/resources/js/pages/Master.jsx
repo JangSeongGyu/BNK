@@ -32,11 +32,17 @@ const Master = (props) => {
     const dialogRef = useRef();
 
     return (
-        <Box backgroundColor={grey[200]} height={'100%'} width={'100%'}>
+        <Box
+            backgroundColor={grey[200]}
+            display={'flex'}
+            flexDirection={'column'}
+            height={'100%'}
+            width={'100%'}
+        >
             <Header page={1} pageType={pageType} />
             <Box
                 backgroundColor={'white'}
-                height={'80%'}
+                height={'100%'}
                 m={2}
                 p={2}
                 border={1}

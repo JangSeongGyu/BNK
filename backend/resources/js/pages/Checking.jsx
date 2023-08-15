@@ -47,7 +47,6 @@ const Checking = (props) => {
     const navigate = useNavigate();
 
     const dataClear = () => {
-        console.log('clear');
         for (let i = 0; i < maxTask; i++) {
             boxRef.current[i].style.backgroundColor = grey[300];
             inputRef.current[i].disabled = true;
@@ -221,11 +220,16 @@ const Checking = (props) => {
     };
 
     return (
-        <>
+        <Box
+            height={'100%'}
+            minWidth={1200}
+            display={'flex'}
+            flexDirection={'column'}
+        >
             {/* Header */}
             <Box
                 sx={{
-                    height: '7%',
+                    height: 50,
                     position: 'sticky',
                     top: 0,
                     left: 0,
@@ -254,43 +258,14 @@ const Checking = (props) => {
                         </Typography>
                     </Box>
                 </ButtonBase>
-
-                {pageType == 'supermarket' && (
-                    <ButtonBase
-                        color="black"
-                        onClick={() => {
-                            navigate(`/${pageType}/checking2/${selectDate}`);
-                        }}
-                    >
-                        <Box
-                            border={1}
-                            px={1}
-                            borderRadius={1}
-                            ml={4}
-                            sx={{
-                                ':hover': {
-                                    color: pink[500],
-                                    backgroundColor: 'white',
-                                },
-                            }}
-                            display={'flex'}
-                            alignItems={'center'}
-                        >
-                            <Typography fontWeight={'bold'} fontSize={24}>
-                                二次検品
-                            </Typography>
-                            <ArrowForwardIcon sx={{ fontSize: 32 }} />
-                        </Box>
-                    </ButtonBase>
-                )}
             </Box>
             {/* Content */}
-
-            <Box height={'90%'}>
+            <Box height={'100%'} display={'flex'} flexDirection={'column'}>
                 <Box
                     width={'100%'}
+                    minWidth={950}
                     px={4}
-                    height={'10%'}
+                    height={80}
                     display={'flex'}
                     alignItems={'center'}
                 >
@@ -303,9 +278,42 @@ const Checking = (props) => {
                         alignItems={'center'}
                         justifyContent={'space-between'}
                     >
-                        <Typography fontSize={24} ml={4} fontWeight={'bold'}>
-                            出荷日 : {selectDate}
-                        </Typography>
+                        <Box display={'flex'} gap={3} alignItems={'center'}>
+                            <Typography
+                                fontSize={24}
+                                ml={4}
+                                fontWeight={'bold'}
+                            >
+                                出荷日 : {selectDate}
+                            </Typography>
+                            {pageType == 'supermarket' && (
+                                <ButtonBase
+                                    onClick={() => {
+                                        navigate(
+                                            `/${pageType}/checking2/${selectDate}`
+                                        );
+                                    }}
+                                >
+                                    <Box
+                                        sx={BtnOption}
+                                        borderRadius={1}
+                                        px={2}
+                                        display={'flex'}
+                                        alignItems={'center'}
+                                    >
+                                        <Typography
+                                            fontWeight={'bold'}
+                                            fontSize={24}
+                                        >
+                                            二次検品
+                                        </Typography>
+                                        <ArrowForwardIcon
+                                            sx={{ fontSize: 32 }}
+                                        />
+                                    </Box>
+                                </ButtonBase>
+                            )}
+                        </Box>
                         {completeText != '' && (
                             <Typography
                                 border={2}
@@ -328,14 +336,7 @@ const Checking = (props) => {
 
                 <Divider variant="middle" />
                 {/* MIDDLE LIST */}
-                <Box
-                    height={'10%'}
-                    gap={2}
-                    mx={4}
-                    mt={1}
-                    mb={2}
-                    display={'flex'}
-                >
+                <Box height={80} gap={2} mx={4} mt={1} mb={2} display={'flex'}>
                     <Box minWidth={200} width={'15%'}>
                         <Typography>注文明細No</Typography>
                         <Box sx={CheckingOutputBoxOption}>
@@ -377,7 +378,7 @@ const Checking = (props) => {
 
                 <Divider variant="middle" />
                 <Box
-                    height={'80%'}
+                    height={'100%'}
                     minWidth={1200}
                     alignItems={'center'}
                     display={'flex'}
@@ -385,7 +386,7 @@ const Checking = (props) => {
                     backgroundColor={grey[100]}
                 >
                     <Box
-                        height={'80%'}
+                        height={'70%'}
                         width={'100%'}
                         mx={4}
                         mt={2}
@@ -493,7 +494,7 @@ const Checking = (props) => {
                     </Box>
                 </Box>
             </Box>
-        </>
+        </Box>
     );
 };
 export default Checking;

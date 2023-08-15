@@ -37,7 +37,6 @@ const Taxi = (props) => {
             .get(`/api/${pageType}/order/`)
             .then((res) => {
                 SetSFDatas(res.data);
-                console.log(res.data);
             })
             .catch((e) => {});
     };
@@ -60,7 +59,6 @@ const Taxi = (props) => {
         axios
             .get(`/api/${pageType}/backlogdata/`)
             .then((res) => {
-                console.log(res.data);
                 SetLogDatas(res.data[0]);
                 SetSelectDate(data.selectDate);
             })
@@ -95,7 +93,6 @@ const Taxi = (props) => {
             parseInt(logDatas.通常) +
             parseInt(logDatas.通常P);
 
-        console.log(logDatas);
         if (logDataSum == 0 || logDatas.length == 0)
             toast.error('処理するデータがありません');
         else SetOpen(true);
@@ -116,7 +113,6 @@ const Taxi = (props) => {
             .then((res) => {
                 toast.success('データ取得完了。', { id: toastId });
                 SetIsData(true);
-                console.log(res.data);
             })
             .catch((e) => {
                 let errMsg = '';
@@ -130,9 +126,15 @@ const Taxi = (props) => {
     };
 
     return (
-        <Box height={'100%'} backgroundColor={grey[200]}>
+        <Box
+            height={'100%'}
+            display={'flex'}
+            flexDirection={'column'}
+            minWidth={1300}
+            backgroundColor={grey[200]}
+        >
             <Header page={0} pageType={pageType} />
-            <Box height={'80%'} sx={{ display: 'flex' }}>
+            <Box height={'100%'} p={2} gap={2} sx={{ display: 'flex' }}>
                 <Box sx={{ width: '60%', height: '100%', minWidth: 700 }}>
                     <Box
                         sx={{
@@ -207,12 +209,7 @@ const Taxi = (props) => {
                         handleOpen={handleOpen}
                     />
                 </Box>
-                <Box
-                    mt={1}
-                    sx={{ width: '40%' }}
-                    minWidth={450}
-                    height={'100%'}
-                >
+                <Box sx={{ width: '40%' }} minWidth={500} height={'100%'}>
                     {isData && (
                         <MarketSideList
                             pageType={pageType}

@@ -57,7 +57,6 @@ const PrintOutBtnList = (props) => {
         axios
             .get(`/api/${pageType}/label/` + selectDate)
             .then((res) => {
-                console.log(res.data);
                 SetLabelData(res.data);
 
                 toast.success('梱包ラベル出力完了。', { id: toastId });
@@ -77,8 +76,6 @@ const PrintOutBtnList = (props) => {
         axios
             .get(`/api/${pageType}/totalpick/` + selectDate)
             .then((res) => {
-                console.log(res.data);
-                console.log({ supermarket: res.data });
                 if (pageType == 'supermarket')
                     SetYamaData({ supermarket: res.data });
                 else SetYamaData(res.data);
@@ -101,7 +98,6 @@ const PrintOutBtnList = (props) => {
         axios
             .get(`/api/${pageType}/jobticket/` + selectDate)
             .then((res) => {
-                console.log(res.data);
                 SetJobData(res.data);
                 toast.success('Jobチケット出力完了。', { id: toastId });
             })
@@ -165,7 +161,6 @@ const PrintOutBtnList = (props) => {
                         documentTitle={`Jobチケット_${fileDate()}`}
                         onBeforeGetContent={() => {
                             return new Promise((resolve) => {
-                                console.log('jobData', jobData);
                                 if (jobData.length == 0) {
                                     promiseJobRef.current = resolve;
                                     JobPrinting();

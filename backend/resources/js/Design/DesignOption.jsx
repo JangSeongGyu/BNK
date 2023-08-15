@@ -34,7 +34,7 @@ export const BtnOption = () => {
         border: 1,
         borderColor: 'primary.main',
         color: 'primary.main',
-        fontSize: { lg: 18, md: 16 },
+        fontSize: 18,
         fontWeight: 'bold',
         fontFamily: '游ゴシック',
         backgroundColor: 'white',

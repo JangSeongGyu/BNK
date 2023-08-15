@@ -18,7 +18,6 @@ const BizlogiImportBtn = (props) => {
     const [updateData, setUpdateData] = useState(null);
 
     const putWKOrder = async (json) => {
-        // waitCircleRef.current.handleOpen();
         let errCnt = 0;
         let maxCnt = json['クール区分'].length;
 
@@ -59,18 +58,45 @@ const BizlogiImportBtn = (props) => {
 
         setJson(null);
     };
+
+    const CallTeams = () => {
+        const toastId = toast.loading('Teams発信中...');
+        axios
+            .post(`/api/${pageType}/webhook/${selectDate}`, {
+                category: '出荷指示完了',
+            })
+            .then((res) => {
+                toast.success('Teams発信完了', { id: toastId });
+            })
+            .catch((e) => {
+                let errMsg = '';
+                if (e.response == null) {
+                    errMsg = 'Teamsサーバー接続失敗。';
+                } else {
+                    errMsg = e.response.data.message;
+                }
+                toast.custom(errMsg, { type: 'closeError', id: toastId });
+            });
+    };
+
+    CallTeams();
+
     const tsubushi = async () => {
+        const toastId = toast.loading('つぶし実行中...');
         await axios
             .put(`/api/${pageType}/tsubushi/${selectDate}`)
-            .then((response) => {})
+            .then((res) => {
+                toast.success('つぶし完了', { id: toastId });
+                CallTeams();
+            })
             .catch((e) => {
+                let errMsg = '';
                 if (e.response == null) {
-                    return alert('接続がタイムアウトしました。');
+                    errMsg = 'つぶしサーバー接続失敗。';
+                } else {
+                    errMsg = e.response.data.message;
                 }
-                if (e.response.status >= 500) {
-                    const errors = e.response.data;
-                    return alert(errors.message);
-                }
+                toast.custom(errMsg, { type: 'closeError', id: toastId });
             });
     };
 

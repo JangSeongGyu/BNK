@@ -5,31 +5,39 @@ namespace App\Http\Controllers\Taxi;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
 
+use Illuminate\Http\Request;
 use App\Http\Requests\Taxi\UpdateInquiryNoFormRequest;
 use App\Http\Requests\Taxi\CreateMonthlyNumberFormRequest;
 
 use App\MyDefined\ValueObject\General\DateValueObject;
+use App\MyDefined\ValueObject\Taxi\PouchTypeValueObject;
 use App\MyDefined\ValueObject\General\SagawaInquiryNoValueObject;
 use App\MyDefined\ValueObject\Taxi\ShipmentNoValueObject;
 use App\MyDefined\ValueObject\Taxi\CheckInquiryNoValueObject;
+use App\MyDefined\ValueObject\Taxi\CheckingTypeValueObject;
 use App\MyDefined\ValueObject\General\YearMonthValueObject;
 use App\MyDefined\ValueObject\General\OrderNoValueObject;
 
+use App\MyDefined\UseCase\Taxi\GetOrderDataUseCase;
 use App\MyDefined\UseCase\Taxi\CreateOrderDataUseCase;
-use App\MyDefined\UseCase\Taxi\GetBacklogDataUseCase;
 use App\MyDefined\UseCase\Taxi\UpdateShipmentUseCase;
-use App\MyDefined\UseCase\Taxi\GetDailyShipmentDataUseCase;
+use App\MyDefined\UseCase\Taxi\GetBacklogDataUseCase;
 use App\MyDefined\UseCase\Taxi\GetBizlogiUseCase;
-use App\MyDefined\UseCase\Taxi\GetDTFUseCase;
-use App\MyDefined\UseCase\Taxi\GetLabelUseCase;
+use App\MyDefined\UseCase\Taxi\GetDailyShipmentDataUseCase;
+use App\MyDefined\UseCase\Taxi\UpdateShipmentDataUseCase;
+use App\MyDefined\UseCase\Taxi\GetBetweenShipmentDataUseCase;
+use App\MyDefined\UseCase\Taxi\GetBetweenShipmentCountUseCase;
+use App\MyDefined\UseCase\Taxi\GetQRDataUseCase;
 use App\MyDefined\UseCase\Taxi\GetJobTicketUseCase;
 use App\MyDefined\UseCase\Taxi\GetTotalPickUseCase;
 use App\MyDefined\UseCase\Taxi\UpdateInquiryNoUseCase;
 use App\MyDefined\UseCase\Taxi\UpdateTsubushiUseCase;
+use App\MyDefined\UseCase\Taxi\GetDataByInquiryNoUseCase;
 use App\MyDefined\UseCase\Taxi\UpdateFirstPackingUseCase;
 use App\MyDefined\UseCase\Taxi\CreateMonthlyNumberUseCase;
-use App\MyDefined\UseCase\Taxi\GetMonthlyDataUseCase;
+use App\MyDefined\UseCase\Taxi\GetMonthlyNumberUseCase;
 use App\MyDefined\UseCase\Taxi\GetAllDataUseCase;
+use App\MyDefined\UseCase\Taxi\PostTeamsWebhookUseCase;
 
 /**
  * 楽天スーパーコントローラー
@@ -37,6 +45,19 @@ use App\MyDefined\UseCase\Taxi\GetAllDataUseCase;
 
 class TaxiController extends Controller
 {
+    /**
+     * [GET]SFOrderデータ取得
+     *
+     * @param GetOrderDataUseCase $GetOrderDataUseCase
+     */
+
+    public function getOrderData(
+        GetOrderDataUseCase $GetOrderDataUseCase,
+    ){
+        $orderData = $GetOrderDataUseCase->execute();
+        return new JsonResponse($orderData, 200, [], JSON_UNESCAPED_UNICODE);
+    }
+
     /**
      * [POST]注文データインポート
      *
@@ -70,11 +91,13 @@ class TaxiController extends Controller
      */
 
     public function updateShipment(
+        Request $request,
         UpdateShipmentUseCase $UpdateShipmentUseCase,
         $shipmentDate
     ){
         $DateVO = DateValueObject::create($shipmentDate);
-        $UpdateShipmentUseCase->execute($DateVO);
+        $PouchTypeVO = PouchTypeValueObject::create($request->input('pouch'));
+        $UpdateShipmentUseCase->execute($DateVO, $PouchTypeVO);
         return new JsonResponse();
     }
 
@@ -88,8 +111,56 @@ class TaxiController extends Controller
         $shipmentDate
     ){
         $DateVO = DateValueObject::create($shipmentDate);
-        $bizlogiData = $GetDailyShipmentDataUseCase->execute($DateVO);
-        return new JsonResponse($bizlogiData);
+        $dailyData = $GetDailyShipmentDataUseCase->execute($DateVO);
+        return new JsonResponse($dailyData, 200, [], JSON_UNESCAPED_UNICODE);
+    }
+
+    /**
+     * [PUT]出荷日変更
+     * @param UpdateDailyShipmentDataUseCase $UpdateDailyShipmentDataUseCase
+     */
+
+     public function updateDailyShipmentData(
+        Request $request,
+        UpdateShipmentDataUseCase $UpdateShipmentDataUseCase,
+        $shipmentDate
+    ){
+        $DateVO = DateValueObject::create($shipmentDate);
+        $ChangeDateVO = DateValueObject::create($request->input('change_date'));
+        $UpdateShipmentDataUseCase->execute($DateVO, $ChangeDateVO);
+        return new JsonResponse('200', 200, [], JSON_UNESCAPED_UNICODE);
+    }
+
+    /**
+     * [GET]期間別データ出力
+     * @param GetBetweenShipmentDataUseCase $GetBetweenShipmentDataUseCase
+     */
+
+    public function getBetweenShipmentData(
+        GetBetweenShipmentDataUseCase $GetBetweenShipmentDataUseCase,
+        $startDate,
+        $endDate
+    ){
+        $StartDateVO = DateValueObject::create($startDate);
+        $EndDateVO = DateValueObject::create($endDate);
+        $dailyData = $GetBetweenShipmentDataUseCase->execute($StartDateVO, $EndDateVO);
+        return new JsonResponse($dailyData, 200, [], JSON_UNESCAPED_UNICODE);
+    }
+
+    /**
+     * [GET]期間別出荷件数出力
+     * @param GetBetweenShipmentCountUseCase $GetBetweenShipmentCountUseCase
+     */
+
+    public function getBetweenShipmentCount(
+        GetBetweenShipmentCountUseCase $GetBetweenShipmentCountUseCase,
+        $startDate,
+        $endDate
+    ){
+        $StartDateVO = DateValueObject::create($startDate);
+        $EndDateVO = DateValueObject::create($endDate);
+        $countData = $GetBetweenShipmentCountUseCase->execute($StartDateVO, $EndDateVO);
+        return new JsonResponse($countData, 200, [], JSON_UNESCAPED_UNICODE);
     }
 
     /**
@@ -103,35 +174,21 @@ class TaxiController extends Controller
     ){
         $DateVO = DateValueObject::create($shipmentDate);
         $bizlogiData = $GetBizlogiUseCase->execute($DateVO);
-        return new JsonResponse($bizlogiData);
+        return new JsonResponse($bizlogiData, 200, [], JSON_UNESCAPED_UNICODE);
     }
 
     /**
-     * [GET]DTF連携データ出力
-     * @param GetDTFUseCase $GetDTFUseCase
+     * [GET]QR用データ出力
+     * @param GetQRDataUseCase $GetQRDataUseCase
      */
 
-    public function getDTF(
-        GetDTFUseCase $GetDTFUseCase,
+    public function getQRData(
+        GetQRDataUseCase $GetQRDataUseCase,
         $shipmentDate
     ){
         $DateVO = DateValueObject::create($shipmentDate);
-        $dtfData = $GetDTFUseCase->execute($DateVO);
-        return new JsonResponse($dtfData);
-    }
-
-    /**
-     * [GET]梱包ラベル用データ出力
-     * @param GetLabelUseCase $GetLabelUseCase
-     */
-
-    public function getLabel(
-        GetLabelUseCase $GetLabelUseCase,
-        $shipmentDate
-    ){
-        $DateVO = DateValueObject::create($shipmentDate);
-        $labelData = $GetLabelUseCase->execute($DateVO);
-        return new JsonResponse($labelData);
+        $dtfData = $GetQRDataUseCase->execute($DateVO);
+        return new JsonResponse($dtfData, 200, [], JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES);
     }
 
     /**
@@ -144,8 +201,8 @@ class TaxiController extends Controller
         $shipmentDate
     ){
         $DateVO = DateValueObject::create($shipmentDate);
-        $totalPickData = $GetTotalPickUseCase->execute($DateVO);
-        return new JsonResponse($totalPickData);
+        $TotalPick = $GetTotalPickUseCase->execute($DateVO);
+        return new JsonResponse($TotalPick, 200, [], JSON_UNESCAPED_UNICODE);
     }
 
     
@@ -160,7 +217,7 @@ class TaxiController extends Controller
     ){
         $DateVO = DateValueObject::create($shipmentDate);
         $jobTicketData = $GetJobTicketUseCase->execute($DateVO);
-        return new JsonResponse($jobTicketData);
+        return new JsonResponse($jobTicketData, 200, [], JSON_UNESCAPED_UNICODE);
     }
 
     /**
@@ -197,6 +254,24 @@ class TaxiController extends Controller
     }
 
     /**
+     * [GET]問合せ番号別データ出力
+     * @param GetDataByInquiryNoUseCase $GetDataByInquiryNoUseCase
+     */
+
+    public function getDataByInquiryNo(
+        Request $request,
+        GetDataByInquiryNoUseCase $GetDataByInquiryNoUseCase,
+        $shipmentDate,
+        $inquiryNo
+    ){
+        $DateVO = DateValueObject::create($shipmentDate);
+        $InquiryNoVO = CheckInquiryNoValueObject::create($inquiryNo);
+        $CheckingTypeVO = CheckingTypeValueObject::create($request->input('type'));
+        $data = $GetDataByInquiryNoUseCase->execute($DateVO, $InquiryNoVO, $CheckingTypeVO);
+        return new JsonResponse($data, 200, [], JSON_UNESCAPED_UNICODE);
+    }
+
+    /**
      * [PUT]一次梱包フラグUPDATE
      *
      * @param UpdateFirstPackingUseCase $UpdateFirstPackingUseCase
@@ -210,6 +285,7 @@ class TaxiController extends Controller
         $DateVO = DateValueObject::create($shipmentDate);
         $InquiryNoVO = CheckInquiryNoValueObject::create($barcode);
         $UpdateFirstPackingUseCase->execute($DateVO, $InquiryNoVO);
+        
         return new JsonResponse();
     }
 
@@ -232,16 +308,14 @@ class TaxiController extends Controller
     /**
      * [GET]月次集計
      *
-     * @param GetMonthlyDataUseCase $GetMonthlyDataUseCase
+     * @param GetMonthlyNumberUseCase $GetMonthlyNumberUseCase
      */
 
-    public function getMonthlyData(
-        GetMonthlyDataUseCase $GetMonthlyDataUseCase,
-        $yearMonth
+    public function getMonthlyNumber(
+        GetMonthlyNumberUseCase $GetMonthlyNumberUseCase
     ){
-        $YearMonthVO = YearMonthValueObject::create($yearMonth);
-        $monthlyData = $GetMonthlyDataUseCase->execute($YearMonthVO);
-        return new JsonResponse($monthlyData);
+        $monthlyData = $GetMonthlyNumberUseCase->execute();
+        return new JsonResponse($monthlyData, 200, [], JSON_UNESCAPED_UNICODE);
     }
 
     /**
@@ -254,6 +328,19 @@ class TaxiController extends Controller
         GetAllDataUseCase $GetAllDataUseCase,
     ){
         $allData = $GetAllDataUseCase->execute();
-        return new JsonResponse($allData);
+        return new JsonResponse($allData, 200, [], JSON_UNESCAPED_UNICODE);
+    }
+
+    /**
+     * [GET]TeamsにWebhook通知
+     *
+     * @param PostTeamsWebhookUseCase $PostTeamsWebhookUseCase
+     */
+
+    public function postWebhook(
+        PostTeamsWebhookUseCase $WebhookUseCase
+    ){
+        $allData = $WebhookUseCase->execute('test');
+        return new JsonResponse($allData, 200, [], JSON_UNESCAPED_UNICODE);
     }
 }

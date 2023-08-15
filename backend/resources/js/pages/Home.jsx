@@ -26,6 +26,7 @@ const Home = (props) => {
             height={'100%'}
             display={'flex'}
             flexDirection={'column'}
+            minWidth={1000}
         >
             <Header pageType={pageType} disableList={true} />
             <Box

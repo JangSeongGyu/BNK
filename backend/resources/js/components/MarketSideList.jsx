@@ -4,20 +4,12 @@ import { red } from '@mui/material/colors';
 import SelectDateCard from './SelectDateCard';
 import PrintOutBtnList from './PrintOutBtnList';
 import BizlogiBtnList from './BizlogiComponent/BizlogiBtnList';
-import DesignOption from '../Design/DesignOption';
 import CheckingList from './CheckingList';
-
-const BorderOption = DesignOption('BorderOption');
-const BtnOption = DesignOption('BtnOption');
 
 const MarketSideList = (props) => {
     const selectDate = props.selectDate;
     const pageType = props.pageType;
     const isData = props.isData;
-    // const [dailyData, SetDailyData] = useState([]);
-    // useEffect(() => {
-    //     SetDailyData(props.dailyData);
-    // }, [props.dailyData]);
 
     const SideList = () => {
         if (isData)
@@ -41,7 +33,7 @@ const MarketSideList = (props) => {
     };
 
     return (
-        <Box sx={{ px: 2 }}>
+        <Box>
             <SideList></SideList>
         </Box>
     );

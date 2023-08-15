@@ -1,22 +1,31 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Typography, Box, Button, Divider, TextField } from '@mui/material';
-import Header from '../components/Header';
-import DesignOption from '../Design/DesignOption';
+import {
+    Typography,
+    Box,
+    Button,
+    Divider,
+    TextField,
+    ButtonBase,
+} from '@mui/material';
+import {
+    BtnOption,
+    CheckingListInputOption,
+    CheckingListBoxOption,
+    CheckingOutputBoxOption,
+    CheckingListResultOption,
+    CheckingListResultTextOption,
+} from '../Design/DesignOption';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ForwardIcon from '@mui/icons-material/Forward';
 import { green, grey, pink, red } from '@mui/material/colors';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import barcode from '../images/barcode.png';
 import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
-
-const insListOption = DesignOption('insListOption');
-const insOutputOption = DesignOption('insOutputOption');
-const insListResultOption = DesignOption('insListResultOption');
-const BtnOption = DesignOption('BtnOption');
+import Header from '../components/HeaderCompnent/Header';
 
 const Checking = (props) => {
-    const insListResultTypoOption = DesignOption('insListResultTypoOption');
-    const insTFOption = DesignOption('insTFOption');
-
     const pageType = props.pageType;
     const [MsgBox, SetMsgBox] = useState({
         0: '未完了',
@@ -24,7 +33,7 @@ const Checking = (props) => {
         2: '未完了',
     });
     const [inputData, SetInputData] = useState({});
-    const [taskCnt, SetTaskCnt] = useState(0);
+    const [taskCnt, SetTaskCnt] = useState(10);
     const [maxWorkCount, SetMaxWorkCount] = useState(0);
     const [WorkCount, SetWorkCount] = useState(0);
     const boxRef = useRef(new Array());
@@ -32,15 +41,16 @@ const Checking = (props) => {
     const btnRef = useRef();
     const { selectDate } = useParams();
     const [searchData, SetSearchData] = useState([]);
+    const [completeText, SetCompleteText] = useState('');
     const maxTask = 3;
 
+    const navigate = useNavigate();
+
     const dataClear = () => {
-        console.log('clear');
         for (let i = 0; i < maxTask; i++) {
             boxRef.current[i].style.backgroundColor = grey[300];
             inputRef.current[i].disabled = true;
         }
-        SetTaskCnt(0);
         SetInputData({ 0: '', 1: '', 2: '' });
         SetMsgBox({ 0: '未完了', 1: '未完了', 2: '未完了' });
         focusing(0);
@@ -50,7 +60,6 @@ const Checking = (props) => {
     useEffect(() => {
         getWorkCount();
         inputLock();
-        focusing(0);
     }, []);
 
     const inputLock = () => {
@@ -59,14 +68,21 @@ const Checking = (props) => {
         }
     };
 
+    const printComplete = () => {
+        SetCompleteText('完了');
+        inputLock();
+        SetTaskCnt(maxTask + 1);
+        btnRef.current.hidden = 'true';
+    };
+
     const getWorkCount = () => {
         let cnt = 0;
-        const toastid = toast.loading('作業進捗更新中...');
+        const toastId = toast.loading('作業進捗更新中...');
         SetWorkCount(0);
         axios
             .get(`/api/${pageType}/dailydata/${selectDate}`)
             .then((res) => {
-                toast.success('作業進捗更新できました。', { id: toastid });
+                toast.success('作業進捗更新できました。', { id: toastId });
                 SetMaxWorkCount(res.data.length);
                 res.data.forEach((data) => {
                     if (data.一次梱包フラグ == 1 || data.二次梱包フラグ == 1) {
@@ -76,100 +92,106 @@ const Checking = (props) => {
                 SetWorkCount(cnt);
                 // 全部処理したら実行
                 if (cnt == res.data.length) {
-                    inputLock();
-                    SetTaskCnt(5);
-                    console.log(btnRef);
-                    btnRef.current.hidden = 'true';
+                    printComplete();
+                } else {
+                    focusing(0);
                 }
             })
             .catch((e) => {
-                toast.error('作業進捗の更新に失敗しました。', { id: toastid });
+                let errMsg = '';
+                if (e.response == null) {
+                    errMsg = '作業進捗サーバー接続失敗。';
+                } else if (e.response.status == 410) {
+                    errMsg = '進捗情報がありません。';
+                } else {
+                    errMsg = e.response.data.message;
+                }
+                printComplete();
+                toast.custom(errMsg, { type: 'closeError', id: toastId });
             });
     };
 
-    const focusing = (nuer) => {
-        console.log(inputRef);
-        inputRef.current[nuer].disabled = false;
-        inputRef.current[nuer].focus();
+    const focusing = (number) => {
+        SetTaskCnt(number);
+        inputRef.current[number].disabled = false;
+        inputRef.current[number].focus();
     };
 
     const GetNumberData = () => {
         axios
             .get(
-                `/api/${pageType}/checkingdata/${selectDate}/${inputData['0']}`
+                `/api/${pageType}/checkingdata/${selectDate}/${inputData[0]}?type=1`
             )
             .then((res) => {
                 SetSearchData(res.data[0]);
+                ResultOK();
             })
             .catch((e) => {
                 let errMsg = ErrorCheck(e);
-                ResultError(`入力番号:${inputData['0']}
+                ResultError(`入力番号:${inputData[0]}
                 ${errMsg}`);
             });
     };
 
     const is_number = (text) => {
         const regex = /^[0-9]+$/;
-        if (regex.test(text)) {
-            return true;
-        }
-        return false;
+        return regex.test(text);
     };
 
     const handleKeyPress = (e) => {
         const event = e;
         if (event.key === 'Enter') {
+            SetMsgBox((prevState) => ({
+                ...prevState,
+                [taskCnt]: 'サーバ接続中…',
+            }));
+
             // 入力データがない時
             if (inputData[taskCnt] == '' || inputData[taskCnt] == null) {
-                ResultError('入力してください');
+                ResultError('内容を入力してください');
                 return;
             }
 
             if (taskCnt == 0) {
                 GetNumberData();
             } else if (taskCnt == 1) {
-                if (inputData['0'] == inputData['1']) {
+                let checkData = inputData[0];
+                if (pageType == 'taxi') {
+                    checkData = inputData[0].slice(0, -3);
+                }
+
+                if (checkData == inputData[1]) {
                     ResultOK();
                 } else {
-                    ResultError(`入力番号:${inputData['1']}
+                    ResultError(`入力番号:${inputData[1]}
                     問い合わせ番号が違います。`);
                 }
             } else if (taskCnt == 2) {
                 // 数量なのかチェック
-                if (!is_number(inputData['2'])) {
+                if (!is_number(inputData[2])) {
                     ResultError('数量を入力してください');
                     return;
                 }
 
-                SetMsgBox((prevState) => ({
-                    ...prevState,
-                    [taskCnt]: 'サーバ接続中…',
-                }));
-
                 // 数量がデータベースと同じだったら実行
-                if (searchData.数量 == inputData['2']) {
-                    const toastid = toast.loading('出荷処理中...');
+                if (searchData.数量 == inputData[2]) {
                     axios
                         .put(
-                            `/api/${pageType}/firstpacking/${selectDate}/${inputData['0']}`
+                            `/api/${pageType}/firstpacking/${selectDate}/${inputData[0]}`
                         )
                         .then((res) => {
-                            toast.success('検品処理完了しました。', {
-                                id: toastid,
-                            });
+                            toast.success('検品処理完了しました。');
                             getWorkCount();
                             dataClear();
                         })
                         .catch((e) => {
                             let errMsg = ErrorCheck(e);
-
-                            ResultError('エラー：' + errMsg);
-                            toast.error('error', { id: toastid });
+                            ResultError(errMsg);
                         });
                 } else {
                     ResultError(
-                        `入力数量:${inputData['2']} 
-                        入力数量数量が違います。`
+                        `入力数量:${inputData[2]} 
+                        入力数量が違います。`
                     );
                 }
             }
@@ -181,7 +203,6 @@ const Checking = (props) => {
         SetMsgBox((prevState) => ({ ...prevState, [taskCnt]: '完了' }));
         boxRef.current[taskCnt].style.backgroundColor = green[200];
         focusing(taskCnt + 1);
-        SetTaskCnt(taskCnt + 1);
     };
 
     const ResultError = (text) => {
@@ -199,13 +220,52 @@ const Checking = (props) => {
     };
 
     return (
-        <>
-            <Header pageType={pageType} disableList="false" />
-            <Box height={'90%'}>
+        <Box
+            height={'100%'}
+            minWidth={1200}
+            display={'flex'}
+            flexDirection={'column'}
+        >
+            {/* Header */}
+            <Box
+                sx={{
+                    height: 50,
+                    position: 'sticky',
+                    top: 0,
+                    left: 0,
+                    color: 'primary.dark',
+                    backgroundColor: 'primary.main',
+                    py: 1,
+                    px: 1,
+                    boxShadow: 2,
+                    display: 'flex',
+                    alignItems: 'center',
+                }}
+            >
+                <ButtonBase
+                    color="black"
+                    onClick={() => {
+                        navigate(`/${pageType}`);
+                    }}
+                >
+                    <Box
+                        sx={{ ':hover': { color: grey[300] } }}
+                        display={'flex'}
+                    >
+                        <ArrowBackIcon sx={{ fontSize: 32 }} />
+                        <Typography fontWeight={'bold'} fontSize={24}>
+                            戻る
+                        </Typography>
+                    </Box>
+                </ButtonBase>
+            </Box>
+            {/* Content */}
+            <Box height={'100%'} display={'flex'} flexDirection={'column'}>
                 <Box
                     width={'100%'}
+                    minWidth={950}
                     px={4}
-                    height={'8%'}
+                    height={80}
                     display={'flex'}
                     alignItems={'center'}
                 >
@@ -218,11 +278,55 @@ const Checking = (props) => {
                         alignItems={'center'}
                         justifyContent={'space-between'}
                     >
-                        <Typography fontSize={24} ml={4} fontWeight={'bold'}>
-                            出荷日 : {selectDate}
-                        </Typography>
-
-                        <Box ref={btnRef} width={'20%'}>
+                        <Box display={'flex'} gap={3} alignItems={'center'}>
+                            <Typography
+                                fontSize={24}
+                                ml={4}
+                                fontWeight={'bold'}
+                            >
+                                出荷日 : {selectDate}
+                            </Typography>
+                            {pageType == 'supermarket' && (
+                                <ButtonBase
+                                    onClick={() => {
+                                        navigate(
+                                            `/${pageType}/checking2/${selectDate}`
+                                        );
+                                    }}
+                                >
+                                    <Box
+                                        sx={BtnOption}
+                                        borderRadius={1}
+                                        px={2}
+                                        display={'flex'}
+                                        alignItems={'center'}
+                                    >
+                                        <Typography
+                                            fontWeight={'bold'}
+                                            fontSize={24}
+                                        >
+                                            二次検品
+                                        </Typography>
+                                        <ArrowForwardIcon
+                                            sx={{ fontSize: 32 }}
+                                        />
+                                    </Box>
+                                </ButtonBase>
+                            )}
+                        </Box>
+                        {completeText != '' && (
+                            <Typography
+                                border={2}
+                                borderRadius={2}
+                                px={2}
+                                color={red[400]}
+                                fontWeight={'bold'}
+                                fontSize={32}
+                            >
+                                {completeText}
+                            </Typography>
+                        )}
+                        <Box ref={btnRef} width={300}>
                             <Button onClick={() => dataClear()} sx={BtnOption}>
                                 データクリア
                             </Button>
@@ -232,24 +336,30 @@ const Checking = (props) => {
 
                 <Divider variant="middle" />
                 {/* MIDDLE LIST */}
-                <Box height={'10%'} gap={2} mx={4} my={2} display={'flex'}>
+                <Box height={80} gap={2} mx={4} mt={1} mb={2} display={'flex'}>
                     <Box minWidth={200} width={'15%'}>
                         <Typography>注文明細No</Typography>
-                        <Box sx={insOutputOption}>{searchData.注文No}</Box>
+                        <Box sx={CheckingOutputBoxOption}>
+                            {searchData.注文No}
+                        </Box>
                     </Box>
                     <Box minWidth={250} width={'25%'}>
                         <Typography>宛名</Typography>
-                        <Box sx={insOutputOption}>{searchData.シーン名}</Box>
+                        <Box sx={CheckingOutputBoxOption}>
+                            {searchData.シーン名}
+                        </Box>
                     </Box>
                     <Box minWidth={500} width={'45%'}>
                         <Typography>納品先住所</Typography>
-                        <Box sx={insOutputOption}>{searchData.納品先住所}</Box>
+                        <Box sx={CheckingOutputBoxOption}>
+                            {searchData.納品先住所}
+                        </Box>
                     </Box>
                     <Box minWidth={150} width={'10%'}>
                         <Typography>作業進捗</Typography>
                         <Box
                             justifyContent={'center'}
-                            sx={insOutputOption}
+                            sx={CheckingOutputBoxOption}
                             display={'flex'}
                         >
                             <Typography
@@ -268,26 +378,22 @@ const Checking = (props) => {
 
                 <Divider variant="middle" />
                 <Box
-                    height={'80%'}
-                    width={'100%'}
+                    height={'100%'}
+                    minWidth={1200}
                     alignItems={'center'}
                     display={'flex'}
                     justifyContent={'center'}
                     backgroundColor={grey[100]}
                 >
                     <Box
-                        height={'80%'}
-                        width={'90%'}
+                        height={'70%'}
+                        width={'100%'}
                         mx={4}
                         mt={2}
                         display={'flex'}
                     >
                         {/* バーコードリスト 1 */}
-                        <Box
-                            sx={insListOption}
-                            border={2}
-                            borderColor={taskCnt == 0 ? red[500] : grey[500]}
-                        >
+                        <Box sx={CheckingListBoxOption(taskCnt, 0)}>
                             <Typography
                                 my={2}
                                 fontSize={20}
@@ -297,35 +403,31 @@ const Checking = (props) => {
                                 頭紙バーコード
                             </Typography>
                             <TextField
-                                value={inputData['0']}
+                                value={inputData[0]}
                                 onChange={TextFieldHandler}
                                 inputProps={{ onKeyPress: handleKeyPress }}
                                 inputRef={(ref) => inputRef.current.push(ref)}
                                 id="0"
                                 label="問い合わせNo"
-                                sx={insTFOption}
+                                sx={CheckingListInputOption}
                             />
                             <Box
                                 ref={(ref) => boxRef.current.push(ref)}
-                                sx={insListResultOption}
+                                sx={CheckingListResultOption}
                                 backgroundColor={grey[400]}
                                 height={100}
                             >
                                 <Typography
                                     whiteSpace={'pre-line'}
-                                    sx={insListResultTypoOption}
+                                    sx={CheckingListResultTextOption}
                                 >
-                                    {MsgBox['0']}
+                                    {String(MsgBox[0]).replace(/<br>/g, '\n')}
                                 </Typography>
                             </Box>
                         </Box>
                         <ForwardIcon sx={{ fontSize: 100, height: '100%' }} />
                         {/* バーコードリスト 2 */}
-                        <Box
-                            sx={insListOption}
-                            border={2}
-                            borderColor={taskCnt == 1 ? red[500] : grey[500]}
-                        >
+                        <Box sx={CheckingListBoxOption(taskCnt, 1)}>
                             <Typography
                                 my={2}
                                 fontSize={20}
@@ -335,34 +437,30 @@ const Checking = (props) => {
                                 梱包ラベルバーコード
                             </Typography>
                             <TextField
-                                value={inputData['1']}
+                                value={inputData[1]}
                                 onChange={TextFieldHandler}
                                 inputProps={{ onKeyPress: handleKeyPress }}
                                 inputRef={(ref) => inputRef.current.push(ref)}
                                 id="1"
                                 label="問い合わせNo"
-                                sx={insTFOption}
+                                sx={CheckingListInputOption}
                             />
                             <Box
                                 ref={(ref) => boxRef.current.push(ref)}
-                                sx={insListResultOption}
+                                sx={CheckingListResultOption}
                                 backgroundColor={grey[400]}
                             >
                                 <Typography
                                     whiteSpace={'pre-line'}
-                                    sx={insListResultTypoOption}
+                                    sx={CheckingListResultTextOption}
                                 >
-                                    {MsgBox['1']}
+                                    {MsgBox[1]}
                                 </Typography>
                             </Box>
                         </Box>
                         <ForwardIcon sx={{ fontSize: 100, height: '100%' }} />
                         {/* 数量入力 */}
-                        <Box
-                            sx={insListOption}
-                            border={2}
-                            borderColor={taskCnt == 2 ? red[500] : grey[500]}
-                        >
+                        <Box sx={CheckingListBoxOption(taskCnt, 2)}>
                             <Typography
                                 my={2}
                                 fontSize={20}
@@ -377,39 +475,34 @@ const Checking = (props) => {
                                 onChange={TextFieldHandler}
                                 inputProps={{ onKeyPress: handleKeyPress }}
                                 inputRef={(ref) => inputRef.current.push(ref)}
-                                value={inputData['2']}
+                                value={inputData[2]}
                                 id="2"
-                                sx={insTFOption}
+                                sx={CheckingListInputOption}
                             />
                             <Box
                                 ref={(ref) => boxRef.current.push(ref)}
-                                sx={insListResultOption}
+                                sx={CheckingListResultOption}
                             >
                                 <Typography
                                     whiteSpace={'pre-line'}
-                                    sx={insListResultTypoOption}
+                                    sx={CheckingListResultTextOption}
                                 >
-                                    {MsgBox['2']}
+                                    {MsgBox[2]}
                                 </Typography>
                             </Box>
                         </Box>
                     </Box>
                 </Box>
             </Box>
-        </>
+        </Box>
     );
 };
 export default Checking;
 
 function ErrorCheck(e) {
-    let errMsg = e.response.data.message;
-    let status = e.response.status;
-    if (status == 500) errMsg = e.response.data.message;
-    else if (status == 410) {
-        errMsg = e.response.data.message;
-    } else if (status == 409) {
-        errMsg = e.response.data.message;
-    } else errMsg = e.response.data.message;
-
+    let errMsg = '';
+    if (e.response == null) errMsg = 'サーバー接続失敗';
+    else if (e.response.status == 409) errMsg = '出荷済みの問い合わせ番号です';
+    else errMsg = e.response.data.message;
     return errMsg;
 }

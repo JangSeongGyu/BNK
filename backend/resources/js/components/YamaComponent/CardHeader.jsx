@@ -29,12 +29,14 @@ const CardListHeaderOption = () => {
 };
 
 const CardHeader = (props) => {
-    let taskCount = 0;
     const selectDate = props.selectDate;
-    let count = 0;
-    let datas = props.data;
-    let keys = Object.keys(datas);
+    const title = props.title;
+    const datas = props.data;
+    const keys = Object.keys(datas);
+
     let deliCount = keys.length;
+    let count = 0;
+    let taskCount = 0;
 
     keys.forEach((key) => {
         for (let i = 0; i < datas[key].length; i++) {
@@ -48,7 +50,7 @@ const CardHeader = (props) => {
             <>
                 <Box sx={HeaderOption}>
                     <Typography fontSize={40} fontWeight={'bold'}>
-                        楽天スーパーマーケットＱＲ
+                        {title}
                         <br />
                         山出しリスト
                     </Typography>

@@ -1,15 +1,16 @@
 import React, { useEffect, useState, useRef } from 'react';
 import styled from '@emotion/styled';
-import { Grid, Modal, Typography, Box } from '@mui/material';
+import { Grid, Modal, Typography, Box, Dialog } from '@mui/material';
+import axios from 'axios';
+import { toast } from 'react-hot-toast';
+
 import FullCalendar from '@fullcalendar/react';
 import interactionPlugin from '@fullcalendar/interaction';
 import jaLocale from '@fullcalendar/core/locales/ja';
 import dayGridPlugin from '@fullcalendar/daygrid';
-import tippy from 'tippy.js';
-import axios from 'axios';
-import DesignOption from '../Design/DesignOption';
-import { red } from '@mui/material/colors';
-import { toast } from 'react-hot-toast';
+import CalendarChangeDialog from './CalendarChangeDialog';
+import { grey } from '@mui/material/colors';
+import { Today } from './GlobalComponent';
 
 const CalendarList = (props) => {
     const pageType = props.pageType;
@@ -19,6 +20,9 @@ const CalendarList = (props) => {
     const [currentDate, SetCurrentDate] = useState(props.Today);
     const calref = useRef(null);
     const [eventDates, SetEventDates] = useState({});
+    const dialogRef = useRef('null');
+    const [rightList, SetRightList] = useState('');
+
     const StyleWrapper = styled.div`
         margin: 0 10px;
         width: 100%;
@@ -45,12 +49,11 @@ const CalendarList = (props) => {
     useEffect(() => {
         if (pageType != null) {
             // parent Ref
-            console.log(props.UpdateRef);
             props.UpdateRef.current = {
                 event: updateCalendar,
                 side: SetSideList,
             };
-            console.log(props.UpdateRef);
+
             //first Get Data
             updateCalendar();
         }
@@ -58,9 +61,13 @@ const CalendarList = (props) => {
 
     // Get Select Date Data
     useEffect(() => {
+        props.CallSelectDate({
+            selectDate: selectDate,
+            isData: false,
+        });
+
         if (selectDate != '') {
             if (CheckDate(selectDate)) {
-                console.log('isData');
                 props.CallSelectDate({
                     selectDate: selectDate,
                     isData: true,
@@ -75,34 +82,37 @@ const CalendarList = (props) => {
     }, [selectDate]);
 
     const updateCalendar = () => {
-        const toastid = toast.loading('カレンダー情報更新中...');
+        const toastId = toast.loading('カレンダー情報更新中...');
         let startDate = CreateDate(calref.current.calendar.view.activeStart);
         let endDate = CreateDate(calref.current.calendar.view.activeEnd);
         SetCurrentDate(CreateDate(calref.current.calendar.getDate()));
-
-        console.log(startDate, endDate);
+        SetRightList('');
+        SetEventDatas([]);
 
         axios
             .get(`/api/${pageType}/betweencount/${startDate}/${endDate}`)
             .then((res) => {
+                // calendar Button Controll
+                SetRightList('prevBtn nextBtn');
                 toast.success('カレンダー情報更新完了。', {
-                    id: toastid,
+                    id: toastId,
                 });
-                console.log(res.data);
+                console.log('Calendar Data', res.data);
                 SetEventList(res.data);
             })
             .catch((e) => {
+                SetRightList('prevBtn nextBtn');
+
+                let errMsg = '';
                 if (e.response == null) {
-                    toast.error('カレンダー更新失敗。', {
-                        id: toastid,
-                    });
+                    errMsg = 'カレンダーサーバー接続失敗';
                 } else if (e.response.status == '410') {
-                    toast.success('カレンダー情報更新完了。', {
-                        id: toastid,
-                    });
+                    toast.success('カレンダー情報更新完了', { id: toastId });
+                    return;
                 } else {
-                    toast.error(e.response.message, { id: toastid });
+                    errMsg = e.response.data.message;
                 }
+                toast.error(errMsg, { id: toastId });
             });
     };
 
@@ -111,7 +121,7 @@ const CalendarList = (props) => {
         datas.forEach((data) => {
             strData.push({
                 date: data.出荷日,
-                title: '出荷 : ' + data.件数 + '件',
+                title: '出荷 ' + data.件数 + '件',
             });
             SetEventDates((prevState) => ({ ...prevState, [data.出荷日]: 1 }));
         });
@@ -138,17 +148,31 @@ const CalendarList = (props) => {
     };
 
     const SetSideList = (date) => {
-        console.log('selectData', date);
         SetSelectDate(date);
         props.CallSelectDate({
             selectDate: date,
             isData: true,
         });
     };
+    const EventDrop = (dropInfo) => {
+        const originalDate = dropInfo.oldEvent.startStr;
+        const changeDate = dropInfo.event.startStr;
 
+        console.log(dropInfo);
+        if (changeDate < Today()) {
+            toast.error('出荷日は本日より前日に設定することは出来ません');
+            dropInfo.revert();
+        } else {
+            dialogRef.current.ChangeDate(dropInfo, originalDate, changeDate);
+        }
+    };
     const handleDateClick = (dateClickInfo) => {
         SetSelectDate(dateClickInfo.dateStr);
-        if (!CheckDate(dateClickInfo.dateStr)) props.handleOpen();
+        if (!CheckDate(dateClickInfo.dateStr)) {
+            if (dateClickInfo.dateStr < Today())
+                toast.error('出荷日は本日より前日に設定することは出来ません');
+            else props.handleOpen();
+        }
         SetCssStr(`
             outline: 2px solid red;
             outline-offset: -2px;
@@ -159,22 +183,37 @@ const CalendarList = (props) => {
     return (
         <Box
             sx={{
+                border: 1,
+                borderRadius: 2,
+                borderColor: grey[400],
+                boxShadow: 2,
+                p: 1,
+                backgroundColor: 'white',
                 width: '100%',
-                display: 'flex',
                 height: '100%',
-                marginTop: 2,
+                display: 'flex',
             }}
         >
+            <CalendarChangeDialog
+                updateCalendar={updateCalendar}
+                pageType={pageType}
+                ref={dialogRef}
+            />
             <StyleWrapper>
                 <FullCalendar
                     ref={calref}
                     plugins={[dayGridPlugin, interactionPlugin]}
                     initialView="dayGridMonth"
                     initialDate={currentDate}
+                    droppable={true}
+                    dragScroll={false}
+                    editable={true}
+                    eventOverlap={false}
+                    eventDurationEditable={false}
                     locales={[jaLocale]}
                     locale="ja"
                     height={'100%'}
-                    // contentHeight={'auto'}
+                    eventDrop={(dropInfo) => EventDrop(dropInfo)}
                     businessHours={{ daysOfWeek: [1, 2, 3, 4, 5] }}
                     events={eventDatas}
                     dateClick={handleDateClick}
@@ -196,7 +235,7 @@ const CalendarList = (props) => {
                     }}
                     headerToolbar={{
                         left: 'title',
-                        right: 'prevBtn nextBtn',
+                        right: rightList,
                     }}
                 />
             </StyleWrapper>

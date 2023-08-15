@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef, forwardRef } from 'react';
 import { Grid, Modal, Typography, Box, Button, CardMedia } from '@mui/material';
 import axios from 'axios';
+import { paddingNum } from './GlobalComponent';
 
 const MainWidth = 1080;
 const MainHeight = MainWidth * 1.4142;
@@ -55,22 +56,23 @@ const RightTypoOption = () => {
 };
 
 const LabelLayout = forwardRef((props, ref) => {
+    const labelData = props.labelData;
     const selectDate = props.selectDate;
-    const [labelData, SetLabelData] = useState([]);
     const pageType = props.pageType;
 
     const Cards = () => {
         let html = [];
         let cardList = [];
         let i = 0;
+        let keyCnt = 0;
         let count = labelData.length;
         for (i = 0; i < count; i++) {
-            cardList.push(LabelCard(i));
+            cardList.push(<Box key={keyCnt++}>{LabelCard(i)}</Box>);
 
             if ((i + 1) % 6 == 0 && i != 0) {
                 html.push(
                     <Box
-                        key={i}
+                        key={keyCnt++}
                         display={'flex'}
                         flexWrap={'wrap'}
                         gap={10}
@@ -91,11 +93,14 @@ const LabelLayout = forwardRef((props, ref) => {
         // 余白処理
         if (count % 6 != 0)
             for (i = 0; i < 6 - (count % 6); i++) {
-                cardList.push(<Box key={i} width={420} height={343}></Box>);
+                cardList.push(
+                    <Box key={keyCnt++} width={420} height={343}></Box>
+                );
             }
         if (cardList.length > 0)
             html.push(
                 <Box
+                    ket={keyCnt++}
                     display={'flex'}
                     flexWrap={'wrap'}
                     gap={10}
@@ -114,11 +119,9 @@ const LabelLayout = forwardRef((props, ref) => {
 
     const LabelCard = (number) => {
         let currentData = labelData[number];
-        let paddingNumber = currentData.同梱連番.toString().padStart(3, '0');
-
-        console.log(paddingNumber);
+        let bundledNumber = paddingNum(currentData.同梱連番, 3);
         return (
-            <Box key={number} width={420} height={343} border={3}>
+            <Box width={420} height={343} border={3}>
                 <Box sx={MainBoxOption} height={'21.5%'}>
                     <Box sx={LeftBoxOption}>
                         <Typography sx={LeftTypoOption}>店舗名</Typography>
@@ -176,7 +179,7 @@ const LabelLayout = forwardRef((props, ref) => {
                             textAlign={'center'}
                         >
                             *{currentData.問い合わせ番号}
-                            {paddingNumber}*
+                            {bundledNumber}*
                         </Box>
                         <Box
                             pr={2}
@@ -187,7 +190,7 @@ const LabelLayout = forwardRef((props, ref) => {
                             fontFamily={'MS PGothic'}
                         >
                             {currentData.問い合わせ番号}
-                            {paddingNumber}
+                            {bundledNumber}
                         </Box>
                     </Box>
                     <Box
@@ -197,18 +200,18 @@ const LabelLayout = forwardRef((props, ref) => {
                         fontWeight={'bold'}
                         textAlign={'right'}
                     >
-                        {number}
+                        {number + 1}
                     </Box>
                 </Box>
             </Box>
         );
     };
-    useEffect(() => {
-        axios.get(`/api/${pageType}/label/` + selectDate).then((res) => {
-            console.log(res.data);
-            SetLabelData(res.data);
-        });
-    }, []);
+    // useEffect(() => {
+    //     axios.get(`/api/${pageType}/label/` + selectDate).then((res) => {
+    //         console.log(res.data);
+    //         SetLabelData(res.data);
+    //     });
+    // }, []);
 
     return (
         <Box ref={ref}>

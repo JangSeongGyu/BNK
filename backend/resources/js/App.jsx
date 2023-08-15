@@ -14,15 +14,6 @@ axios.defaults.headers.post['Access-Control-Allow-Origin'] =
 axios.defaults.withCredentials = true;
 
 const App = () => {
-    // const http = axios.create({
-    //     baseURL: 'http://192.168.150.196:8080/',
-    //     withCredentials: true,
-    // });
-
-    // axios.get('/sanctum/csrf-cookie').then((res) => {
-    //     console.log(res);
-    // });
-
     return (
         <>
             <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="ja">

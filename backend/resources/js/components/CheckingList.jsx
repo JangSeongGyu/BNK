@@ -1,21 +1,22 @@
 import { Grid, Modal, Typography, Box, Button } from '@mui/material';
-import DesignOption from '../Design/DesignOption';
+import {
+    BorderOption,
+    BtnOption,
+    ListTitleOption,
+} from '../Design/DesignOption';
 import { useNavigate } from 'react-router-dom';
-import { red } from '@mui/material/colors';
 
 const CheckingList = (props) => {
-    var selectDate = props.selectDate;
     const pageType = props.pageType;
-    const BorderOption = DesignOption('BorderOption');
-    const BtnOption = DesignOption('BtnOption');
-    const calendarBoxTypo = DesignOption('calendarBoxTypo');
-
+    const selectDate = props.selectDate;
     let navigate = useNavigate();
     const CheckingBtnClick = () => {
+        localStorage.setItem('LastSelectDate', selectDate);
         navigate('checking/' + selectDate);
     };
 
     const Checking2BtnClick = () => {
+        localStorage.setItem('LastSelectDate', selectDate);
         navigate('checking2/' + selectDate);
     };
 
@@ -27,18 +28,18 @@ const CheckingList = (props) => {
         );
     };
 
-    const CheckCheck2Btn = () => {
+    const Checking2Btn = () => {
         if (pageType == 'supermarket') return <Check2Btn />;
     };
     return (
         <Box my={1} width={'100%'} sx={BorderOption}>
-            <Typography sx={calendarBoxTypo}>検品</Typography>
+            <Typography sx={ListTitleOption}>検品</Typography>
             <Box mt={1} mb={1}>
                 <Button sx={BtnOption} onClick={() => CheckingBtnClick()}>
                     一次検品
                 </Button>
             </Box>
-            <CheckCheck2Btn />
+            <Checking2Btn />
         </Box>
     );
 };

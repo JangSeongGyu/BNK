@@ -32,7 +32,7 @@ const TXSceneCard = (props) => {
             </Grid>
 
             <Grid sx={SceneCardOption} item xs={1}>
-                10x10
+                {data.商品名}
             </Grid>
             <Grid sx={SceneCardOption} item xs={6.5}>
                 {data.シーン名}

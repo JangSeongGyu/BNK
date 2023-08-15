@@ -13,9 +13,9 @@ import {
 import { green, grey, pink, red } from '@mui/material/colors';
 import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
-import DesignOption from '../Design/DesignOption';
-import Header from '../components/Header';
-import MasterMonthDialog from '../components/MasterMonthDialog';
+import { BtnOption } from '../Design/DesignOption';
+import MasterMonthDialog from '../components/MasterComponent/MasterMonthDialog';
+import Header from '../components/HeaderCompnent/Header';
 
 const InputOption = () => {
     return {
@@ -26,19 +26,23 @@ const InputOption = () => {
     };
 };
 
-const BtnOption = DesignOption('BtnOption');
-
 const Master = (props) => {
     const pageType = props.pageType;
     const [textData, SetTextData] = useState({});
     const dialogRef = useRef();
 
     return (
-        <Box backgroundColor={grey[200]} height={'100%'} width={'100%'}>
+        <Box
+            backgroundColor={grey[200]}
+            display={'flex'}
+            flexDirection={'column'}
+            height={'100%'}
+            width={'100%'}
+        >
             <Header page={1} pageType={pageType} />
             <Box
                 backgroundColor={'white'}
-                height={'80%'}
+                height={'100%'}
                 m={2}
                 p={2}
                 border={1}
@@ -46,7 +50,13 @@ const Master = (props) => {
                 boxShadow={1}
                 borderRadius={2}
             >
-                <Typography fontSize={40} fontWeight={'bold'}>
+                <Typography
+                    borderBottom={1}
+                    borderColor={grey[400]}
+                    fontSize={40}
+                    fontWeight={'bold'}
+                    mb={2}
+                >
                     マスタ登録
                 </Typography>
                 <Box width={200}>

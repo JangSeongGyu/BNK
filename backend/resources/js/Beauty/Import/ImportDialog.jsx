@@ -18,12 +18,10 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
 import { Box, Input, Stack, Typography } from '@mui/material';
 import { blue, green, grey, red } from '@mui/material/colors';
-import DesignOption from '../../Design/DesignOption';
+import { BtnOption, dialogYes, dialogNo } from '../../Design/DesignOption';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
-
-const BtnOption = DesignOption('BtnOption');
-const dialogYes = DesignOption('dialogYes');
-const dialogNo = DesignOption('dialogNo');
+import FileUploadRoundedIcon from '@mui/icons-material/FileUploadRounded';
+import ArrowBackRoundedIcon from '@mui/icons-material/ArrowBackRounded';
 
 const Transition = forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -57,6 +55,7 @@ const ImportDialog = forwardRef((props, ref) => {
             },
         };
     });
+
     const handleClose = () => {
         inputRef.current.value = '';
         setFile('');
@@ -238,12 +237,13 @@ const ImportDialog = forwardRef((props, ref) => {
 
                         <Box display={'flex'} gap={1} mt={2}>
                             <Button sx={dialogNo} onClick={handleClose}>
+                                <ArrowBackRoundedIcon />
                                 <Typography
                                     sx={{
                                         fontWeight: 'bold',
                                     }}
                                 >
-                                    キャンセル
+                                    戻る
                                 </Typography>
                             </Button>
                             <Button
@@ -253,12 +253,13 @@ const ImportDialog = forwardRef((props, ref) => {
                                     setParent();
                                 }}
                             >
+                                <FileUploadRoundedIcon />
                                 <Typography
                                     sx={{
                                         fontWeight: 'bold',
                                     }}
                                 >
-                                    適用
+                                    インポート
                                 </Typography>
                             </Button>
                         </Box>

@@ -14,15 +14,31 @@ import Taxi from './pages/Taxi';
 import SPTheme from './SPTheme';
 import { ThemeProvider } from '@mui/material';
 import TXTheme from './TXTheme';
-import EGTheme from './EGTheme';
 import DetailView from './pages/DetailView';
 import Master from './pages/Master';
+import ErrorPage from './pages/ErrorPage';
 
 const Router = () => {
     return (
         <BrowserRouter>
             <Routes>
-                <Route path={`home`} element={<Home />} />
+                <Route
+                    path={`home`}
+                    element={
+                        <ThemeProvider theme={SPTheme}>
+                            <Home />
+                        </ThemeProvider>
+                    }
+                />
+                <Route
+                    path={`/`}
+                    element={
+                        <ThemeProvider theme={SPTheme}>
+                            <Home />
+                        </ThemeProvider>
+                    }
+                />
+                {/*============ SuperMarket ======================================================*/}
                 <Route
                     exact
                     path={`/supermarket`}
@@ -70,8 +86,7 @@ const Router = () => {
                     }
                 />
 
-                <Route exact path="/test" element={<YamaLayout />}></Route>
-
+                {/*============ Taxi ======================================================*/}
                 <Route
                     exact
                     path={`/taxi`}
@@ -87,7 +102,7 @@ const Router = () => {
                     path={`/taxi/master`}
                     element={
                         <ThemeProvider theme={TXTheme}>
-                            <Taxi pageType="taxi" />
+                            <Master pageType="taxi" />
                         </ThemeProvider>
                     }
                 />
@@ -101,19 +116,31 @@ const Router = () => {
                     }
                 />
 
+                <Route
+                    exact
+                    path={`/taxi/detail/:selectDate/`}
+                    element={
+                        <ThemeProvider theme={TXTheme}>
+                            <DetailView pageType="taxi" />
+                        </ThemeProvider>
+                    }
+                />
+
+                {/* <Route exact path="/test" element={<YamaLayout />}></Route> */}
+
                 <Route exact path={`/beauty`} element={<Beauty />}>
                     <Route index element={<BeautyImport />} />
                     <Route path={`import`} element={<BeautyImport />} />
                 </Route>
-                <Route path={`/`} element={<Home />} />
-                {/* <Route
+
+                <Route
                     path="*"
                     element={
-                        <main style={{ padding: '1rem' }}>
-                            <p>There's nothing here!</p>
-                        </main>
+                        <ThemeProvider theme={SPTheme}>
+                            <ErrorPage />
+                        </ThemeProvider>
                     }
-                /> */}
+                />
             </Routes>
         </BrowserRouter>
     );

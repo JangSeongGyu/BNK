@@ -24,7 +24,7 @@ const ShipmentConfirmBox = (props) => {
             })
             .catch((e) => {
                 let errMsg = '';
-                if (e.respone == null) {
+                if (e.response == null) {
                     errMsg = '出荷処理サーバー接続失敗。';
                 } else {
                     errMsg = e.response.data.message;

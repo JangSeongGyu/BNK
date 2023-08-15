@@ -200,7 +200,7 @@ const LabelLayout = forwardRef((props, ref) => {
                         fontWeight={'bold'}
                         textAlign={'right'}
                     >
-                        {number}
+                        {number + 1}
                     </Box>
                 </Box>
             </Box>

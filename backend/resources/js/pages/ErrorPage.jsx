@@ -13,18 +13,18 @@ const ErrorPage = () => {
             flex={'column'}
             justifyContent={'center'}
             alignItems={'center'}
-            backgroundColor={grey[200]}
+            // backgroundColor={grey[200]}
         >
             <Box
                 display={'flex'}
                 flexDirection={'column'}
                 alignItems={'center'}
-                border={1}
+                // border={1}
                 px={30}
                 py={10}
-                borderColor={grey[500]}
+                // borderColor={grey[500]}
                 borderRadius={2}
-                boxShadow={2}
+                // boxShadow={2}
                 backgroundColor={'white'}
             >
                 <ErrorIcon sx={{ color: grey[400], fontSize: 200 }} />
@@ -32,10 +32,10 @@ const ErrorPage = () => {
                     404 Not Found
                 </Typography>
                 <Typography fontSize={24} color={grey[700]}>
-                    存在しないページです。
+                    存在しないページです
                 </Typography>
                 <Typography fontSize={24} color={grey[700]}>
-                    下のボタンをクリックしてHomeに戻ってください。
+                    下のボタンをクリックしてHomeに戻ってください
                 </Typography>
 
                 <Button
@@ -56,7 +56,9 @@ const ErrorPage = () => {
                         navigate('/home');
                     }}
                 >
-                    <Typography fontSize={24}>Homeに戻る</Typography>
+                    <Typography fontSize={24} fontWeight={'bold'}>
+                        Homeに戻る
+                    </Typography>
                 </Button>
             </Box>
         </Box>

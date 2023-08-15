@@ -82,15 +82,17 @@ const CalendarList = (props) => {
     }, [selectDate]);
 
     const updateCalendar = () => {
-        SetRightList('');
         const toastId = toast.loading('カレンダー情報更新中...');
         let startDate = CreateDate(calref.current.calendar.view.activeStart);
         let endDate = CreateDate(calref.current.calendar.view.activeEnd);
         SetCurrentDate(CreateDate(calref.current.calendar.getDate()));
+        SetRightList('');
+        SetEventDatas([]);
 
         axios
             .get(`/api/${pageType}/betweencount/${startDate}/${endDate}`)
             .then((res) => {
+                // calendar Button Controll
                 SetRightList('prevBtn nextBtn');
                 toast.success('カレンダー情報更新完了。', {
                     id: toastId,
@@ -157,7 +159,12 @@ const CalendarList = (props) => {
         const changeDate = dropInfo.event.startStr;
 
         console.log(dropInfo);
-        dialogRef.current.ChangeDate(dropInfo, originalDate, changeDate);
+        if (changeDate < Today()) {
+            toast.error('出荷日は本日より前日に設定することは出来ません');
+            dropInfo.revert();
+        } else {
+            dialogRef.current.ChangeDate(dropInfo, originalDate, changeDate);
+        }
     };
     const handleDateClick = (dateClickInfo) => {
         SetSelectDate(dateClickInfo.dateStr);
@@ -189,7 +196,11 @@ const CalendarList = (props) => {
                 ml: 1,
             }}
         >
-            <CalendarChangeDialog pageType={pageType} ref={dialogRef} />
+            <CalendarChangeDialog
+                updateCalendar={updateCalendar}
+                pageType={pageType}
+                ref={dialogRef}
+            />
             <StyleWrapper>
                 <FullCalendar
                     ref={calref}

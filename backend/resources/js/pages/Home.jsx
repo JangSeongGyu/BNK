@@ -11,9 +11,9 @@ const BtnOption = (mainColor) => {
         height: 50,
         border: 1,
         borderColor: mainColor,
-        color: 'white',
-        backgroundColor: mainColor,
-        ':hover': { color: mainColor, backgroundColor: 'white' },
+        color: mainColor,
+        backgroundColor: 'white',
+        ':hover': { color: 'white', backgroundColor: mainColor },
     };
 };
 
@@ -26,6 +26,7 @@ const Home = (props) => {
             <Box
                 p={2}
                 border={1}
+                borderColor={grey[500]}
                 m={2}
                 height={'90%'}
                 borderRadius={2}

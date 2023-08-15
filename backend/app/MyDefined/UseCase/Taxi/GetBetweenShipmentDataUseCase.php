@@ -6,9 +6,9 @@ use App\MyDefined\ValueObject\General\DateValueObject;
 use App\MyDefined\Repository\Taxi\GetRepoInterface;
 
 /**
- * [Taxi]指定出荷日で梱包ラベル用データ取得
+ * [Taxi]期間別データ取得
  */
-final class GetLabelUseCase
+final class GetBetweenShipmentDataUseCase
 {
     /**
      * リポジトリインターフェースをプロパティに設定
@@ -27,10 +27,10 @@ final class GetLabelUseCase
 
     /**
      * メイン処理
-     * 1．梱包ラベル用データ取得
+     * 1．期間別データ取得
      */
-    public function execute(DateValueObject $DateVO){
-        $result = $this->getRepository->getAllDataByShipmentDate($DateVO);
+    public function execute(DateValueObject $StartDateVO, DateValueObject $EndDateVO){
+        $result = $this->getRepository->getAllDataByBetween($StartDateVO, $EndDateVO);
         return $result;
     }
 }

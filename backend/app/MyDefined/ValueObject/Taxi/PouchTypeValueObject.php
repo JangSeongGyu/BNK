@@ -1,11 +1,11 @@
 <?php
 
-namespace App\MyDefined\ValueObject\SuperMarket;
+namespace App\MyDefined\ValueObject\Taxi;
 use App\MyDefined\ValueObject\ValueObject;
 
 use App\Exceptions\InvalidValueErrorResponseException;
 
-final class CheckingTypeValueObject extends ValueObject
+final class PouchTypeValueObject extends ValueObject
 {
     public $type;
 
@@ -16,16 +16,16 @@ final class CheckingTypeValueObject extends ValueObject
     /**
      * @param string $type
      */
-    public static function create(string $type): CheckingTypeValueObject
+    public static function create(string $type): PouchTypeValueObject
     {
-        $instance = new CheckingTypeValueObject();
+        $instance = new PouchTypeValueObject();
         $instance->value = $instance->validate($type);
         return $instance;
     }
 
     private function validate(string $type)
     {
-        if(!in_array(intval($type), [1, 2], true)){
+        if(!in_array(intval($type), [0, 1], true)){
             throw new InvalidValueErrorResponseException('type: ' . $type);
         }
         return $type;

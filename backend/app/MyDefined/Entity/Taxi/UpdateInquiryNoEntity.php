@@ -22,11 +22,11 @@ final class UpdateInquiryNoEntity{
         DateValueObject $DateVO
     ): UpdateInquiryNoEntity 
     {
-        $InquiryNoEntity = new self();
-        $InquiryNoEntity->inquiryNo = $SagawaInquiryNoVO->value;
-        $InquiryNoEntity->shipmentNo = $ShipmentNoVO->value;
-        $InquiryNoEntity->shipmentDate = $DateVO->value;
-        return $InquiryNoEntity;
+        $selfEntity = new self();
+        $selfEntity->inquiryNo = $SagawaInquiryNoVO->value;
+        $selfEntity->shipmentNo = $ShipmentNoVO->value;
+        $selfEntity->shipmentDate = $DateVO->value;
+        return $selfEntity;
     }
 }
 ?>

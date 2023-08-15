@@ -13,10 +13,10 @@ final class UserEntity{
 
     public static function reconstructFromUseCase(): UserEntity 
     {
-        $UserEntity = new self();
-        $UserEntity->name = gethostname();
-        $UserEntity->ip = $_SERVER["REMOTE_ADDR"];
-        return $UserEntity;
+        $selfEntity = new self();
+        $selfEntity->name = gethostname();
+        $selfEntity->ip = $_SERVER["REMOTE_ADDR"];
+        return $selfEntity;
     }
 
 }

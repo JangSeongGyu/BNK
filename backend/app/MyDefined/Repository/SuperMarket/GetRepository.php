@@ -44,7 +44,7 @@ final class GetRepository implements GetRepoInterface{
     {
         $rows = DB::connection('supermarket')
         ->table('TT_出荷指示')
-        ->select("*")
+        ->selectRaw('COUNT(*) AS 件数')
         ->whereNull('出荷日')
         ->get();
         if($rows == '[]'){
@@ -57,7 +57,7 @@ final class GetRepository implements GetRepoInterface{
     {
         $rows = DB::connection('supermarket')
         ->select("EXEC dbo.sp_GetBizlogi '$DateVO->value'"); 
-        if($rows == '[]'){
+        if(!$rows){
             throw new NotExistsErrorResponseException();
         }
         return $rows;

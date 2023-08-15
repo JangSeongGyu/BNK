@@ -4,9 +4,11 @@ namespace App\MyDefined\Repository\Taxi;
 
 use App\MyDefined\Entity\General\UserEntity;
 use App\MyDefined\Entity\Taxi\UpdateShipmentEntity;
+use App\MyDefined\Entity\Taxi\UpdateShipmentDateEntity;
 use App\MyDefined\Entity\Taxi\UpdateInquiryNoEntity;
 use App\MyDefined\Entity\Taxi\UpdateTsubushiEntity;
 use App\MyDefined\Entity\Taxi\UpdateFirstPackingEntity;
+use App\MyDefined\Entity\Taxi\UpdateSecondPackingEntity;
 
 use Illuminate\Support\Facades\DB;
 use PDO;
@@ -18,20 +20,43 @@ final class UpdateRepository implements UpdateRepoInterface{
         $pdo = DB::connection('taxi')->getpdo();
 
         // 指定出荷日でUpdate
-        $transaction = $pdo->prepare("{CALL dbo.sp_UpdateShipment(?,?,?,?,?,?)}"); 
+        $transaction = $pdo->prepare("{CALL dbo.sp_UpdateShipment(?,?,?,?,?,?,?)}"); 
         $transaction->bindParam(1, $msgCD, PDO::PARAM_STR|PDO::PARAM_INPUT_OUTPUT, 50);
-        $transaction->bindParam(2, $msgParam1, PDO::PARAM_STR|PDO::PARAM_INPUT_OUTPUT, 2500);
-        $transaction->bindParam(3, $msgParam2, PDO::PARAM_STR|PDO::PARAM_INPUT_OUTPUT, 2500);
-        $transaction->bindParam(4, $msgParam3, PDO::PARAM_STR|PDO::PARAM_INPUT_OUTPUT, 2500);
+        $transaction->bindParam(2, $msgParam1, PDO::PARAM_STR|PDO::PARAM_INPUT_OUTPUT, 1000);
+        $transaction->bindParam(3, $msgParam2, PDO::PARAM_STR|PDO::PARAM_INPUT_OUTPUT, 1000);
+        $transaction->bindParam(4, $msgParam3, PDO::PARAM_STR|PDO::PARAM_INPUT_OUTPUT, 1000);
         $transaction->bindParam(5, $UserEntity->name, PDO::PARAM_STR);
         $transaction->bindParam(6, $ShipmentEntity->shipmentDate, PDO::PARAM_STR);
+        $transaction->bindParam(7, $ShipmentEntity->pouch, PDO::PARAM_STR);
         $transaction->execute();
         
-        if(!$msgCD){
+        if($msgCD !== null){
             RoutingResponseExceptions::Routing($msgCD, $msgParam1 . $msgParam2 . $msgParam3);
         }
 
         return;  
+    }
+
+    public function updateShipmentData(UserEntity $UserEntity, UpdateShipmentDateEntity $ShipmentDateEntity)
+    {
+        $pdo = DB::connection('taxi')->getpdo();
+
+        // 指定出荷日でUpdate
+        $transaction = $pdo->prepare("{CALL dbo.sp_UpdateShipmentDate(?,?,?,?,?,?,?)}"); 
+        $transaction->bindParam(1, $msgCD, PDO::PARAM_STR|PDO::PARAM_INPUT_OUTPUT, 50);
+        $transaction->bindParam(2, $msgParam1, PDO::PARAM_STR|PDO::PARAM_INPUT_OUTPUT, 1000);
+        $transaction->bindParam(3, $msgParam2, PDO::PARAM_STR|PDO::PARAM_INPUT_OUTPUT, 1000);
+        $transaction->bindParam(4, $msgParam3, PDO::PARAM_STR|PDO::PARAM_INPUT_OUTPUT, 1000);
+        $transaction->bindParam(5, $UserEntity->name, PDO::PARAM_STR);
+        $transaction->bindParam(6, $ShipmentDateEntity->shipmentDate, PDO::PARAM_STR);
+        $transaction->bindParam(7, $ShipmentDateEntity->changeShipmentDate, PDO::PARAM_STR);
+        $transaction->execute();
+        
+        if($msgCD !== null){
+            RoutingResponseExceptions::Routing($msgCD, $msgParam1 . $msgParam2 . $msgParam3);
+        }
+
+        return;
     }
     
     public function updateInquiryNo(UserEntity $UserEntity, UpdateInquiryNoEntity $InquiryNoEntity){
@@ -41,16 +66,16 @@ final class UpdateRepository implements UpdateRepoInterface{
         // 指定出荷日でUpdate
         $transaction = $pdo->prepare("{CALL dbo.sp_UpdateInquiryNo(?,?,?,?,?,?,?,?)}"); 
         $transaction->bindParam(1, $msgCD, PDO::PARAM_STR|PDO::PARAM_INPUT_OUTPUT, 50);
-        $transaction->bindParam(2, $msgParam1, PDO::PARAM_STR|PDO::PARAM_INPUT_OUTPUT, 2500);
-        $transaction->bindParam(3, $msgParam2, PDO::PARAM_STR|PDO::PARAM_INPUT_OUTPUT, 2500);
-        $transaction->bindParam(4, $msgParam3, PDO::PARAM_STR|PDO::PARAM_INPUT_OUTPUT, 2500);
+        $transaction->bindParam(2, $msgParam1, PDO::PARAM_STR|PDO::PARAM_INPUT_OUTPUT, 1000);
+        $transaction->bindParam(3, $msgParam2, PDO::PARAM_STR|PDO::PARAM_INPUT_OUTPUT, 1000);
+        $transaction->bindParam(4, $msgParam3, PDO::PARAM_STR|PDO::PARAM_INPUT_OUTPUT, 1000);
         $transaction->bindParam(5, $UserEntity->name, PDO::PARAM_STR);
         $transaction->bindParam(6, $InquiryNoEntity->shipmentDate, PDO::PARAM_STR);
         $transaction->bindParam(7, $InquiryNoEntity->shipmentNo, PDO::PARAM_STR);
         $transaction->bindParam(8, $InquiryNoEntity->inquiryNo, PDO::PARAM_STR);
         $transaction->execute();
         
-        if(!$msgCD){
+        if($msgCD !== null){
             RoutingResponseExceptions::Routing($msgCD, $msgParam1 . $msgParam2 . $msgParam3);
         }
 
@@ -63,14 +88,14 @@ final class UpdateRepository implements UpdateRepoInterface{
         // 指定出荷日でUpdate
         $transaction = $pdo->prepare("{CALL dbo.sp_UpdateTsubushi(?,?,?,?,?,?)}"); 
         $transaction->bindParam(1, $msgCD, PDO::PARAM_STR|PDO::PARAM_INPUT_OUTPUT, 50);
-        $transaction->bindParam(2, $msgParam1, PDO::PARAM_STR|PDO::PARAM_INPUT_OUTPUT, 2500);
-        $transaction->bindParam(3, $msgParam2, PDO::PARAM_STR|PDO::PARAM_INPUT_OUTPUT, 2500);
-        $transaction->bindParam(4, $msgParam3, PDO::PARAM_STR|PDO::PARAM_INPUT_OUTPUT, 2500);
+        $transaction->bindParam(2, $msgParam1, PDO::PARAM_STR|PDO::PARAM_INPUT_OUTPUT, 1000);
+        $transaction->bindParam(3, $msgParam2, PDO::PARAM_STR|PDO::PARAM_INPUT_OUTPUT, 1000);
+        $transaction->bindParam(4, $msgParam3, PDO::PARAM_STR|PDO::PARAM_INPUT_OUTPUT, 1000);
         $transaction->bindParam(5, $UserEntity->name, PDO::PARAM_STR);
         $transaction->bindParam(6, $TsubushiEntity->shipmentDate, PDO::PARAM_STR);
         $transaction->execute();
         
-        if(!$msgCD){
+        if($msgCD !== null){
             RoutingResponseExceptions::Routing($msgCD, $msgParam1 . $msgParam2 . $msgParam3);
         }
 
@@ -79,19 +104,19 @@ final class UpdateRepository implements UpdateRepoInterface{
 
     public function updateFirstPacking(UserEntity $UserEntity, UpdateFirstPackingEntity $FirstPackingEntity){
         $pdo = DB::connection('taxi')->getpdo();
-
+        
         // 指定出荷日でUpdate
-        $transaction = $pdo->prepare("{CALL dbo.sp_UpdateFirstPacking(?,?,?,?,?,?)}"); 
+        $transaction = $pdo->prepare("{CALL dbo.sp_UpdateFirstPacking(?,?,?,?,?,?,?)}"); 
         $transaction->bindParam(1, $msgCD, PDO::PARAM_STR|PDO::PARAM_INPUT_OUTPUT, 50);
-        $transaction->bindParam(2, $msgParam1, PDO::PARAM_STR|PDO::PARAM_INPUT_OUTPUT, 2500);
-        $transaction->bindParam(3, $msgParam2, PDO::PARAM_STR|PDO::PARAM_INPUT_OUTPUT, 2500);
-        $transaction->bindParam(4, $msgParam3, PDO::PARAM_STR|PDO::PARAM_INPUT_OUTPUT, 2500);
+        $transaction->bindParam(2, $msgParam1, PDO::PARAM_STR|PDO::PARAM_INPUT_OUTPUT, 1000);
+        $transaction->bindParam(3, $msgParam2, PDO::PARAM_STR|PDO::PARAM_INPUT_OUTPUT, 1000);
+        $transaction->bindParam(4, $msgParam3, PDO::PARAM_STR|PDO::PARAM_INPUT_OUTPUT, 1000);
         $transaction->bindParam(5, $UserEntity->name, PDO::PARAM_STR);
         $transaction->bindParam(6, $FirstPackingEntity->shipmentDate, PDO::PARAM_STR);
-        $transaction->bindParam(6, $FirstPackingEntity->inputBarcode, PDO::PARAM_STR);
+        $transaction->bindParam(7, $FirstPackingEntity->inputBarcode, PDO::PARAM_STR);
         $transaction->execute();
         
-        if(!$msgCD){
+        if($msgCD !== null){
             RoutingResponseExceptions::Routing($msgCD, $msgParam1 . $msgParam2 . $msgParam3);
         }
 

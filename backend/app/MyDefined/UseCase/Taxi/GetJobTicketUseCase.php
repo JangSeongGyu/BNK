@@ -30,7 +30,7 @@ final class GetJobTicketUseCase
      * 1．JOBチケット用データ取得
      */
     public function execute(DateValueObject $DateVO){
-        $result = $this->getRepository->getAllDataByShipmentDate($DateVO);
+        $result = $this->getRepository->getJOBTicket($DateVO);
         return $result;
     }
 }

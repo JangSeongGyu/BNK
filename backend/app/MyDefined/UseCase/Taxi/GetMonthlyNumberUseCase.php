@@ -2,13 +2,13 @@
 
 namespace App\MyDefined\UseCase\Taxi;
 
-use App\MyDefined\ValueObject\General\DateValueObject;
+use App\MyDefined\ValueObject\General\YearMonthValueObject;
 use App\MyDefined\Repository\Taxi\GetRepoInterface;
 
 /**
- * [Taxi]指定出荷日でDTF連携用データ取得
+ * [Taxi]月次集計用データ取得
  */
-final class GetDTFUseCase
+final class GetMonthlyNumberUseCase
 {
     /**
      * リポジトリインターフェースをプロパティに設定
@@ -27,10 +27,10 @@ final class GetDTFUseCase
 
     /**
      * メイン処理
-     * 1．DTF連携データ取得
+     * 1．月次集計用データ取得
      */
-    public function execute(DateValueObject $DateVO){
-        $result = $this->getRepository->getAllDataByShipmentDate($DateVO);
+    public function execute(){
+        $result = $this->getRepository->getMonthlyNumber();
         return $result;
     }
 }

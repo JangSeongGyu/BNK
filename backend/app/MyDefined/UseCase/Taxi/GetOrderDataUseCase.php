@@ -2,13 +2,12 @@
 
 namespace App\MyDefined\UseCase\Taxi;
 
-use App\MyDefined\ValueObject\General\DateValueObject;
 use App\MyDefined\Repository\Taxi\GetRepoInterface;
 
 /**
- * [Taxi]指定出荷日で山出し用データ取得
+ * [Taxi]SFOrderデータ取得
  */
-final class GetTotalPickUseCase
+final class GetOrderDataUseCase
 {
     /**
      * リポジトリインターフェースをプロパティに設定
@@ -27,10 +26,10 @@ final class GetTotalPickUseCase
 
     /**
      * メイン処理
-     * 1．山出し用データ取得
+     * 1．SFOrderデータ取得
      */
-    public function execute(DateValueObject $DateVO){
-        $result = $this->getRepository->getTotalPick($DateVO);
+    public function execute(){
+        $result = $this->getRepository->getOrderData();
         return $result;
     }
 }

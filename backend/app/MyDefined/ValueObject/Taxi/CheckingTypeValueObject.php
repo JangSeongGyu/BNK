@@ -1,6 +1,6 @@
 <?php
 
-namespace App\MyDefined\ValueObject\SuperMarket;
+namespace App\MyDefined\ValueObject\Taxi;
 use App\MyDefined\ValueObject\ValueObject;
 
 use App\Exceptions\InvalidValueErrorResponseException;

@@ -17,10 +17,10 @@ final class CreateMonthlyNumberEntity{
 
     public static function reconstructFromUseCase(YearMonthValueObject $YearMonthVO, OrderNoValueObject $OrderNoVO): CreateMonthlyNumberEntity 
     {
-        $MonthlyNumberEntity = new self();
-        $MonthlyNumberEntity->yearMonth = $YearMonthVO->value;
-        $MonthlyNumberEntity->orderNo = $OrderNoVO->value;
-        return $MonthlyNumberEntity;
+        $selfEntity = new self();
+        $selfEntity->yearMonth = $YearMonthVO->value;
+        $selfEntity->orderNo = $OrderNoVO->value;
+        return $selfEntity;
     }
 }
 ?>

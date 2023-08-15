@@ -23,10 +23,10 @@ final class ShipmentNoValueObject extends ValueObject
 
     private function validate(string $shipmentNo)
     {
-        if(!preg_match('/TX[0-9]{8}-[0-9]{4}/', $shipmentNo)){
+        if(!preg_match('/^SM[0-9]{8}-[0-9]{4}$/', $shipmentNo)){
             throw new InvalidValueErrorResponseException('出荷番号: ' . $shipmentNo);
         }
-        return;
+        return $shipmentNo;
     }
 }
 ?>

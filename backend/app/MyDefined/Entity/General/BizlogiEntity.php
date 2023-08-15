@@ -59,11 +59,11 @@ final class BizlogiEntity{
 
     public static function reconstructFromRepository(array $data): BizlogiEntity 
     {
-        $BizlogiEntity = new self();
-        foreach(get_object_vars($BizlogiEntity) as $key => $value){
-            $BizlogiEntity->$key = $data[$key];
+        $selfEntity = new self();
+        foreach(get_object_vars($selfEntity) as $key => $value){
+            $selfEntity->$key = $data[$key];
         }
-        return $BizlogiEntity;
+        return $selfEntity;
     }
 }
 ?>

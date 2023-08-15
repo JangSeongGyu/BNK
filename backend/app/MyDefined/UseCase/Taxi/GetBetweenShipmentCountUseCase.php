@@ -2,13 +2,13 @@
 
 namespace App\MyDefined\UseCase\Taxi;
 
-use App\MyDefined\ValueObject\General\YearMonthValueObject;
+use App\MyDefined\ValueObject\General\DateValueObject;
 use App\MyDefined\Repository\Taxi\GetRepoInterface;
 
 /**
- * [Taxi]月次集計用データ取得
+ * [Taxi]期間別出荷件数取得
  */
-final class GetMonthlyDataUseCase
+final class GetBetweenShipmentCountUseCase
 {
     /**
      * リポジトリインターフェースをプロパティに設定
@@ -27,10 +27,10 @@ final class GetMonthlyDataUseCase
 
     /**
      * メイン処理
-     * 1．月次集計用データ取得
+     * 1．期間別データ取得
      */
-    public function execute(YearMonthValueObject $YearMonthVO){
-        $result = $this->getRepository->getAllDataByMonth($YearMonthVO);
+    public function execute(DateValueObject $StartDateVO, DateValueObject $EndDateVO){
+        $result = $this->getRepository->getShipmentCountByBetween($StartDateVO, $EndDateVO);
         return $result;
     }
 }

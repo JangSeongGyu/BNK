@@ -3,6 +3,7 @@
 namespace App\MyDefined\UseCase\Taxi;
 
 use App\MyDefined\ValueObject\General\DateValueObject;
+use App\MyDefined\ValueObject\Taxi\PouchTypeValueObject;
 use App\MyDefined\Entity\General\UserEntity;
 use App\MyDefined\Entity\Taxi\UpdateShipmentEntity;
 use App\MyDefined\Repository\Taxi\UpdateRepoInterface;
@@ -32,9 +33,9 @@ final class UpdateShipmentUseCase
      * 1．ユーザー情報取得
      * 2. 指定出荷日でUpdate
      */
-    public function execute(DateValueObject $DateVO){
+    public function execute(DateValueObject $DateVO, PouchTypeValueObject $PouchTypeVO){
         $UserEntity = UserEntity::reconstructFromUseCase();
-        $ShipmentEntity = UpdateShipmentEntity::reconstructFromUseCase($DateVO);
+        $ShipmentEntity = UpdateShipmentEntity::reconstructFromUseCase($DateVO, $PouchTypeVO);
         $this->updateRepository->UpdateShipment($UserEntity, $ShipmentEntity);
         return;
     }

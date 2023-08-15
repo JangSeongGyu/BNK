@@ -55,7 +55,7 @@ const ToasterComp = () => {
                                 <Box
                                     px={1}
                                     my={1.5}
-                                    whiteSpace={'pre-line'}
+                                    overflow={'hidden'}
                                     width={'100%'}
                                 >
                                     {String(message.props.children).replace(
@@ -65,7 +65,10 @@ const ToasterComp = () => {
                                 </Box>
                                 {t.type == 'closeError' && (
                                     <Button
-                                        wud
+                                        px={1}
+                                        my={1.5}
+                                        whiteSpace={'pre-line'}
+                                        width={'100%'}
                                         onClick={() => toast.dismiss(t.id)}
                                         sx={CloseBtn}
                                     >

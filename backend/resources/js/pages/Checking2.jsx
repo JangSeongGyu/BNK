@@ -1,5 +1,12 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Typography, Box, Button, Divider, TextField } from '@mui/material';
+import {
+    Typography,
+    Box,
+    Button,
+    Divider,
+    TextField,
+    ButtonBase,
+} from '@mui/material';
 import {
     BtnOption,
     CheckingListInputOption,
@@ -10,10 +17,11 @@ import {
 } from '../Design/DesignOption';
 import ForwardIcon from '@mui/icons-material/Forward';
 import { green, grey, pink, red } from '@mui/material/colors';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
 import Header from '../components/HeaderCompnent/Header';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 const Checking2 = (props) => {
     const [MsgBox, SetMsgBox] = useState({
@@ -21,9 +29,11 @@ const Checking2 = (props) => {
         1: '未完了',
         2: '未完了',
     });
+
+    const navigate = useNavigate();
     const pageType = props.pageType;
     const [inputData, SetInputData] = useState({});
-    const [taskCnt, SetTaskCnt] = useState(0);
+    const [taskCnt, SetTaskCnt] = useState(10);
     const [maxWorkCount, SetMaxWorkCount] = useState(0);
     const [WorkCount, SetWorkCount] = useState(0);
     const boxRef = useRef(new Array());
@@ -42,7 +52,6 @@ const Checking2 = (props) => {
             boxRef.current[i].style.backgroundColor = grey[300];
             inputRef.current[i].disabled = true;
         }
-        SetTaskCnt(0);
         SetInputData({ 0: '', 1: '' });
         SetMsgBox({ 0: '未完了', 1: '未完了', 2: '未完了' });
         focusing(0);
@@ -54,7 +63,6 @@ const Checking2 = (props) => {
     useEffect(() => {
         getWorkCount();
         inputLock();
-        focusing(0);
     }, []);
 
     const inputLock = () => {
@@ -63,50 +71,57 @@ const Checking2 = (props) => {
         }
     };
 
+    const printComplete = () => {
+        SetCompleteText('完了');
+        inputLock();
+        SetTaskCnt(maxTask + 1);
+        btnRef.current.hidden = 'true';
+    };
+
     const getWorkCount = () => {
         let cnt = 0;
         const toastId = toast.loading('作業進捗更新中...');
         SetWorkCount(0);
         axios
-            .get(`/api/${pageType}/dailydata/` + selectDate)
+            .get(`/api/${pageType}/dailydata/${selectDate}`)
             .then((res) => {
                 toast.success('作業進捗更新できました。', { id: toastId });
                 SetMaxWorkCount(res.data.length);
                 res.data.forEach((data) => {
                     if (data.二次梱包フラグ == 1) cnt++;
                 });
-                console.log(WorkCount);
 
                 SetWorkCount(cnt);
                 if (cnt == res.data.length) {
-                    SetCompleteText('完了');
-                    inputLock();
-                    SetTaskCnt(5);
-                    console.log(btnRef);
-                    btnRef.current.hidden = 'true';
+                    printComplete();
+                } else {
+                    focusing(0);
                 }
             })
             .catch((e) => {
                 let errMsg = '';
                 if (e.response == null) {
                     errMsg = 'サーバー接続失敗。';
+                } else if (e.response.status == 410) {
+                    errMsg = '進捗情報がありません。';
                 } else {
                     errMsg = e.response.data.message;
                 }
+                printComplete();
                 toast.custom(errMsg, { type: 'closeError', id: toastId });
             });
     };
 
-    const focusing = (nuer) => {
-        console.log(inputRef);
-        inputRef.current[nuer].disabled = false;
-        inputRef.current[nuer].focus();
+    const focusing = (number) => {
+        SetTaskCnt(number);
+        inputRef.current[number].disabled = false;
+        inputRef.current[number].focus();
     };
 
     const GetNumberData = () => {
         axios
             .get(
-                `/api/${pageType}/checkingdata/${selectDate}/${inputData['0']}?type=2`
+                `/api/${pageType}/checkingdata/${selectDate}/${inputData[0]}?type=2`
             )
             .then((res) => {
                 SetSceneName(res.data[0].シーン名);
@@ -116,26 +131,25 @@ const Checking2 = (props) => {
             })
             .catch((e) => {
                 let errMsg = ErrorCheck(e);
-                ResultError(`入力番号:${inputData['0']}
+                ResultError(`入力番号:${inputData[0]}
                 ${errMsg}`);
             });
     };
 
     const is_number = (text) => {
         const regex = /^[0-9]+$/;
-        if (regex.test(text)) {
-            return true;
-        }
-        return false;
+        return regex.test(text);
     };
 
     const handleKeyPress = (e) => {
         const event = e;
         if (event.key === 'Enter') {
+            // InputData なし
             if (inputData[taskCnt] == '' || inputData[taskCnt] == null) {
                 ResultError('入力してください');
                 return;
             }
+
             SetMsgBox((prevState) => ({
                 ...prevState,
                 [taskCnt]: 'サーバ接続中…',
@@ -143,10 +157,10 @@ const Checking2 = (props) => {
 
             if (taskCnt == 0) GetNumberData();
             else if (taskCnt == 1) {
-                if (inputData['0'].slice(0, -3) == inputData['1']) {
+                if (inputData[0].slice(0, -3) == inputData[1]) {
                     axios
                         .put(
-                            `/api/${pageType}/secondpacking/${selectDate}/${inputData['0']}?type=2`
+                            `/api/${pageType}/secondpacking/${selectDate}/${inputData[0]}?type=2`
                         )
                         .then((res) => {
                             toast.success('検品処理完了しました。');
@@ -158,7 +172,7 @@ const Checking2 = (props) => {
                             ResultError(errMsg);
                         });
                 } else {
-                    ResultError(`入力番号:${inputData['1']}
+                    ResultError(`入力番号:${inputData[1]}
                     問い合わせ番号が違います。`);
                 }
             }
@@ -170,7 +184,6 @@ const Checking2 = (props) => {
         boxRef.current[taskCnt].style.backgroundColor = green[200];
         SetMsgBox((prevState) => ({ ...prevState, [taskCnt]: '完了' }));
         focusing(taskCnt + 1);
-        SetTaskCnt(taskCnt + 1);
     };
 
     const ResultError = (text) => {
@@ -189,7 +202,40 @@ const Checking2 = (props) => {
 
     return (
         <>
-            <Header pageType={pageType} disableList="false" />
+            <Box
+                sx={{
+                    height: '7%',
+                    position: 'sticky',
+                    top: 0,
+                    left: 0,
+                    color: 'primary.dark',
+                    backgroundColor: 'primary.main',
+                    py: 1,
+                    px: 1,
+                    boxShadow: 2,
+                    display: 'flex',
+                    alignItems: 'center',
+                }}
+            >
+                <ButtonBase
+                    color="black"
+                    onClick={() => {
+                        navigate(`/${pageType}`);
+                    }}
+                >
+                    <Box
+                        sx={{ ':hover': { color: grey[300] } }}
+                        display={'flex'}
+                    >
+                        <ArrowBackIcon sx={{ fontSize: 32 }} />
+                        <Typography fontWeight={'bold'} fontSize={24}>
+                            戻る
+                        </Typography>
+                    </Box>
+                </ButtonBase>
+            </Box>
+
+            {/* <Header pageType={pageType} disableList={true} /> */}
             <Box height={'90%'}>
                 <Box
                     width={'100%'}
@@ -300,7 +346,7 @@ const Checking2 = (props) => {
                                 バーコード
                             </Typography>
                             <TextField
-                                value={inputData['0']}
+                                value={inputData[0]}
                                 onChange={TextFieldHandler}
                                 inputProps={{ onKeyPress: handleKeyPress }}
                                 inputRef={(ref) => inputRef.current.push(ref)}
@@ -318,7 +364,7 @@ const Checking2 = (props) => {
                                     whiteSpace={'pre-line'}
                                     sx={CheckingListResultTextOption}
                                 >
-                                    {MsgBox['0']}
+                                    {MsgBox[0]}
                                 </Typography>
                             </Box>
                         </Box>
@@ -334,7 +380,7 @@ const Checking2 = (props) => {
                                 バーコード２
                             </Typography>
                             <TextField
-                                value={inputData['1']}
+                                value={inputData[1]}
                                 onChange={TextFieldHandler}
                                 inputProps={{ onKeyPress: handleKeyPress }}
                                 inputRef={(ref) => inputRef.current.push(ref)}
@@ -351,7 +397,7 @@ const Checking2 = (props) => {
                                     whiteSpace={'pre-line'}
                                     sx={CheckingListResultTextOption}
                                 >
-                                    {MsgBox['1']}
+                                    {MsgBox[1]}
                                 </Typography>
                             </Box>
                         </Box>

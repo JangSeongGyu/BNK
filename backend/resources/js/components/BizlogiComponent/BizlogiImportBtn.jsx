@@ -5,6 +5,7 @@ import WaitCircle from '../WaitCircle';
 import ImportDialog from '../../Beauty/Import/ImportDialog';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
+import { CallTeams } from '../GlobalComponent';
 
 const BizlogiImportBtn = (props) => {
     const selectDate = props.selectDate;
@@ -34,7 +35,7 @@ const BizlogiImportBtn = (props) => {
                 .catch((e) => {
                     let errMsg = '';
                     if (e.response == null) {
-                        errMsg = 'サーバー接続失敗。';
+                        errMsg = 'サーバー接続失敗';
                     } else {
                         errMsg = e.response.data.message;
                     }
@@ -59,27 +60,7 @@ const BizlogiImportBtn = (props) => {
         setJson(null);
     };
 
-    const CallTeams = () => {
-        const toastId = toast.loading('Teams発信中...');
-        axios
-            .post(`/api/${pageType}/webhook/${selectDate}`, {
-                category: '出荷指示完了',
-            })
-            .then((res) => {
-                toast.success('Teams発信完了', { id: toastId });
-            })
-            .catch((e) => {
-                let errMsg = '';
-                if (e.response == null) {
-                    errMsg = 'Teamsサーバー接続失敗。';
-                } else {
-                    errMsg = e.response.data.message;
-                }
-                toast.custom(errMsg, { type: 'closeError', id: toastId });
-            });
-    };
-
-    CallTeams();
+    // CallTeams(pageType, selectDate, '出荷指示完了');
 
     const tsubushi = async () => {
         const toastId = toast.loading('つぶし実行中...');
@@ -92,7 +73,7 @@ const BizlogiImportBtn = (props) => {
             .catch((e) => {
                 let errMsg = '';
                 if (e.response == null) {
-                    errMsg = 'つぶしサーバー接続失敗。';
+                    errMsg = 'つぶしサーバー接続失敗';
                 } else {
                     errMsg = e.response.data.message;
                 }

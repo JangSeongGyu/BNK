@@ -1,5 +1,7 @@
+import axios from 'axios';
 import { saveAs } from 'file-saver';
 import JSZip from 'jszip';
+import { toast } from 'react-hot-toast';
 
 export const ZipDownload = (files, zipTitle) => {
     const today = fileToday();
@@ -41,4 +43,24 @@ export const Today = () => {
 export const paddingNum = (data, index) => {
     const paddingNum = String(data).toString().padStart(index, '0');
     return paddingNum;
+};
+
+export const CallTeams = (pageType, selectDate, category) => {
+    const toastId = toast.loading('Teams発信中...');
+    axios
+        .post(`/api/${pageType}/webhook/${selectDate}`, {
+            category: category,
+        })
+        .then((res) => {
+            toast.success('Teams発信完了', { id: toastId });
+        })
+        .catch((e) => {
+            let errMsg = '';
+            if (e.response == null) {
+                errMsg = 'Teamsサーバー接続失敗';
+            } else {
+                errMsg = e.response.data.message;
+            }
+            toast.custom(errMsg, { type: 'closeError', id: toastId });
+        });
 };

@@ -4,26 +4,25 @@ import axios from 'axios';
 import CalendarList from '../components/CalendarList';
 import MarketSideList from '../components/MarketSideList';
 import ShipmentDialog from '../components/ShipmentComponent/ShipmentDialog';
-import { Dialog, Typography, Button, Box, Tooltip } from '@mui/material';
-import { toast } from 'react-hot-toast';
+import { Dialog, Typography, Button, Box, Slide, Tooltip } from '@mui/material';
 import { grey } from '@mui/material/colors';
+import { toast } from 'react-hot-toast';
+import { Today } from '../components/GlobalComponent';
+import { useParams } from 'react-router-dom';
 
 const BacklogTextOption = {
     width: 100,
     fontSize: 18,
     fontWeight: 'bold',
-    borderRadius: 1,
 };
 
 const Taxi = (props) => {
     const pageType = props.pageType;
-    const [selectDate, SetSelectDate] = useState('');
+    const { selectDate } = useParams();
     const [open, SetOpen] = useState(false);
     const [logDatas, SetLogDatas] = useState([]);
     const [pouchDatas, SetPouchDatas] = useState('');
     const [SFDatas, SetSFDatas] = useState('');
-    const [dailyData, SetDailyData] = useState([]);
-    const [clickType, SetClickType] = useState('');
     const [isData, SetIsData] = useState(false);
     const UpdateRef = useRef(null);
 
@@ -31,6 +30,12 @@ const Taxi = (props) => {
         CallSFData();
         callBacklog();
     }, []);
+
+    useEffect(() => {
+        if (selectDate == null) return;
+        SetIsData(false);
+        callDailyData(selectDate);
+    }, [selectDate]);
 
     const CallSFData = () => {
         axios
@@ -42,16 +47,24 @@ const Taxi = (props) => {
     };
 
     const ClickSFData = () => {
-        toast.loading('サーバ接続中...');
+        const toastId = toast.loading('サーバ接続中...');
         axios
             .post(`/api/${pageType}/order/`)
             .then((res) => {
                 callBacklog();
                 SetSFDatas('');
-                toast.success('SFデータ取得完了。');
+                toast.success('SFデータ取得完了', { id: toastId });
             })
             .catch((e) => {
-                toast.success(e.response.current);
+                let errMsg = '';
+                if (e.response == null) {
+                    errMsg = '作業進捗サーバー接続失敗';
+                } else if (e.response.status == 410) {
+                    errMsg = '進捗情報がありません';
+                } else {
+                    errMsg = e.response.data.message;
+                }
+                toast.custom(errMsg, { type: 'closeError', id: toastId });
             });
     };
 
@@ -60,30 +73,17 @@ const Taxi = (props) => {
             .get(`/api/${pageType}/backlogdata/`)
             .then((res) => {
                 SetLogDatas(res.data[0]);
-                SetSelectDate(data.selectDate);
             })
             .catch((e) => {});
     };
 
-    const thisMonth = () => {
-        const today = new Date();
-        if (localStorage.getItem('LastSelectDate')) {
-            const date = localStorage.getItem('LastSelectDate');
-            return date;
-        }
-        localStorage.removeItem('LastSelectDate');
-        return `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(
-            2,
-            '0'
-        )}`;
-    };
-
-    const handleClose = (res) => {
-        if (res) {
+    const handleClose = (confirm) => {
+        if (confirm) {
             callBacklog();
-            UpdateRef.current.event();
-            UpdateRef.current.side(selectDate);
+            UpdateRef.current();
+            callDailyData(selectDate);
         }
+
         SetOpen(false);
     };
     const handleOpen = () => {
@@ -98,30 +98,14 @@ const Taxi = (props) => {
         else SetOpen(true);
     };
 
-    // Get Calender -> selectDate & dailyData
-    const CallSelectDate = (data) => {
-        SetSelectDate(data.selectDate);
-        if (data.isData == true) callDailyData(data.selectDate);
-        else SetIsData(false);
-        // SetIsData(data.isData);
-    };
-
-    const callDailyData = (date) => {
-        const toastId = toast.loading(date + 'データ取得中...');
+    const callDailyData = (selectDate) => {
         axios
-            .get(`/api/${pageType}/dailydata/${date}`)
+            .get(`/api/${pageType}/dailydata/${selectDate}`)
             .then((res) => {
-                toast.success('データ取得完了。', { id: toastId });
                 SetIsData(true);
             })
             .catch((e) => {
-                let errMsg = '';
-                if (e.response == null) {
-                    errMsg = 'サーバー接続失敗。';
-                } else {
-                    errMsg = e.response.data.message;
-                }
-                toast.error(errMsg, { id: toastId });
+                handleOpen(true);
             });
     };
 
@@ -134,7 +118,7 @@ const Taxi = (props) => {
             backgroundColor={grey[200]}
         >
             <Header page={0} pageType={pageType} />
-            <Box height={'100%'} p={2} gap={2} sx={{ display: 'flex' }}>
+            <Box height={'100%'} gap={2} p={2} sx={{ display: 'flex' }}>
                 <Box sx={{ width: '60%', height: '100%', minWidth: 700 }}>
                     <Box
                         sx={{
@@ -171,6 +155,7 @@ const Taxi = (props) => {
                             <br />
                             {SFDatas.length}
                         </Typography>
+
                         <Tooltip
                             title={
                                 <Typography>
@@ -204,20 +189,20 @@ const Taxi = (props) => {
                     <CalendarList
                         UpdateRef={UpdateRef}
                         pageType={pageType}
-                        Today={thisMonth}
-                        CallSelectDate={CallSelectDate}
-                        handleOpen={handleOpen}
+                        selectDate={selectDate}
                     />
                 </Box>
-                <Box sx={{ width: '40%' }} minWidth={500} height={'100%'}>
-                    {isData && (
-                        <MarketSideList
-                            pageType={pageType}
-                            selectDate={selectDate}
-                            isData={isData}
-                            logDatas={logDatas}
-                        />
-                    )}
+                <Box
+                    width="40%"
+                    overflow={'hidden'}
+                    minWidth={500}
+                    height={'100%'}
+                >
+                    <MarketSideList
+                        pageType={pageType}
+                        selectDate={selectDate}
+                        isData={isData}
+                    />
                 </Box>
             </Box>
             <Dialog onClose={() => handleClose(false)} open={open}>

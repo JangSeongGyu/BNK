@@ -82,7 +82,7 @@ const Checking = (props) => {
         axios
             .get(`/api/${pageType}/dailydata/${selectDate}`)
             .then((res) => {
-                toast.success('作業進捗更新できました。', { id: toastId });
+                toast.success('作業進捗更新できました', { id: toastId });
                 SetMaxWorkCount(res.data.length);
                 res.data.forEach((data) => {
                     if (data.一次梱包フラグ == 1 || data.二次梱包フラグ == 1) {
@@ -100,9 +100,9 @@ const Checking = (props) => {
             .catch((e) => {
                 let errMsg = '';
                 if (e.response == null) {
-                    errMsg = '作業進捗サーバー接続失敗。';
+                    errMsg = '作業進捗サーバー接続失敗';
                 } else if (e.response.status == 410) {
-                    errMsg = '進捗情報がありません。';
+                    errMsg = '進捗情報がありません';
                 } else {
                     errMsg = e.response.data.message;
                 }
@@ -164,7 +164,7 @@ const Checking = (props) => {
                     ResultOK();
                 } else {
                     ResultError(`入力番号:${inputData[1]}
-                    問い合わせ番号が違います。`);
+                    問い合わせ番号が違います`);
                 }
             } else if (taskCnt == 2) {
                 // 数量なのかチェック
@@ -180,7 +180,7 @@ const Checking = (props) => {
                             `/api/${pageType}/firstpacking/${selectDate}/${inputData[0]}`
                         )
                         .then((res) => {
-                            toast.success('検品処理完了しました。');
+                            toast.success('検品処理完了しました');
                             getWorkCount();
                             dataClear();
                         })
@@ -191,7 +191,7 @@ const Checking = (props) => {
                 } else {
                     ResultError(
                         `入力数量:${inputData[2]} 
-                        入力数量が違います。`
+                        入力数量が違います`
                     );
                 }
             }
@@ -237,6 +237,7 @@ const Checking = (props) => {
                     backgroundColor: 'primary.main',
                     py: 1,
                     px: 1,
+                    zIndex: 2,
                     boxShadow: 2,
                     display: 'flex',
                     alignItems: 'center',
@@ -245,7 +246,7 @@ const Checking = (props) => {
                 <ButtonBase
                     color="black"
                     onClick={() => {
-                        navigate(`/${pageType}`);
+                        navigate(`/${pageType}/${selectDate}`);
                     }}
                 >
                     <Box
@@ -254,7 +255,7 @@ const Checking = (props) => {
                     >
                         <ArrowBackIcon sx={{ fontSize: 32 }} />
                         <Typography fontWeight={'bold'} fontSize={24}>
-                            戻る
+                            カレンダーに戻る
                         </Typography>
                     </Box>
                 </ButtonBase>
@@ -290,7 +291,7 @@ const Checking = (props) => {
                                 <ButtonBase
                                     onClick={() => {
                                         navigate(
-                                            `/${pageType}/checking2/${selectDate}`
+                                            `/${pageType}/${selectDate}/checking2`
                                         );
                                     }}
                                 >
@@ -326,11 +327,6 @@ const Checking = (props) => {
                                 {completeText}
                             </Typography>
                         )}
-                        <Box ref={btnRef} width={300}>
-                            <Button onClick={() => dataClear()} sx={BtnOption}>
-                                データクリア
-                            </Button>
-                        </Box>
                     </Box>
                 </Box>
 
@@ -377,16 +373,24 @@ const Checking = (props) => {
                 </Box>
 
                 <Divider variant="middle" />
+
+                <Box width={'100%'} backgroundColor={grey[100]}>
+                    <Box width={350} mt={3} ml={4} ref={btnRef}>
+                        <Button onClick={() => dataClear()} sx={BtnOption}>
+                            入力データクリア
+                        </Button>
+                    </Box>
+                </Box>
+
                 <Box
                     height={'100%'}
-                    minWidth={1200}
                     alignItems={'center'}
                     display={'flex'}
                     justifyContent={'center'}
                     backgroundColor={grey[100]}
                 >
                     <Box
-                        height={'70%'}
+                        height={'90%'}
                         width={'100%'}
                         mx={4}
                         mt={2}
@@ -418,7 +422,7 @@ const Checking = (props) => {
                                 height={100}
                             >
                                 <Typography
-                                    whitespace={'pre-line'}
+                                    whiteSpace={'pre-line'}
                                     sx={CheckingListResultTextOption}
                                 >
                                     {String(MsgBox[0]).replace(/<br>/g, '\n')}
@@ -451,7 +455,7 @@ const Checking = (props) => {
                                 backgroundColor={grey[400]}
                             >
                                 <Typography
-                                    whitespace={'pre-line'}
+                                    whiteSpace={'pre-line'}
                                     sx={CheckingListResultTextOption}
                                 >
                                     {MsgBox[1]}
@@ -484,7 +488,7 @@ const Checking = (props) => {
                                 sx={CheckingListResultOption}
                             >
                                 <Typography
-                                    whitespace={'pre-line'}
+                                    whiteSpace={'pre-line'}
                                     sx={CheckingListResultTextOption}
                                 >
                                     {MsgBox[2]}

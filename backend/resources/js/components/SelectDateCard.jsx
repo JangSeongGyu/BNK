@@ -14,7 +14,7 @@ const SelectDateCard = (props) => {
 
     const DetailClick = () => {
         localStorage.setItem('LastSelectDate', selectDate);
-        navigate(`/${pageType}/detail/${selectDate}`);
+        navigate(`/${pageType}/${selectDate}/detail`);
     };
     return (
         <Box width={'100%'} sx={BorderOption}>

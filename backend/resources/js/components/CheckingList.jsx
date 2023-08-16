@@ -10,19 +10,10 @@ const CheckingList = (props) => {
     const pageType = props.pageType;
     const selectDate = props.selectDate;
     let navigate = useNavigate();
-    const CheckingBtnClick = () => {
-        localStorage.setItem('LastSelectDate', selectDate);
-        navigate('checking/' + selectDate);
-    };
-
-    const Checking2BtnClick = () => {
-        localStorage.setItem('LastSelectDate', selectDate);
-        navigate('checking2/' + selectDate);
-    };
 
     const Check2Btn = () => {
         return (
-            <Button sx={BtnOption} onClick={() => Checking2BtnClick()}>
+            <Button sx={BtnOption} onClick={() => navigate('./checking2')}>
                 二次検品
             </Button>
         );
@@ -35,7 +26,7 @@ const CheckingList = (props) => {
         <Box my={1} width={'100%'} sx={BorderOption}>
             <Typography sx={ListTitleOption}>検品</Typography>
             <Box mt={1} mb={1}>
-                <Button sx={BtnOption} onClick={() => CheckingBtnClick()}>
+                <Button sx={BtnOption} onClick={() => navigate('./checking')}>
                     一次検品
                 </Button>
             </Box>

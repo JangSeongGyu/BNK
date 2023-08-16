@@ -41,7 +41,7 @@ const Home = (props) => {
             >
                 <Box borderBottom={1} borderColor={grey[400]} mb={2}>
                     <Typography fontSize={32} fontWeight={'bold'}>
-                        ショットカット
+                        ショートカット
                     </Typography>
                 </Box>
                 <Box display={'flex'}>

@@ -138,7 +138,7 @@ const DetailView = (props) => {
                 <ButtonBase
                     color="black"
                     onClick={() => {
-                        navigate(`/${pageType}`);
+                        navigate(`/${pageType}/${selectDate}`);
                     }}
                 >
                     <Box
@@ -147,7 +147,7 @@ const DetailView = (props) => {
                     >
                         <ArrowBackIcon sx={{ fontSize: 32 }} />
                         <Typography fontWeight={'bold'} fontSize={24}>
-                            戻る
+                            カレンダーに戻る
                         </Typography>
                     </Box>
                 </ButtonBase>

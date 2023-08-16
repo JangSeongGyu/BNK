@@ -11,18 +11,20 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import CalendarChangeDialog from './CalendarChangeDialog';
 import { grey } from '@mui/material/colors';
 import { Today } from './GlobalComponent';
+import { useNavigate } from 'react-router-dom';
 
 const CalendarList = (props) => {
     const pageType = props.pageType;
-    const [selectDate, SetSelectDate] = useState('');
+    const selectDate = props.selectDate;
     const [eventDatas, SetEventDatas] = useState([]);
     const [cssStr, SetCssStr] = useState('');
-    const [currentDate, SetCurrentDate] = useState(props.Today);
+    const [currentDate, SetCurrentDate] = useState(selectDate);
     const calref = useRef(null);
     const [eventDates, SetEventDates] = useState({});
     const dialogRef = useRef('null');
     const [rightList, SetRightList] = useState('');
 
+    const navigate = useNavigate();
     const StyleWrapper = styled.div`
         margin: 0 10px;
         width: 100%;
@@ -32,7 +34,9 @@ const CalendarList = (props) => {
             cursor: pointer;
         }
         [data-date='${selectDate}'] {
-            ${cssStr}
+            outline: 2px solid red;
+            outline-offset: -2px;
+            cursor: pointer;
         }
 
         .fc-daygrid-event {
@@ -47,38 +51,14 @@ const CalendarList = (props) => {
     `;
 
     useEffect(() => {
-        if (pageType != null) {
-            // parent Ref
-            props.UpdateRef.current = {
-                event: updateCalendar,
-                side: SetSideList,
-            };
-
-            //first Get Data
-            updateCalendar();
-        }
+        if (pageType == null) return;
+        props.UpdateRef.current = updateCalendar;
+        updateCalendar();
     }, []);
 
     // Get Select Date Data
     useEffect(() => {
-        props.CallSelectDate({
-            selectDate: selectDate,
-            isData: false,
-        });
-
-        if (selectDate != '') {
-            if (CheckDate(selectDate)) {
-                props.CallSelectDate({
-                    selectDate: selectDate,
-                    isData: true,
-                });
-            } else {
-                props.CallSelectDate({
-                    selectDate: selectDate,
-                    isData: false,
-                });
-            }
-        }
+        console.log('calendar', selectDate);
     }, [selectDate]);
 
     const updateCalendar = () => {
@@ -94,7 +74,7 @@ const CalendarList = (props) => {
             .then((res) => {
                 // calendar Button Controll
                 SetRightList('prevBtn nextBtn');
-                toast.success('カレンダー情報更新完了。', {
+                toast.success('カレンダー情報更新完了', {
                     id: toastId,
                 });
                 console.log('Calendar Data', res.data);
@@ -139,21 +119,6 @@ const CalendarList = (props) => {
         return `${startYear}-${startMonth}-${startDay}`;
     };
 
-    const CheckDate = (date) => {
-        let res = false;
-        eventDatas.forEach((data) => {
-            if (data.date == date) res = true;
-        });
-        return res;
-    };
-
-    const SetSideList = (date) => {
-        SetSelectDate(date);
-        props.CallSelectDate({
-            selectDate: date,
-            isData: true,
-        });
-    };
     const EventDrop = (dropInfo) => {
         const originalDate = dropInfo.oldEvent.startStr;
         const changeDate = dropInfo.event.startStr;
@@ -166,18 +131,9 @@ const CalendarList = (props) => {
             dialogRef.current.ChangeDate(dropInfo, originalDate, changeDate);
         }
     };
+
     const handleDateClick = (dateClickInfo) => {
-        SetSelectDate(dateClickInfo.dateStr);
-        if (!CheckDate(dateClickInfo.dateStr)) {
-            if (dateClickInfo.dateStr < Today())
-                toast.error('出荷日は本日より前日に設定することは出来ません');
-            else props.handleOpen();
-        }
-        SetCssStr(`
-            outline: 2px solid red;
-            outline-offset: -2px;
-            cursor: pointer;
-        `);
+        navigate(`/${pageType}/${dateClickInfo.dateStr}`);
     };
 
     return (

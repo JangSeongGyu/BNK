@@ -10,7 +10,7 @@ const TXTheme = createTheme({
         primary: {
             light: '#fafafa',
             main: orange[500],
-            dark: 'black',
+            dark: 'white',
             font: orange['A700'],
             contrastText: '#fff',
             borderColor: '#bdbdbd',

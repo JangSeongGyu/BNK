@@ -4,10 +4,11 @@ import axios from 'axios';
 import CalendarList from '../components/CalendarList';
 import MarketSideList from '../components/MarketSideList';
 import ShipmentDialog from '../components/ShipmentComponent/ShipmentDialog';
-import { Dialog, Divider, Typography, Button, Box } from '@mui/material';
-import { grey, pink, red } from '@mui/material/colors';
+import { Dialog, Typography, Button, Box, Slide } from '@mui/material';
+import { grey } from '@mui/material/colors';
 import { toast } from 'react-hot-toast';
-import { paddingNum } from '../components/GlobalComponent';
+import { Today } from '../components/GlobalComponent';
+import { useParams } from 'react-router-dom';
 
 const BacklogTextOption = {
     width: 100,
@@ -17,7 +18,7 @@ const BacklogTextOption = {
 
 const SuperMarket = (props) => {
     const pageType = props.pageType;
-    const [selectDate, SetSelectDate] = useState('');
+    const { selectDate } = useParams();
     const [open, SetOpen] = useState(false);
     const [logDatas, SetLogDatas] = useState([]);
     const [SFDatas, SetSFDatas] = useState('');
@@ -25,19 +26,45 @@ const SuperMarket = (props) => {
     const UpdateRef = useRef(null);
 
     useEffect(() => {
+        CallSFData();
         callBacklog();
     }, []);
 
-    const thisMonth = () => {
-        const today = new Date();
-        const month = paddingNum(String(today.getMonth() + 1), 2);
-        if (localStorage.getItem('LastSelectDate')) {
-            const date = localStorage.getItem('LastSelectDate');
-            return date;
-        }
+    useEffect(() => {
+        if (selectDate == null) return;
+        SetIsData(false);
+        callDailyData(selectDate);
+    }, [selectDate]);
 
-        localStorage.removeItem('LastSelectDate');
-        return `${today.getFullYear()}-${month}`;
+    const CallSFData = () => {
+        axios
+            .get(`/api/${pageType}/order/`)
+            .then((res) => {
+                SetSFDatas(res.data);
+            })
+            .catch((e) => {});
+    };
+
+    const ClickSFData = () => {
+        const toastId = toast.loading('サーバ接続中...');
+        axios
+            .post(`/api/${pageType}/order/`)
+            .then((res) => {
+                callBacklog();
+                SetSFDatas('');
+                toast.success('SFデータ取得完了', { id: toastId });
+            })
+            .catch((e) => {
+                let errMsg = '';
+                if (e.response == null) {
+                    errMsg = '作業進捗サーバー接続失敗';
+                } else if (e.response.status == 410) {
+                    errMsg = '進捗情報がありません';
+                } else {
+                    errMsg = e.response.data.message;
+                }
+                toast.custom(errMsg, { type: 'closeError', id: toastId });
+            });
     };
 
     const callBacklog = () => {
@@ -45,51 +72,39 @@ const SuperMarket = (props) => {
             .get(`/api/${pageType}/backlogdata/`)
             .then((res) => {
                 SetLogDatas(res.data[0]);
-                SetSelectDate(data.selectDate);
             })
             .catch((e) => {});
     };
 
-    const handleClose = (res) => {
-        if (res) {
+    const handleClose = (confirm) => {
+        if (confirm) {
             callBacklog();
-            UpdateRef.current.event();
-            UpdateRef.current.side(selectDate);
+            UpdateRef.current();
+            callDailyData(selectDate);
         }
+
         SetOpen(false);
     };
     const handleOpen = () => {
+        if (selectDate < Today()) {
+            toast.error('出荷日は本日より前日に設定することは出来ません');
+            return;
+        }
         if (logDatas.件数 == 0 || logDatas.length == 0) {
             toast.error('処理するデータがありません');
-        } else {
-            SetOpen(true);
+            return;
         }
+        SetOpen(true);
     };
 
-    // Get Calender -> selectDate
-    const CallSelectDate = (data) => {
-        SetSelectDate(data.selectDate);
-        if (data.isData == true) callDailyData(data.selectDate);
-        else SetIsData(false);
-    };
-
-    // Get Side List Data
-    const callDailyData = (date) => {
-        const toastId = toast.loading(date + 'データ取得中...');
+    const callDailyData = (selectDate) => {
         axios
-            .get(`/api/${pageType}/dailydata/${date}`)
+            .get(`/api/${pageType}/dailydata/${selectDate}`)
             .then((res) => {
-                toast.success('データ取得完了。', { id: toastId });
                 SetIsData(true);
             })
             .catch((e) => {
-                let errMsg = '';
-                if (e.response == null) {
-                    errMsg = 'サーバー接続失敗。';
-                } else {
-                    errMsg = e.response.data.message;
-                }
-                toast.error(errMsg, { id: toastId });
+                handleOpen(true);
             });
     };
 
@@ -150,19 +165,20 @@ const SuperMarket = (props) => {
                     <CalendarList
                         UpdateRef={UpdateRef}
                         pageType={pageType}
-                        Today={thisMonth}
-                        CallSelectDate={CallSelectDate}
-                        handleOpen={handleOpen}
+                        selectDate={selectDate}
                     />
                 </Box>
-                <Box sx={{ width: '40%' }} minWidth={500} height={'100%'}>
-                    {isData && (
-                        <MarketSideList
-                            pageType={pageType}
-                            selectDate={selectDate}
-                            isData={isData}
-                        />
-                    )}
+                <Box
+                    width="40%"
+                    overflow={'hidden'}
+                    minWidth={500}
+                    height={'100%'}
+                >
+                    <MarketSideList
+                        pageType={pageType}
+                        selectDate={selectDate}
+                        isData={isData}
+                    />
                 </Box>
             </Box>
             <Dialog onClose={() => handleClose(false)} open={open}>

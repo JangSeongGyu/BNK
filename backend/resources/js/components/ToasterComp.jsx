@@ -55,6 +55,7 @@ const ToasterComp = () => {
                                 <Box
                                     px={1}
                                     my={1.5}
+                                    whiteSpace={'pre-line'}
                                     overflow={'hidden'}
                                     width={'100%'}
                                 >
@@ -67,7 +68,6 @@ const ToasterComp = () => {
                                     <Button
                                         px={1}
                                         my={1.5}
-                                        whitespace={'pre-line'}
                                         width={'100%'}
                                         onClick={() => toast.dismiss(t.id)}
                                         sx={CloseBtn}

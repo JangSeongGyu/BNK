@@ -48,9 +48,19 @@ const Router = () => {
                         </ThemeProvider>
                     }
                 />
+
                 <Route
                     exact
-                    path={`/supermarket/checking/:selectDate/`}
+                    path={`/supermarket/:selectDate`}
+                    element={
+                        <ThemeProvider theme={SPTheme}>
+                            <SuperMarket pageType="supermarket" />
+                        </ThemeProvider>
+                    }
+                />
+                <Route
+                    exact
+                    path={`/supermarket/:selectDate/checking/`}
                     element={
                         <ThemeProvider theme={SPTheme}>
                             <Checking pageType="supermarket" />
@@ -59,7 +69,7 @@ const Router = () => {
                 />
                 <Route
                     exact
-                    path={`/supermarket/checking2/:selectDate/`}
+                    path={`/supermarket/:selectDate/checking2/`}
                     element={
                         <ThemeProvider theme={SPTheme}>
                             <Checking2 pageType="supermarket" />
@@ -68,7 +78,7 @@ const Router = () => {
                 />
                 <Route
                     exact
-                    path={`/supermarket/detail/:selectDate/`}
+                    path={`/supermarket/:selectDate/detail/`}
                     element={
                         <ThemeProvider theme={SPTheme}>
                             <DetailView pageType="supermarket" />
@@ -96,6 +106,15 @@ const Router = () => {
                         </ThemeProvider>
                     }
                 />
+                <Route
+                    exact
+                    path={`/taxi/:selectDate`}
+                    element={
+                        <ThemeProvider theme={TXTheme}>
+                            <Taxi pageType="taxi" />
+                        </ThemeProvider>
+                    }
+                />
 
                 <Route
                     exact
@@ -108,7 +127,7 @@ const Router = () => {
                 />
                 <Route
                     exact
-                    path={`/taxi/checking/:selectDate/`}
+                    path={`/taxi/:selectDate/checking/`}
                     element={
                         <ThemeProvider theme={TXTheme}>
                             <Checking pageType="taxi" />
@@ -118,7 +137,7 @@ const Router = () => {
 
                 <Route
                     exact
-                    path={`/taxi/detail/:selectDate/`}
+                    path={`/taxi/:selectDate/detail/`}
                     element={
                         <ThemeProvider theme={TXTheme}>
                             <DetailView pageType="taxi" />

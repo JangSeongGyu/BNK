@@ -1,21 +1,12 @@
 import React, { useEffect, useState, useRef } from 'react';
-import {
-    Typography,
-    Box,
-    Button,
-    Divider,
-    TextField,
-    Input,
-    InputAdornment,
-    FormControl,
-    InputLabel,
-} from '@mui/material';
+import { Typography, Box, Button } from '@mui/material';
 import { green, grey, pink, red } from '@mui/material/colors';
 import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
 import { BtnOption } from '../Design/DesignOption';
 import MasterMonthDialog from '../components/MasterComponent/MasterMonthDialog';
 import Header from '../components/HeaderCompnent/Header';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const InputOption = () => {
     return {
@@ -28,8 +19,15 @@ const InputOption = () => {
 
 const Master = (props) => {
     const pageType = props.pageType;
-    const [textData, SetTextData] = useState({});
-    const dialogRef = useRef();
+    const { openType } = useParams();
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (openType == null) return;
+        if (openType == 'create_monthly') {
+            // dialogRef.current.handleClickOpen(true);
+        }
+    }, [openType]);
 
     return (
         <Box
@@ -61,16 +59,16 @@ const Master = (props) => {
                 </Typography>
                 <Box width={200}>
                     <Button
-                        onClick={() => {
-                            dialogRef.current.handleClickOpen(true);
-                        }}
+                        onClick={() =>
+                            navigate(`/${pageType}/master/create_monthly`)
+                        }
                         sx={BtnOption}
                         height={'20%'}
                     >
                         月次登録
                     </Button>
                 </Box>
-                <MasterMonthDialog ref={dialogRef} pageType={pageType} />
+                <MasterMonthDialog pageType={pageType} openType={openType} />
             </Box>
         </Box>
     );

@@ -136,6 +136,7 @@ const SuperMarket = (props) => {
                                 width: 150,
                                 height: 50,
                                 border: 1,
+                                ml: 2,
                                 color: 'primary.main',
                                 backgroundColor: 'white',
                                 '&:hover': {

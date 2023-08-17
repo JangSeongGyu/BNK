@@ -125,6 +125,7 @@ const Taxi = (props) => {
                             left: 180,
                             top: 120,
                             gap: 1,
+                            ml: 2,
                             position: 'absolute',
                             display: 'flex',
                             alignItems: 'center',

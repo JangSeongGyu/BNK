@@ -20,6 +20,7 @@ import { dialogYes, dialogNo } from '../../Design/DesignOption';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import { paddingNum } from '../GlobalComponent';
+import { useNavigate } from 'react-router-dom';
 
 const BtnOption = {
     height: 50,
@@ -32,6 +33,7 @@ const BtnOption = {
 };
 
 const MasterMonthDialog = forwardRef((props, ref) => {
+    const openType = props.openType;
     const pageType = props.pageType;
     const [open, SetOpen] = useState(false);
     const [textData, SetTextData] = useState('');
@@ -39,14 +41,14 @@ const MasterMonthDialog = forwardRef((props, ref) => {
     const today = new Date();
     const [calendarYear, SetCalendarYear] = useState(today.getFullYear());
     const [selectDate, SetSelectDate] = useState('');
+    const navigate = useNavigate();
 
-    useImperativeHandle(ref, () => {
-        return {
-            handleClickOpen() {
-                SetOpen(true);
-            },
-        };
-    });
+    useEffect(() => {
+        if (openType == null) return;
+        if (openType == 'create_monthly') {
+            SetOpen(true);
+        }
+    }, [openType]);
 
     useEffect(() => {
         callMonthlyData();
@@ -114,6 +116,7 @@ const MasterMonthDialog = forwardRef((props, ref) => {
     const handleClose = () => {
         Clear();
         SetOpen(false);
+        navigate(`/${pageType}/master`);
     };
 
     const Clear = () => {

@@ -95,6 +95,15 @@ const Router = () => {
                         </ThemeProvider>
                     }
                 />
+                <Route
+                    exact
+                    path={`/supermarket/master/:openType`}
+                    element={
+                        <ThemeProvider theme={SPTheme}>
+                            <Master pageType="supermarket" />
+                        </ThemeProvider>
+                    }
+                />
 
                 {/*============ Taxi ======================================================*/}
                 <Route
@@ -115,10 +124,18 @@ const Router = () => {
                         </ThemeProvider>
                     }
                 />
-
                 <Route
                     exact
                     path={`/taxi/master`}
+                    element={
+                        <ThemeProvider theme={TXTheme}>
+                            <Master pageType="taxi" />
+                        </ThemeProvider>
+                    }
+                />
+                <Route
+                    exact
+                    path={`/taxi/master/:openType`}
                     element={
                         <ThemeProvider theme={TXTheme}>
                             <Master pageType="taxi" />

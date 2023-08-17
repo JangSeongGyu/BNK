@@ -3,8 +3,7 @@
 namespace App\MyDefined\UseCase\Taxi;
 
 use App\MyDefined\Entity\General\UserEntity;
-use App\MyDefined\Entity\Taxi\PostTeamsWebhookEntity;
-
+use App\MyDefined\ValueObject\General\DateValueObject;
 use App\MyDefined\Repository\Taxi\GetRepoInterface;
 
 /**
@@ -34,11 +33,11 @@ final class PostTeamsWebhookUseCase
      * 3. 投稿時のメンション先を取得
      * 4. Teamsへ投稿
      */
-    public function execute(string $webhookCategory){
+    public function execute(string $webhookCategory, DateValueObject $DateVO){
         $UserEntity = UserEntity::reconstructFromUseCase();
         $WebhookEntity = $this->getRepository->getWebhook($webhookCategory);
         $WebhookMentionerEntity = $this->getRepository->getWebhookMentioner($webhookCategory);
-        $WebhookEntity->postWebhook($WebhookMentionerEntity);
+        $WebhookEntity->postWebhook($WebhookMentionerEntity, $DateVO);
         return;
     }
 }

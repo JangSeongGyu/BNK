@@ -24,7 +24,7 @@ use App\MyDefined\UseCase\Taxi\UpdateShipmentUseCase;
 use App\MyDefined\UseCase\Taxi\GetBacklogDataUseCase;
 use App\MyDefined\UseCase\Taxi\GetBizlogiUseCase;
 use App\MyDefined\UseCase\Taxi\GetDailyShipmentDataUseCase;
-use App\MyDefined\UseCase\Taxi\UpdateShipmentDataUseCase;
+use App\MyDefined\UseCase\Taxi\UpdateShipmentDateUseCase;
 use App\MyDefined\UseCase\Taxi\GetBetweenShipmentDataUseCase;
 use App\MyDefined\UseCase\Taxi\GetBetweenShipmentCountUseCase;
 use App\MyDefined\UseCase\Taxi\GetQRDataUseCase;
@@ -117,17 +117,17 @@ class TaxiController extends Controller
 
     /**
      * [PUT]出荷日変更
-     * @param UpdateDailyShipmentDataUseCase $UpdateDailyShipmentDataUseCase
+     * @param UpdateDailyShipmentDateUseCase $UpdateDailyShipmentDateUseCase
      */
 
-     public function updateDailyShipmentData(
+     public function updateDailyShipmentDate(
         Request $request,
-        UpdateShipmentDataUseCase $UpdateShipmentDataUseCase,
+        UpdateShipmentDateUseCase $UpdateShipmentDateUseCase,
         $shipmentDate
     ){
         $DateVO = DateValueObject::create($shipmentDate);
         $ChangeDateVO = DateValueObject::create($request->input('change_date'));
-        $UpdateShipmentDataUseCase->execute($DateVO, $ChangeDateVO);
+        $UpdateShipmentDateUseCase->execute($DateVO, $ChangeDateVO);
         return new JsonResponse('200', 200, [], JSON_UNESCAPED_UNICODE);
     }
 
@@ -332,15 +332,19 @@ class TaxiController extends Controller
     }
 
     /**
-     * [GET]TeamsにWebhook通知
+     * [POST]TeamsにWebhook通知
      *
      * @param PostTeamsWebhookUseCase $PostTeamsWebhookUseCase
      */
 
     public function postWebhook(
-        PostTeamsWebhookUseCase $WebhookUseCase
+        Request $request,
+        PostTeamsWebhookUseCase $WebhookUseCase,
+        $date
     ){
-        $allData = $WebhookUseCase->execute('test');
-        return new JsonResponse($allData, 200, [], JSON_UNESCAPED_UNICODE);
+        $DateVO = DateValueObject::create($date);
+        $category = $request->input('category');
+        $WebhookUseCase->execute($category, $DateVO);
+        return;
     }
 }

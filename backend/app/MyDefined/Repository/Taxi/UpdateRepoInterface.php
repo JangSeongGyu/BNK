@@ -11,7 +11,7 @@ use App\MyDefined\Entity\Taxi\UpdateFirstPackingEntity;
 
 interface UpdateRepoInterface{
     public function updateShipment(UserEntity $UserEntity, UpdateShipmentEntity $ShipmnetEntity);
-    public function updateShipmentData(UserEntity $UserEntity, UpdateShipmentDateEntity $ShipmentDateEntity);
+    public function updateShipmentDate(UserEntity $UserEntity, UpdateShipmentDateEntity $ShipmentDateEntity);
     public function updateInquiryNo(UserEntity $UserEntity, UpdateInquiryNoEntity $InquiryNoEntity);
     public function updateTsubushi(UserEntity $UserEntity, UpdateTsubushiEntity $TsubushiEntity);
     public function updateFirstPacking(UserEntity $UserEntity, UpdateFirstPackingEntity $SecondPackingEntity);

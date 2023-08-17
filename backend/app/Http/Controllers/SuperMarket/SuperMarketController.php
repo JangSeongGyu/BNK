@@ -19,6 +19,7 @@ use App\MyDefined\ValueObject\General\OrderNoValueObject;
 use App\MyDefined\UseCase\SuperMarket\GetOrderDataUseCase;
 use App\MyDefined\UseCase\SuperMarket\CreateOrderDataUseCase;
 use App\MyDefined\UseCase\SuperMarket\UpdateShipmentUseCase;
+use App\MyDefined\UseCase\SuperMarket\UpdateShipmentDateUseCase;
 use App\MyDefined\UseCase\SuperMarket\GetBacklogDataUseCase;
 use App\MyDefined\UseCase\SuperMarket\GetBizlogiUseCase;
 use App\MyDefined\UseCase\SuperMarket\GetDailyShipmentDataUseCase;
@@ -36,6 +37,7 @@ use App\MyDefined\UseCase\SuperMarket\UpdateSecondPackingUseCase;
 use App\MyDefined\UseCase\SuperMarket\CreateMonthlyNumberUseCase;
 use App\MyDefined\UseCase\SuperMarket\GetMonthlyNumberUseCase;
 use App\MyDefined\UseCase\SuperMarket\GetAllDataUseCase;
+use App\MyDefined\UseCase\SuperMarket\PostTeamsWebhookUseCase;
 use Illuminate\Http\Request;
 
 /**
@@ -97,6 +99,22 @@ class SuperMarketController extends Controller
         // return new JsonResponse($DateVO->value, 200, [], JSON_UNESCAPED_UNICODE);
         $UpdateShipmentUseCase->execute($DateVO);
         return new JsonResponse();
+    }
+
+    /**
+     * [PUT]出荷日変更
+     * @param UpdateDailyShipmentDateUseCase $UpdateDailyShipmentDateUseCase
+     */
+
+     public function updateDailyShipmentDate(
+        Request $request,
+        UpdateShipmentDateUseCase $UpdateShipmentDateUseCase,
+        $shipmentDate
+    ){
+        $DateVO = DateValueObject::create($shipmentDate);
+        $ChangeDateVO = DateValueObject::create($request->input('change_date'));
+        $UpdateShipmentDateUseCase->execute($DateVO, $ChangeDateVO);
+        return new JsonResponse('200', 200, [], JSON_UNESCAPED_UNICODE);
     }
 
     /**
@@ -342,5 +360,22 @@ class SuperMarketController extends Controller
     ){
         $allData = $GetAllDataUseCase->execute();
         return new JsonResponse($allData, 200, [], JSON_UNESCAPED_UNICODE);
+    }
+
+    /**
+     * [POST]TeamsにWebhook通知
+     *
+     * @param PostTeamsWebhookUseCase $PostTeamsWebhookUseCase
+     */
+
+     public function postWebhook(
+        Request $request,
+        PostTeamsWebhookUseCase $WebhookUseCase,
+        $date
+    ){
+        $DateVO = DateValueObject::create($date);
+        $category = $request->input('category');
+        $WebhookUseCase->execute($category, $DateVO);
+        return;
     }
 }

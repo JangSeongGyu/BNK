@@ -7,6 +7,8 @@ use App\MyDefined\ValueObject\General\YearMonthValueObject;
 use App\MyDefined\ValueObject\SuperMarket\CheckInquiryNoValueObject;
 use App\MyDefined\ValueObject\SuperMarket\CheckingTypeValueObject;
 use App\MyDefined\Entity\SuperMarket\GetAllDataByInquiryNoEntity;
+use App\MyDefined\Entity\SuperMarket\PostTeamsWebhookEntity;
+use App\MyDefined\Entity\SuperMarket\PostTeamsWebhookMentionerEntity;
 
 interface GetRepoInterface{
     public function getOrderData();
@@ -24,5 +26,7 @@ interface GetRepoInterface{
     public function getMonthlyNumber();
     public function getAllDataByMonth(YearMonthValueObject $YearMonthVO);
     public function getAllData();
+    public function getWebhook(string $webhookCategory):PostTeamsWebhookEntity;
+    public function getWebhookMentioner(string $webhookCategory):PostTeamsWebhookMentionerEntity;
 }
 ?>

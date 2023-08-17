@@ -23,6 +23,7 @@ Route::middleware(['middleware' => 'api'])->group(function () {
         Route::post('order', [SuperMarketController::class, 'createOrderData'])->name('sm.createOrderData');
         Route::get('backlogdata', [SuperMarketController::class, 'getBacklogData'])->name('sm.getBacklogData');
         Route::put('shipment/{date}', [SuperMarketController::class, 'updateShipment'])->name('sm.updateShipment');
+        Route::put('dailydata/{date}', [SuperMarketController::class, 'updateDailyShipmentDate'])->name('sm.updateShipmentDate');
         Route::get('dailydata/{date}', [SuperMarketController::class, 'getDailyShipmentData'])->name('sm.getDailyShipmentData');
         Route::get('betweendata/{startdate}/{enddate}', [SuperMarketController::class, 'getBetweenShipmentData'])->name('sm.getBetweenShipmentData');
         Route::get('betweencount/{startdate}/{enddate}', [SuperMarketController::class, 'getBetweenShipmentCount'])->name('sm.getBetweenShipmentCount');
@@ -39,14 +40,15 @@ Route::middleware(['middleware' => 'api'])->group(function () {
         Route::put('monthlynumber', [SuperMarketController::class, 'createMonthlyNumber'])->name('sm.createMonthlyNumber');
         Route::get('monthlynumber', [SuperMarketController::class, 'getMonthlyNumber'])->name('sm.getMonthlyNumber');
         Route::get('alldata', [SuperMarketController::class, 'getAllData'])->name('sm.getAllData');
+        Route::post('webhook/{date}', [SuperMarketController::class, 'postWebhook'])->name('sm.postWebhook');
     });
     Route::group(['prefix'=>'taxi', 'as'=>'taxi.'], function(){
         Route::get('order', [TaxiController::class, 'getOrderData'])->name('tx.getOrderData');
         Route::post('order', [TaxiController::class, 'createOrderData'])->name('tx.createOrderData');
         Route::get('backlogdata', [TaxiController::class, 'getBacklogData'])->name('tx.getBacklogData');
         Route::put('shipment/{date}', [TaxiController::class, 'updateShipment'])->name('tx.updateShipment');
+        Route::put('dailydata/{date}', [TaxiController::class, 'updateDailyShipmentDate'])->name('tx.updateDailyShipmentDate');
         Route::get('dailydata/{date}', [TaxiController::class, 'getDailyShipmentData'])->name('tx.getDailyShipmentData');
-        Route::put('dailydata/{date}', [TaxiController::class, 'updateDailyShipmentData'])->name('tx.updateDailyShipmentData');
         Route::get('betweendata/{startdate}/{enddate}', [TaxiController::class, 'getBetweenShipmentData'])->name('tx.getBetweenShipmentData');
         Route::get('betweencount/{startdate}/{enddate}', [TaxiController::class, 'getBetweenShipmentCount'])->name('tx.getBetweenShipmentCount');
         Route::get('bizlogi/{date}', [TaxiController::class, 'getBizlogi'])->name('tx.getBizlogi');
@@ -60,7 +62,7 @@ Route::middleware(['middleware' => 'api'])->group(function () {
         Route::put('monthlynumber', [TaxiController::class, 'createMonthlyNumber'])->name('tx.createMonthlyNumber');
         Route::get('monthlynumber', [TaxiController::class, 'getMonthlyNumber'])->name('tx.getMonthlyNumber');
         Route::get('alldata', [TaxiController::class, 'getAllData'])->name('tx.getAllData');
-        Route::get('webhook', [TaxiController::class, 'postWebhook'])->name('tx.postWebhook');
+        Route::post('webhook/{date}', [TaxiController::class, 'postWebhook'])->name('tx.postWebhook');
     });
     // Route::get('/wkorders', [ImportController::class, 'getWKOrders']);
     // Route::put('/wkorders', [ImportController::class, 'putWKOrders']);

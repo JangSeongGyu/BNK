@@ -6,6 +6,8 @@ use App\MyDefined\ValueObject\General\DateValueObject;
 use App\MyDefined\ValueObject\SuperMarket\CheckInquiryNoValueObject;
 use App\MyDefined\ValueObject\General\YearMonthValueObject;
 use App\MyDefined\ValueObject\SuperMarket\CheckingTypeValueObject;
+use App\MyDefined\Entity\SuperMarket\PostTeamsWebhookEntity;
+use App\MyDefined\Entity\SuperMarket\PostTeamsWebhookMentionerEntity;
 
 use App\MyDefined\Entity\SuperMarket\GetAllDataByInquiryNoEntity;
 
@@ -163,6 +165,32 @@ final class GetRepository implements GetRepoInterface{
             throw new NotExistsErrorResponseException();
         }
         return $rows;
+    }
+
+    public function getWebhook(string $webhookCategory): PostTeamsWebhookEntity
+    {
+        $rows = DB::connection('supermarket')
+        ->table('TM_Webhook')
+        ->select("*")
+        ->where('カテゴリ', '=', $webhookCategory)
+        ->get();
+        if($rows == '[]'){
+            throw new NotExistsErrorResponseException();
+        }
+        return PostTeamsWebhookEntity::reconstructFromRepository($rows);
+    }
+
+    public function getWebhookMentioner(string $webhookCategory): PostTeamsWebhookMentionerEntity
+    {
+        $rows = DB::connection('supermarket')
+        ->table('TM_Webhookメンション')
+        ->select("*")
+        ->where('カテゴリ', '=', $webhookCategory)
+        ->get();
+        if($rows == '[]'){
+            throw new NotExistsErrorResponseException();
+        }
+        return PostTeamsWebhookMentionerEntity::reconstructFromRepository($rows);
     }
 }
 ?>

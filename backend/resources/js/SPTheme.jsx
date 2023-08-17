@@ -1,4 +1,4 @@
-import { pink } from '@mui/material/colors';
+import { lightGreen, pink } from '@mui/material/colors';
 import { createTheme } from '@mui/material/styles';
 
 const SPTheme = createTheme({
@@ -9,9 +9,9 @@ const SPTheme = createTheme({
     palette: {
         primary: {
             light: '#fafafa',
-            main: pink[500],
+            main: lightGreen[700],
             dark: 'white',
-            font: pink[500],
+            font: lightGreen[700],
             contrastText: '#fff',
             borderColor: '#bdbdbd',
         },

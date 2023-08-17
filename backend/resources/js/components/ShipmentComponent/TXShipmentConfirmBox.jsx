@@ -89,21 +89,21 @@ const TXShipmentConfirmBox = (props) => {
                         mt={1}
                     >
                         <Button
-                            onClick={() => ClickPouch()}
-                            disabled={pouchCnt == 0 ? true : false}
-                            sx={normalBtn}
-                        >
-                            <Typography fontWeight={'bold'}>
-                                パウチ {pouchCnt}件
-                            </Typography>
-                        </Button>
-                        <Button
                             disabled={normalCnt == 0 ? true : false}
                             sx={normalBtn}
                             onClick={ClickNotPouch}
                         >
                             <Typography fontWeight={'bold'}>
                                 通常 {normalCnt}件
+                            </Typography>
+                        </Button>
+                        <Button
+                            onClick={() => ClickPouch()}
+                            disabled={pouchCnt == 0 ? true : false}
+                            sx={normalBtn}
+                        >
+                            <Typography fontWeight={'bold'}>
+                                パウチ {pouchCnt}件
                             </Typography>
                         </Button>
                     </Box>

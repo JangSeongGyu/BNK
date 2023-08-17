@@ -27,7 +27,8 @@ const CheckingList = (props) => {
             <Typography sx={ListTitleOption}>検品</Typography>
             <Box mt={1} mb={1}>
                 <Button sx={BtnOption} onClick={() => navigate('./checking')}>
-                    一次検品
+                    {pageType == 'supermarket' && '一次'}
+                    検品
                 </Button>
             </Box>
             <Checking2Btn />

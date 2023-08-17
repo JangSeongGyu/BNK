@@ -1,6 +1,6 @@
 <?php
 
-namespace App\MyDefined\Entity\Taxi;
+namespace App\MyDefined\Entity\SuperMarket;
 
 use App\Exceptions\WebhookErrorResponseException;
 use App\MyDefined\ValueObject\General\DateValueObject;
@@ -12,7 +12,7 @@ class SubjectTemplete{
     public $size = "extraLarge";
     public $weight = "bolder";
 
-    public function __construct(string $subject){$this->text = $subject;}
+    public function __construct(string $subject){$this->text = "楽天ペイスーパーマーケットQR ".$subject;}
 }
 
 class BodyTemplete{
@@ -118,7 +118,6 @@ final class PostTeamsWebhookEntity{
             $this, 
             $MentionerEntity
         );
-        var_dump($this->sendJson);
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $this->webhookURL);
         curl_setopt($ch, CURLOPT_POST, true);

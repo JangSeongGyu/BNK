@@ -30,6 +30,7 @@ class MentionTemplete{
 
 final class PostTeamsWebhookMentionerEntity{
     public $entities = [];
+    public $width = "Full";
 
     private function __construct()
     {

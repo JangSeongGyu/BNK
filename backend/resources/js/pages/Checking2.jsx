@@ -24,6 +24,7 @@ import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
 import Header from '../components/HeaderCompnent/Header';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { CallTeams } from '../components/GlobalComponent';
 
 const Checking2 = (props) => {
     const [MsgBox, SetMsgBox] = useState({
@@ -62,7 +63,7 @@ const Checking2 = (props) => {
     };
 
     useEffect(() => {
-        getWorkCount();
+        getWorkCount(false);
         inputLock();
     }, []);
 
@@ -79,10 +80,10 @@ const Checking2 = (props) => {
         btnRef.current.hidden = 'true';
     };
 
-    const getWorkCount = () => {
+    const getWorkCount = (isCall) => {
         let cnt = 0;
         const toastId = toast.loading('作業進捗更新中...');
-        SetWorkCount(0);
+        // SetWorkCount(0);
         axios
             .get(`/api/${pageType}/dailydata/${selectDate}`)
             .then((res) => {
@@ -94,12 +95,12 @@ const Checking2 = (props) => {
 
                 SetWorkCount(cnt);
                 if (cnt == res.data.length) {
+                    if (isCall) CallTeams(pageType, selectDate, '検品完了');
+
                     printComplete();
                 } else {
                     focusing(0);
                 }
-
-                return cnt;
             })
             .catch((e) => {
                 let errMsg = '';
@@ -136,6 +137,7 @@ const Checking2 = (props) => {
                 let errMsg = ErrorCheck(e);
                 ResultError(`入力番号:${inputData[0]}
                 ${errMsg}`);
+                focusing(taskCnt);
             });
     };
 
@@ -148,18 +150,20 @@ const Checking2 = (props) => {
         const event = e;
         if (event.key === 'Enter') {
             // InputData なし
+
             if (inputData[taskCnt] == '' || inputData[taskCnt] == null) {
                 ResultError('入力してください');
                 return;
             }
-
             SetMsgBox((prevState) => ({
                 ...prevState,
                 [taskCnt]: 'サーバ接続中…',
             }));
 
-            if (taskCnt == 0) GetNumberData();
-            else if (taskCnt == 1) {
+            if (taskCnt == 0) {
+                GetNumberData();
+                inputRef.current[taskCnt].disabled = true;
+            } else if (taskCnt == 1) {
                 if (inputData[0].slice(0, -3) == inputData[1]) {
                     axios
                         .put(
@@ -167,7 +171,8 @@ const Checking2 = (props) => {
                         )
                         .then((res) => {
                             toast.success('検品処理完了しました');
-                            let nowWork = getWorkCount();
+                            getWorkCount(true);
+
                             dataClear();
                         })
                         .catch((e) => {

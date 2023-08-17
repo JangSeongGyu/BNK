@@ -24,6 +24,7 @@ import barcode from '../images/barcode.png';
 import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
 import Header from '../components/HeaderCompnent/Header';
+import { CallTeams } from '../components/GlobalComponent';
 
 const Checking = (props) => {
     const pageType = props.pageType;
@@ -58,7 +59,7 @@ const Checking = (props) => {
     };
 
     useEffect(() => {
-        getWorkCount();
+        getWorkCount(false);
         inputLock();
     }, []);
 
@@ -75,7 +76,7 @@ const Checking = (props) => {
         btnRef.current.hidden = 'true';
     };
 
-    const getWorkCount = () => {
+    const getWorkCount = (isCall) => {
         let cnt = 0;
         const toastId = toast.loading('作業進捗更新中...');
         SetWorkCount(0);
@@ -92,6 +93,7 @@ const Checking = (props) => {
                 SetWorkCount(cnt);
                 // 全部処理したら実行
                 if (cnt == res.data.length) {
+                    if (isCall) CallTeams(pageType, selectDate, '検品完了');
                     printComplete();
                 } else {
                     focusing(0);
@@ -153,21 +155,19 @@ const Checking = (props) => {
             }
 
             if (taskCnt == 0) {
+                inputRef.current[taskCnt].disabled = true;
                 GetNumberData();
             } else if (taskCnt == 1) {
-                let checkData = inputData[0];
-                if (pageType == 'taxi') {
-                    checkData = inputData[0].slice(0, -3);
-                }
+                let checkData = '';
+                if (pageType == 'taxi') checkData = inputData[0].slice(0, -3);
+                else checkData = inputData[0].slice(0, -3);
 
-                if (checkData == inputData[1]) {
-                    ResultOK();
-                } else {
+                if (checkData == inputData[1]) ResultOK();
+                else
                     ResultError(`入力番号:${inputData[1]}
                     問い合わせ番号が違います`);
-                }
             } else if (taskCnt == 2) {
-                // 数量なのかチェック
+                // Number validate
                 if (!is_number(inputData[2])) {
                     ResultError('数量を入力してください');
                     return;
@@ -181,7 +181,9 @@ const Checking = (props) => {
                         )
                         .then((res) => {
                             toast.success('検品処理完了しました');
-                            getWorkCount();
+
+                            if (pageType == 'taxi') getWorkCount(true);
+                            else getWorkCount(false);
                             dataClear();
                         })
                         .catch((e) => {
@@ -207,6 +209,7 @@ const Checking = (props) => {
 
     const ResultError = (text) => {
         SetMsgBox((prevState) => ({ ...prevState, [taskCnt]: [text] }));
+        focusing(taskCnt);
         boxRef.current[taskCnt].style.backgroundColor = red[200];
         inputData[taskCnt] = '';
     };

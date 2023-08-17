@@ -37,7 +37,7 @@ final class UpdateRepository implements UpdateRepoInterface{
         return;  
     }
 
-    public function updateShipmentData(UserEntity $UserEntity, UpdateShipmentDateEntity $ShipmentDateEntity)
+    public function updateShipmentDate(UserEntity $UserEntity, UpdateShipmentDateEntity $ShipmentDateEntity)
     {
         $pdo = DB::connection('taxi')->getpdo();
 

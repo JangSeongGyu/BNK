@@ -1,6 +1,6 @@
 <?php
 
-namespace App\MyDefined\Entity\Taxi;
+namespace App\MyDefined\Entity\SuperMarket;
 
 use Illuminate\Support\Collection;
 use stdClass;

@@ -1,13 +1,14 @@
 <?php
 
-namespace App\MyDefined\UseCase\Taxi;
+namespace App\MyDefined\UseCase\SuperMarket;
 
 use App\MyDefined\Entity\General\UserEntity;
 use App\MyDefined\ValueObject\General\DateValueObject;
-use App\MyDefined\Repository\Taxi\GetRepoInterface;
+
+use App\MyDefined\Repository\SuperMarket\GetRepoInterface;
 
 /**
- * [Taxi]TeamsにWebhook通知をする
+ * [SuperMarket]TeamsにWebhook通知をする
  */
 final class PostTeamsWebhookUseCase
 {

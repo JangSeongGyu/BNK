@@ -1,6 +1,6 @@
 <?php
 
-namespace App\MyDefined\Entity\Taxi;
+namespace App\MyDefined\Entity\SuperMarket;
 
 use App\Exceptions\WebhookErrorResponseException;
 use App\MyDefined\ValueObject\General\DateValueObject;
@@ -12,7 +12,7 @@ class SubjectTemplete{
     public $size = "extraLarge";
     public $weight = "bolder";
 
-    public function __construct(string $subject){$this->text = "楽天ペイタクシーQR ".$subject;}
+    public function __construct(string $subject){$this->text = "楽天ペイスーパーマーケットQR ".$subject;}
 }
 
 class BodyTemplete{
@@ -40,7 +40,7 @@ class ActionSetTemplete{
     public function __construct(string $shipmentDate)
     {
         // 下にもう一個クラス作ってもいいかな
-        array_push($this->actions, array("type"=>"Action.OpenUrl", "title"=>"確認", "url"=>config('app.url')."taxi/".$shipmentDate));
+        array_push($this->actions, array("type"=>"Action.OpenUrl", "title"=>"確認", "url"=>config('app.url')."supermarket/".$shipmentDate));
     }
 }
 

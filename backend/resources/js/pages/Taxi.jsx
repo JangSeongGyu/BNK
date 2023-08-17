@@ -87,13 +87,17 @@ const Taxi = (props) => {
         SetOpen(false);
     };
     const handleOpen = () => {
+        if (selectDate < Today()) {
+            toast.error('出荷日は本日より前日に設定することは出来ません');
+            return;
+        }
         const logDataSum =
             parseInt(logDatas.イーグルス) +
             parseInt(logDatas.イーグルスP) +
             parseInt(logDatas.通常) +
             parseInt(logDatas.通常P);
 
-        if (logDataSum == 0 || logDatas.length == 0)
+        if (logDataSum == 0 || isNaN(logDataSum))
             toast.error('処理するデータがありません');
         else SetOpen(true);
     };

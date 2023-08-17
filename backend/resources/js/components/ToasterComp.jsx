@@ -36,7 +36,7 @@ const ToasterComp = () => {
                 },
                 error: { duration: 3000 },
                 closeError: {
-                    duration: 900000,
+                    duration: 10000,
                     icon: <CancelIcon sx={{ color: red[500] }} />,
                 },
             }}

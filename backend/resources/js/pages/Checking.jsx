@@ -160,7 +160,7 @@ const Checking = (props) => {
             } else if (taskCnt == 1) {
                 let checkData = '';
                 if (pageType == 'taxi') checkData = inputData[0].slice(0, -3);
-                else checkData = inputData[0].slice(0, -3);
+                else checkData = inputData[0];
 
                 if (checkData == inputData[1]) ResultOK();
                 else

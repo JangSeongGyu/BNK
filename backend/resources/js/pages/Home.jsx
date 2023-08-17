@@ -1,7 +1,7 @@
 import React from 'react';
 import Button from '@mui/material/Button';
 import Header from '../components/HeaderCompnent/Header';
-import { grey, orange, pink, yellow } from '@mui/material/colors';
+import { grey, lightGreen, orange, pink, yellow } from '@mui/material/colors';
 import { Box, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
@@ -41,7 +41,7 @@ const Home = (props) => {
             >
                 <Box borderBottom={1} borderColor={grey[400]} mb={2}>
                     <Typography fontSize={32} fontWeight={'bold'}>
-                        ショートカット
+                        ポータル
                     </Typography>
                 </Box>
                 <Box display={'flex'}>
@@ -64,11 +64,11 @@ const Home = (props) => {
                             QR
                         </Typography>
                         <Button
-                            sx={BtnOption(pink[500])}
+                            sx={BtnOption(lightGreen[700])}
                             onClick={() => navigate('/supermarket')}
                         >
                             <Typography fontSize={20} fontWeight={'bold'}>
-                                楽天SuperMarket
+                                楽天スーパーマーケット
                             </Typography>
                         </Button>
 
@@ -77,7 +77,7 @@ const Home = (props) => {
                             onClick={() => navigate('/taxi')}
                         >
                             <Typography fontSize={20} fontWeight={'bold'}>
-                                楽天Taxi
+                                楽天タクシー
                             </Typography>
                         </Button>
                     </Box>

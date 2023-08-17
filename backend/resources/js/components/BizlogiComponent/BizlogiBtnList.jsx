@@ -50,7 +50,7 @@ const BizlogiBtnList = (props) => {
             type: 'text/csv',
         });
         element.href = URL.createObjectURL(file);
-        element.download = 'bizlogi_' + selectDate + '.csv';
+        element.download = `bizlogi_${pageType}_${selectDate}.csv`;
         document.body.appendChild(element);
         element.click();
         toast.success('エクスポートします。', { id: toastId });

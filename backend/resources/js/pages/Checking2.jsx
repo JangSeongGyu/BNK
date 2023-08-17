@@ -463,7 +463,6 @@ export default Checking2;
 function ErrorCheck(e) {
     let errMsg = '';
     if (e.response == null) errMsg = 'サーバー接続失敗';
-    else if (e.response.status == 409) errMsg = '出荷済みの問い合わせ番号です';
     else errMsg = e.response.data.message;
     return errMsg;
 }

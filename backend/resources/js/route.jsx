@@ -17,6 +17,7 @@ import TXTheme from './TXTheme';
 import DetailView from './pages/DetailView';
 import Master from './pages/Master';
 import ErrorPage from './pages/ErrorPage';
+import HomeTheme from './HomeTheme';
 
 const Router = () => {
     return (
@@ -25,7 +26,7 @@ const Router = () => {
                 <Route
                     path={`home`}
                     element={
-                        <ThemeProvider theme={SPTheme}>
+                        <ThemeProvider theme={HomeTheme}>
                             <Home />
                         </ThemeProvider>
                     }

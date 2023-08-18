@@ -14,6 +14,7 @@ import {
     CheckingOutputBoxOption,
     CheckingListResultOption,
     CheckingListResultTextOption,
+    NumberPadOption,
 } from '../Design/DesignOption';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
@@ -52,7 +53,7 @@ const Checking = (props) => {
             boxRef.current[i].style.backgroundColor = grey[300];
             inputRef.current[i].disabled = true;
         }
-        SetInputData({ 0: '', 1: '', 2: '' });
+        SetInputData({ 0: '', 1: '', 2: 0 });
         SetMsgBox({ 0: '未完了', 1: '未完了', 2: '未完了' });
         focusing(0);
         SetSearchData([]);
@@ -140,9 +141,23 @@ const Checking = (props) => {
         return regex.test(text);
     };
 
+    const NumberPadHandle = (e) => {
+        if (e.target.textContent == '確認') {
+            CheckingDataPut();
+            return;
+        }
+
+        const clickNumber = parseInt(e.target.textContent);
+        let originalNumber = parseInt(inputData[2]);
+        if (isNaN(originalNumber)) originalNumber = 0;
+        if (originalNumber + clickNumber >= 0)
+            SetInputData({ ...inputData, 2: originalNumber + clickNumber });
+    };
+
     const handleKeyPress = (e) => {
         const event = e;
         if (event.key === 'Enter') {
+            console.log('check!');
             SetMsgBox((prevState) => ({
                 ...prevState,
                 [taskCnt]: 'サーバ接続中…',
@@ -167,36 +182,39 @@ const Checking = (props) => {
                     ResultError(`入力番号:${inputData[1]}
                     問い合わせ番号が違います`);
             } else if (taskCnt == 2) {
-                // Number validate
-                if (!is_number(inputData[2])) {
-                    ResultError('数量を入力してください');
-                    return;
-                }
-
-                // 数量がデータベースと同じだったら実行
-                if (searchData.数量 == inputData[2]) {
-                    axios
-                        .put(
-                            `/api/${pageType}/firstpacking/${selectDate}/${inputData[0]}`
-                        )
-                        .then((res) => {
-                            toast.success('検品処理完了しました');
-
-                            if (pageType == 'taxi') getWorkCount(true);
-                            else getWorkCount(false);
-                            dataClear();
-                        })
-                        .catch((e) => {
-                            let errMsg = ErrorCheck(e);
-                            ResultError(errMsg);
-                        });
-                } else {
-                    ResultError(
-                        `入力数量:${inputData[2]} 
-                        入力数量が違います`
-                    );
-                }
+                CheckingDataPut();
             }
+        }
+    };
+
+    const CheckingDataPut = () => {
+        if (!is_number(inputData[2])) {
+            ResultError('数量を入力してください');
+            return;
+        }
+
+        // 数量がデータベースと同じだったら実行
+        if (searchData.数量 == inputData[2]) {
+            axios
+                .put(
+                    `/api/${pageType}/firstpacking/${selectDate}/${inputData[0]}`
+                )
+                .then((res) => {
+                    toast.success('検品処理完了しました');
+
+                    if (pageType == 'taxi') getWorkCount(true);
+                    else getWorkCount(false);
+                    dataClear();
+                })
+                .catch((e) => {
+                    let errMsg = ErrorCheck(e);
+                    ResultError(errMsg);
+                });
+        } else {
+            ResultError(
+                `入力数量:${inputData[2]} 
+                入力数量が違います`
+            );
         }
     };
 
@@ -478,14 +496,59 @@ const Checking = (props) => {
                             </Typography>
 
                             <TextField
+                                type="number"
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
                                 label="数量入力"
                                 onChange={TextFieldHandler}
-                                inputProps={{ onKeyPress: handleKeyPress }}
+                                inputProps={{
+                                    min: 0,
+                                    onKeyPress: handleKeyPress,
+                                }}
                                 inputRef={(ref) => inputRef.current.push(ref)}
                                 value={inputData[2]}
                                 id="2"
                                 sx={CheckingListInputOption}
                             />
+                            <Box
+                                display={taskCnt == 2 ? 'flex' : 'none'}
+                                flexWrap={'wrap'}
+                                gap={1}
+                                mt={1}
+                                mx={1}
+                            >
+                                <Button
+                                    sx={NumberPadOption}
+                                    onClick={(e) => NumberPadHandle(e)}
+                                >
+                                    -10
+                                </Button>
+                                <Button
+                                    sx={NumberPadOption}
+                                    onClick={(e) => NumberPadHandle(e)}
+                                >
+                                    -1
+                                </Button>
+                                <Button
+                                    sx={NumberPadOption}
+                                    onClick={(e) => NumberPadHandle(e)}
+                                >
+                                    +1
+                                </Button>
+                                <Button
+                                    sx={NumberPadOption}
+                                    onClick={(e) => NumberPadHandle(e)}
+                                >
+                                    +10
+                                </Button>
+                                <Button
+                                    sx={NumberPadOption}
+                                    onClick={(e) => NumberPadHandle(e)}
+                                >
+                                    確認
+                                </Button>
+                            </Box>
                             <Box
                                 ref={(ref) => boxRef.current.push(ref)}
                                 sx={CheckingListResultOption}

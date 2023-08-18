@@ -116,7 +116,6 @@ export const dialogYes = () => {
 export const dialogNo = () => {
     return {
         width: '100%',
-
         color: red[600],
         border: 1,
         '&:hover': {
@@ -149,15 +148,15 @@ export const UpdateBorderOption = () => {
     };
 };
 
-export const pouchColor = () => {
-    return {};
-};
-export const taxiColor = () => {
-    return {};
-};
-export const eagleColor = () => {
-    return {};
-};
-export const normalColor = () => {
-    return {};
+export const NumberPadOption = () => {
+    return {
+        width: 60,
+        border: 1,
+        p: 1,
+        fontWeight: 'bold',
+        fontSize: 18,
+        color: 'primary.main',
+        backgroundColor: 'white',
+        ':hover': { backgroundColor: 'primary.main', color: 'white' },
+    };
 };

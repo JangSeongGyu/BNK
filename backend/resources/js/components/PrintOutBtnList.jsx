@@ -13,10 +13,13 @@ import JobTicketLayout from './JobTicketLayout';
 import axios from 'axios';
 import QRBtn from './QRBtn';
 import { toast } from 'react-hot-toast';
+import TeamsDialog from './TeamsDialog';
 
 const PrintOutBtnList = (props) => {
     const selectDate = props.selectDate;
     const pageType = props.pageType;
+    const teamsRef = useRef();
+
     const LabelRef = useRef();
     const YamaRef = useRef();
     const JobRef = useRef();
@@ -137,7 +140,10 @@ const PrintOutBtnList = (props) => {
 
     return (
         <Box mt={1} width={'100%'} sx={BorderOption}>
-            <Typography sx={ListTitleOption}>帳票出力</Typography>
+            <Box display={'flex'} mb={1} justifyContent={'space-between'}>
+                <Typography sx={ListTitleOption}>帳票出力</Typography>
+                <TeamsDialog pageType={pageType} selectDate={selectDate} />
+            </Box>
             <Box>
                 <Box sx={{ display: 'flex', mb: 1 }}>
                     <QRBtn selectDate={selectDate} pageType={pageType} />

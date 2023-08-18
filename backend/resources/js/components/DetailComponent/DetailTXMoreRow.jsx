@@ -104,7 +104,7 @@ const DetailTXMoreRow = (props) => {
                             {data.一次梱包フラグ}
                         </Typography>
                     </Box>
-                    <Box sx={MRowBoxOption}>
+                    {/* <Box sx={MRowBoxOption}>
                         <Typography sx={LeftContentOption}>
                             二次梱包フラグ
                         </Typography>
@@ -117,7 +117,7 @@ const DetailTXMoreRow = (props) => {
                         <Typography sx={RightContentOption}>
                             {data.SFフラグ}
                         </Typography>
-                    </Box>
+                    </Box> */}
                 </Box>
                 {/* 3番ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー */}
                 <Box my={3} px={2}>

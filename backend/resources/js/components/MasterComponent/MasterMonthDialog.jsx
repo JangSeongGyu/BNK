@@ -3,6 +3,7 @@ import React, {
     useEffect,
     useImperativeHandle,
     forwardRef,
+    useRef,
 } from 'react';
 import {
     Typography,
@@ -41,6 +42,9 @@ const MasterMonthDialog = forwardRef((props, ref) => {
     const today = new Date();
     const [calendarYear, SetCalendarYear] = useState(today.getFullYear());
     const [selectDate, SetSelectDate] = useState('');
+
+    const inputRef = useRef({});
+
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -55,9 +59,13 @@ const MasterMonthDialog = forwardRef((props, ref) => {
     }, []);
 
     useEffect(() => {
-        if (monthlyData[selectDate])
+        if (!selectDate) return;
+        if (monthlyData[selectDate]) {
             SetTextData(monthlyData[selectDate].受注番号);
-        else SetTextData('');
+        } else {
+            SetTextData('');
+        }
+        inputRef.current.focus();
     }, [selectDate]);
 
     const callMonthlyData = () => {
@@ -237,6 +245,8 @@ const MasterMonthDialog = forwardRef((props, ref) => {
                             </Typography>
                         </Box>
                         <TextField
+                            //  inputRef={(ref) => inputRef.current.push(ref)}
+                            inputRef={inputRef}
                             disabled={selectDate == '' ? true : false}
                             id="number"
                             value={textData}

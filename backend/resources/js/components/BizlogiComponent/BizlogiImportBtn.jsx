@@ -59,14 +59,12 @@ const BizlogiImportBtn = (props) => {
 
         setJson(null);
     };
-    // CallTeams(pageType, selectDate, '出荷指示完了');
     const tsubushi = async () => {
         const toastId = toast.loading('つぶし実行中...');
         await axios
             .put(`/api/${pageType}/tsubushi/${selectDate}`)
             .then((res) => {
                 toast.success('つぶし完了', { id: toastId });
-                CallTeams(pageType, selectDate, '出荷指示完了');
             })
             .catch((e) => {
                 let errMsg = '';

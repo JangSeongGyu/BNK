@@ -23,7 +23,8 @@ const TeamsDialog = (props) => {
         //     if (selectOption[key] == true) toast.success(key);
         // });
 
-        CallTeams(pageType, selectDate, '出荷指示完了');
+        CallTeams(pageType, selectDate, '出荷指示完了るの');
+        CallTeams(pageType, selectDate, '出荷指示完了VOD');
     };
 
     const btnTextOption = () => {

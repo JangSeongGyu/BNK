@@ -34,7 +34,7 @@ const Router = () => {
                 <Route
                     path={`/`}
                     element={
-                        <ThemeProvider theme={SPTheme}>
+                        <ThemeProvider theme={HomeTheme}>
                             <Home />
                         </ThemeProvider>
                     }

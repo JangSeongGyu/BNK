@@ -18,11 +18,6 @@ const TeamsDialog = (props) => {
     };
 
     const ClickConfirm = () => {
-        // console.log(Object.keys(selectOption));
-        // Object.keys(selectOption).forEach((key) => {
-        //     if (selectOption[key] == true) toast.success(key);
-        // });
-
         CallTeams(pageType, selectDate, '出荷指示完了るの');
         CallTeams(pageType, selectDate, '出荷指示完了VOD');
     };

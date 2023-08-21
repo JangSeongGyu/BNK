@@ -103,7 +103,8 @@ const QRBtn = (props) => {
             // CONTENT　HEADER
 
             sheetRow.getCell(2).value = qrDatas[i].納品先宛名;
-            sheetRow.getCell(3).value = qrDatas[i].ショップ名;
+            sheetRow.getCell(3).value = qrDatas[i].店舗名;
+            sheetRow.getCell(4).value = 0;
             sheetRow.getCell(5).value = 1;
             sheetRow.getCell(6).value = qrDatas[i].数量;
             sheetRow.getCell(7).value =
@@ -163,7 +164,8 @@ const QRBtn = (props) => {
         for (let i = 0; i < qrDatas.length; i++) {
             let sheetRow = worksheet.getRow(cnt++);
             // CONTENT　HEADER
-            sheetRow.getCell(2).value = qrDatas[i].ショップ名;
+            sheetRow.getCell(2).value = qrDatas[i].店舗名;
+            sheetRow.getCell(3).value = 0;
             sheetRow.getCell(4).value = 1;
             sheetRow.getCell(5).value = qrDatas[i].数量;
             sheetRow.getCell(6).value =

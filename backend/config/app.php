@@ -215,5 +215,9 @@ return [
 
     'supermarket' => [
         'qr_url' => env('QR_URL_SUPERMARKET')
+    ],
+
+    'taxi' => [
+        'qr_url' => env('QR_URL_TAXI')
     ]
 ];

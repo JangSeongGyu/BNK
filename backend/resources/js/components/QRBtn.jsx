@@ -73,8 +73,12 @@ const QRBtn = (props) => {
 
     const TXMakeExcel = (qrDatas) => {
         console.log('MakeExcel', qrDatas);
+        let sheetName = 'DTF連携';
+        if (qrDatas[0].商品名 == 'A6') sheetName += '_A6_通常';
+        else if (qrDatas[0].商品名 == '10x10') sheetName += '_10×10_通常';
+
         let workbook = new ExcelJS.Workbook();
-        let worksheet = workbook.addWorksheet('DTF連携', {});
+        let worksheet = workbook.addWorksheet(sheetName, {});
         let cnt = 2;
 
         // qrData.sort(qrData.問い合わせ番号);

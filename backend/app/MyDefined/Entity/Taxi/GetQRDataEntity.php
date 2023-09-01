@@ -27,9 +27,8 @@ final class GetQRDataEntity{
     private function setURL($rows){
         foreach($rows as $key => $value){
             $merchantCrc32 = crc32($rows[$key]->店舗コード);
-            $sceneCrc32 = crc32($rows[$key]->シーンコード);
-            $itemCrc32 = crc32($rows[$key]->アイテムコード);
-            $crc = sprintf("%'.08x", $merchantCrc32) . sprintf("%'.08x", $sceneCrc32 . $itemCrc32);
+            $sumCrc32 = crc32($rows[$key]->シーンコード.$rows[$key]->アイテムコード);
+            $crc = sprintf("%'.08x", $merchantCrc32) . sprintf("%'.08x", $sumCrc32);
             $merchant = $rows[$key]->店舗コード;
             $rows[$key]->URL = config('app.taxi.qr_url') . '?c=' . $crc . '&m=' . $merchant;
         }

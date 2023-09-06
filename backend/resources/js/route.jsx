@@ -18,6 +18,7 @@ import DetailView from './pages/DetailView';
 import Master from './pages/Master';
 import ErrorPage from './pages/ErrorPage';
 import HomeTheme from './HomeTheme';
+import CreateGUI from './pages/CreateGUI';
 
 const Router = () => {
     return (
@@ -178,6 +179,8 @@ const Router = () => {
                         </ThemeProvider>
                     }
                 />
+
+                <Route path="test" element={<CreateGUI />} />
             </Routes>
         </BrowserRouter>
     );

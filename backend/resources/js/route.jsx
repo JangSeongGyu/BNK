@@ -1,186 +1,47 @@
 import React from 'react';
+import Home from './Home';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import Home from './pages/Home';
-import SuperMarket from './pages/SuperMarket';
-import Beauty from './Beauty/Beauty';
-import BeautyImport from './Beauty/BeautyImport';
-import Checking from './pages/Checking';
-import QRLayout from './components/LabelLayout';
-import YamaLayout from './components/YamaComponent/YamaLayout';
-import JobTicketLayout from './components/JobTicketLayout';
-import LabelLayout from './components/LabelLayout';
-import Checking2 from './pages/Checking2';
-import Taxi from './pages/Taxi';
-import SPTheme from './SPTheme';
 import { ThemeProvider } from '@mui/material';
-import TXTheme from './TXTheme';
-import DetailView from './pages/DetailView';
-import Master from './pages/Master';
-import ErrorPage from './pages/ErrorPage';
-import HomeTheme from './HomeTheme';
-import CreateGUI from './pages/CreateGUI';
-
+import Theme from './Theme';
+import Login from './Login';
+import LoginError from './LoginError';
+import Main from './Main';
 const Router = () => {
     return (
         <BrowserRouter>
             <Routes>
                 <Route
-                    path={`home`}
+                    path={`/login/:table_id`}
                     element={
-                        <ThemeProvider theme={HomeTheme}>
+                        <ThemeProvider theme={Theme}>
+                            <Login />
+                        </ThemeProvider>
+                    }
+                />
+                <Route
+                    path={`/game`}
+                    element={
+                        <ThemeProvider theme={Theme}>
                             <Home />
                         </ThemeProvider>
                     }
                 />
                 <Route
-                    path={`/`}
+                    path={`/loginerror`}
                     element={
-                        <ThemeProvider theme={HomeTheme}>
-                            <Home />
+                        <ThemeProvider theme={Theme}>
+                            <LoginError />
                         </ThemeProvider>
                     }
-                />
-                {/*============ SuperMarket ======================================================*/}
+                />{' '}
                 <Route
-                    exact
-                    path={`/supermarket`}
+                    path={`/main/:task`}
                     element={
-                        <ThemeProvider theme={SPTheme}>
-                            <SuperMarket pageType="supermarket" />
+                        <ThemeProvider theme={Theme}>
+                            <Main />
                         </ThemeProvider>
                     }
                 />
-
-                <Route
-                    exact
-                    path={`/supermarket/:selectDate`}
-                    element={
-                        <ThemeProvider theme={SPTheme}>
-                            <SuperMarket pageType="supermarket" />
-                        </ThemeProvider>
-                    }
-                />
-                <Route
-                    exact
-                    path={`/supermarket/:selectDate/checking/`}
-                    element={
-                        <ThemeProvider theme={SPTheme}>
-                            <Checking pageType="supermarket" />
-                        </ThemeProvider>
-                    }
-                />
-                <Route
-                    exact
-                    path={`/supermarket/:selectDate/checking2/`}
-                    element={
-                        <ThemeProvider theme={SPTheme}>
-                            <Checking2 pageType="supermarket" />
-                        </ThemeProvider>
-                    }
-                />
-                <Route
-                    exact
-                    path={`/supermarket/:selectDate/detail/`}
-                    element={
-                        <ThemeProvider theme={SPTheme}>
-                            <DetailView pageType="supermarket" />
-                        </ThemeProvider>
-                    }
-                />
-
-                <Route
-                    exact
-                    path={`/supermarket/master`}
-                    element={
-                        <ThemeProvider theme={SPTheme}>
-                            <Master pageType="supermarket" />
-                        </ThemeProvider>
-                    }
-                />
-                <Route
-                    exact
-                    path={`/supermarket/master/:openType`}
-                    element={
-                        <ThemeProvider theme={SPTheme}>
-                            <Master pageType="supermarket" />
-                        </ThemeProvider>
-                    }
-                />
-
-                {/*============ Taxi ======================================================*/}
-                <Route
-                    exact
-                    path={`/taxi`}
-                    element={
-                        <ThemeProvider theme={TXTheme}>
-                            <Taxi pageType="taxi" />
-                        </ThemeProvider>
-                    }
-                />
-                <Route
-                    exact
-                    path={`/taxi/:selectDate`}
-                    element={
-                        <ThemeProvider theme={TXTheme}>
-                            <Taxi pageType="taxi" />
-                        </ThemeProvider>
-                    }
-                />
-                <Route
-                    exact
-                    path={`/taxi/master`}
-                    element={
-                        <ThemeProvider theme={TXTheme}>
-                            <Master pageType="taxi" />
-                        </ThemeProvider>
-                    }
-                />
-                <Route
-                    exact
-                    path={`/taxi/master/:openType`}
-                    element={
-                        <ThemeProvider theme={TXTheme}>
-                            <Master pageType="taxi" />
-                        </ThemeProvider>
-                    }
-                />
-                <Route
-                    exact
-                    path={`/taxi/:selectDate/checking/`}
-                    element={
-                        <ThemeProvider theme={TXTheme}>
-                            <Checking pageType="taxi" />
-                        </ThemeProvider>
-                    }
-                />
-
-                <Route
-                    exact
-                    path={`/taxi/:selectDate/detail/`}
-                    element={
-                        <ThemeProvider theme={TXTheme}>
-                            <DetailView pageType="taxi" />
-                        </ThemeProvider>
-                    }
-                />
-
-                {/* <Route exact path="/test" element={<YamaLayout />}></Route> */}
-
-                <Route exact path={`/beauty`} element={<Beauty />}>
-                    <Route index element={<BeautyImport />} />
-                    <Route path={`import`} element={<BeautyImport />} />
-                </Route>
-
-                <Route
-                    path="*"
-                    element={
-                        <ThemeProvider theme={SPTheme}>
-                            <ErrorPage />
-                        </ThemeProvider>
-                    }
-                />
-
-                <Route path="test" element={<CreateGUI />} />
             </Routes>
         </BrowserRouter>
     );

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\empty;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use PhpParser\Node\Expr\AssignOp\Coalesce;
 
 class GameController extends Controller
 {
@@ -14,7 +15,7 @@ class GameController extends Controller
 
         $current_game = DB::table("current_game")->value("current_game");
         $current_table = DB::table ("dbo.master_table") -> where("game_no", "=",$current_game)->value("table_name");
-        DB::table($current_table)->insert(["table_no" => $table_id,"submit_data"=>$answer]);
+        DB::table($current_table)->insert(["table_no" => $table_id,"submit_data" =>$answer]);
         // $current_table =  $master_table->table_name;
 
     }
@@ -33,7 +34,11 @@ class GameController extends Controller
 
 
     public function GetAnswer($current_game){
-        $data = DB::table("dbo.Result_".$current_game)->get();
+        if($current_game >= 5){
+            $data = DB::table("dbo.Result_".$current_game)->orderByRaw('Coalesce(id,10000)')->get();
+        }else{
+            $data = DB::table("dbo.Result_".$current_game)->get();
+        }
         return  $data;  
     }
 

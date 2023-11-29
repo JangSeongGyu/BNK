@@ -1,6 +1,7 @@
 import {
     Box,
     Button,
+    ButtonBase,
     Grid,
     Input,
     Slide,
@@ -12,19 +13,34 @@ import { grey, red } from '@mui/material/colors';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import logo from '../image/white_logo.png';
 
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import axios from 'axios';
 
 import GameData from './GameData';
+import LoadingBar from './LoadingBar';
+import { toast } from 'react-hot-toast';
 
 const Game2 = (props) => {
     const [inputData, setInputData] = useState('');
     const pageTask = props.pageTask;
-
+    const [loading, setLoading] = useState(false);
     const SendResult = () => {
-        axios.post('/api/game1/save', {
-            table_id: props.table_id,
-            answer: inputData,
-        });
+        setLoading(true);
+        axios
+            .post('/api/game1/save', {
+                table_id: props.table_id,
+                answer: inputData,
+            })
+            .then((res) => {
+                toast.success('提出完了');
+                setInputData('');
+                setLoading(false);
+            })
+            .catch((err) => {
+                toast.error('提出失敗');
+                setInputData('');
+                setLoading(false);
+            });
     };
 
     return (
@@ -37,10 +53,27 @@ const Game2 = (props) => {
                     p: 1,
                 }}
             >
+                <LoadingBar loading={loading} isBg={true} text={'提出中…'} />
                 <Box
                     sx={{
                         width: '100%',
-                        height: '80%',
+                        height: '5%',
+                        display: 'flex',
+                        alignItems: 'center',
+                    }}
+                    onClick={() => {
+                        props.EndGame1();
+                    }}
+                >
+                    <ArrowBackIcon sx={{ fontSize: 28 }} />
+                    <Typography fontWeight={'bold'} fontSize={20}>
+                        ゲーム選択画面に戻る
+                    </Typography>
+                </Box>
+                <Box
+                    sx={{
+                        width: '100%',
+                        height: '75%',
                         backgroundColor: 'white',
                         justifyContent: 'center',
                         p: 2,
@@ -79,30 +112,32 @@ const Game2 = (props) => {
                     />
                 </Box>
                 <Box sx={{ width: '100%', height: '20%', p: 1 }}>
-                    <Box
-                        sx={{
-                            width: '100%',
-                            height: '100%',
-                            display: 'flex',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            borderRadius: 2,
-                            backgroundColor: 'black',
-                            color: 'white',
-                        }}
-                        onClick={() => {
-                            SendResult();
-                        }}
-                    >
-                        <Typography
+                    <ButtonBase sx={{ width: '100%', height: '100%' }}>
+                        <Box
                             sx={{
-                                fontSize: 24,
-                                fontWeight: 'bold',
+                                width: '100%',
+                                height: '100%',
+                                display: 'flex',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                borderRadius: 2,
+                                backgroundColor: 'black',
+                                color: 'white',
+                            }}
+                            onClick={() => {
+                                SendResult();
                             }}
                         >
-                            提出！
-                        </Typography>
-                    </Box>
+                            <Typography
+                                sx={{
+                                    fontSize: 24,
+                                    fontWeight: 'bold',
+                                }}
+                            >
+                                提出！
+                            </Typography>
+                        </Box>
+                    </ButtonBase>
                 </Box>
             </Box>
         </Slide>

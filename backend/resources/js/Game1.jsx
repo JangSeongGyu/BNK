@@ -1,12 +1,24 @@
-import { Box, Button, Grid, Slide, Typography, colors } from '@mui/material';
+import {
+    Box,
+    Button,
+    Grid,
+    Icon,
+    Slide,
+    Typography,
+    colors,
+} from '@mui/material';
 import { grey, red } from '@mui/material/colors';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import logo from '../image/white_logo.png';
 import axios from 'axios';
 import GameData from './GameData';
+import LoadingBar from './LoadingBar';
+import { toast } from 'react-hot-toast';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 const Game1 = (props) => {
     const [quizSelected, SetQuizSelected] = useState(5);
+    const [loading, setLoading] = useState(false);
     const pageTask = props.pageTask;
 
     // useEffect(() => {
@@ -16,25 +28,40 @@ const Game1 = (props) => {
     // }, [CurrentGame]);
 
     const SendResult = () => {
-        axios.post('/api/game1/save', {
-            table_id: props.table_id,
-            answer: quizSelected,
-        });
+        setLoading(true);
+        axios
+            .post('/api/game1/save', {
+                table_id: props.table_id,
+                answer: quizSelected,
+            })
+            .then((res) => {
+                toast.success('提出完了');
+                setLoading(false);
+            })
+            .catch((err) => {
+                toast.error('提出失敗');
+                setLoading(false);
+            });
     };
 
     const quizBoxOption = (count) => {
-        let border = 0;
+        let boxShadow = `10px 10px 10px #c1c1c1, -10px -10px 10px #ffffff;`;
         if (count == quizSelected) {
-            border = 2;
+            boxShadow = `inset 10px 10px 10px #c1c1c1,inset -10px -10px 10px #ffffff;`;
         }
 
         return {
             width: '100%',
             height: '100%',
-            backgroundColor: 'primary.glass',
-            boxShadow: 2,
-            border: [border],
+            textAlign: 'center',
+            backgroundColor: grey[200],
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontSize: 100,
             borderColor: red[500],
+            borderRadius: 9,
+            boxShadow: boxShadow,
         };
     };
 
@@ -44,48 +71,66 @@ const Game1 = (props) => {
                 sx={{
                     width: '100%',
                     height: '100%',
+                    bgcolor: grey[200],
                     position: 'absolute',
                 }}
             >
-                <Box sx={{ width: '100%', height: '80%' }}>
+                <LoadingBar loading={loading} isBg={true} text={'提出中…'} />
+                <Box
+                    sx={{
+                        width: '100%',
+                        height: '5%',
+                        display: 'flex',
+                        alignItems: 'center',
+                    }}
+                    onClick={() => {
+                        props.EndGame1();
+                    }}
+                >
+                    <ArrowBackIcon sx={{ fontSize: 28 }} />
+                    <Typography fontWeight={'bold'} fontSize={20}>
+                        ゲーム選択画面に戻る
+                    </Typography>
+                </Box>
+                <Box sx={{ width: '100%', height: '75%' }}>
                     <Grid container sx={{ width: '100%', height: '100%' }}>
-                        <Grid xs={6} p={1}>
+                        <Grid xs={6} px={1} py={2}>
                             <Box
                                 // component={'img'}
                                 // src={gameData.image}
-                                sx={quizBoxOption(0)}
+                                sx={quizBoxOption('A')}
                                 onClick={() => {
-                                    SetQuizSelected(0);
+                                    SetQuizSelected('A');
                                 }}
                             >
                                 A
                             </Box>
                         </Grid>
-                        <Grid xs={6} p={1}>
+                        <Grid xs={6} px={1} py={2}>
                             <Box
-                                sx={quizBoxOption(1)}
+                                sx={quizBoxOption('B')}
                                 onClick={() => {
-                                    SetQuizSelected(1);
+                                    SetQuizSelected('B');
                                 }}
                             >
                                 B
                             </Box>
                         </Grid>
-                        <Grid xs={6} p={1}>
+                        <Grid xs={6} px={1} py={2}>
                             <Box
-                                sx={quizBoxOption(2)}
+                                sx={quizBoxOption('C')}
                                 onClick={() => {
-                                    SetQuizSelected(2);
+                                    SetQuizSelected('C');
                                 }}
                             >
                                 C
                             </Box>
                         </Grid>
-                        <Grid xs={6} p={1}>
+                        <Grid xs={6} px={1} py={2}>
                             <Box
-                                sx={quizBoxOption(3)}
+                                sx={quizBoxOption('D')}
                                 onClick={() => {
-                                    SetQuizSelected(3);
+                                    SetQuizSelected('D');
                                 }}
                             >
                                 D

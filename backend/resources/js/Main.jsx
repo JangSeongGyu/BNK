@@ -9,12 +9,13 @@ import game1_2 from '../image/game1_2.jpg';
 import game1_3 from '../image/game1_3.jpg';
 import game1_4 from '../image/game1_4.jpg';
 import game1_5 from '../image/game1_5.jpg';
+import game1_6 from '../image/game1_6.jpg';
 import game1_1_result from '../image/game1_1_result.jpg';
 import game1_2_result from '../image/game1_2_result.jpg';
 import game1_3_result from '../image/game1_3_result.jpg';
 import game1_4_result from '../image/game1_4_result.jpg';
 import game1_5_result from '../image/game1_5_result.jpg';
-
+import game1_6_result from '../image/game1_5_result.jpg';
 import MainGame1 from './MainGame1';
 import MainGame1Answer from './MainGame1Answer';
 import MainGame1Result from './MainGame1Result';
@@ -112,10 +113,14 @@ const Main = () => {
         }
         //       Game 2
         else if (params.task == 17) {
-            return <MainGame1 currentGame={6} src={game1_5} />;
+            return <MainGame1 currentGame={6} src={game1_6} nowPage={0} />;
         } else if (params.task == 18) {
-            return <MainGame2Result src={game1_5_result} />;
+            return <MainGame1 currentGame={6} src={game1_6} nowPage={1} />;
         } else if (params.task == 19) {
+            return <MainGame1 currentGame={6} src={game1_6} nowPage={2} />;
+        } else if (params.task == 20) {
+            return <MainGame2Result src={game1_6_result} />;
+        } else if (params.task == 21) {
             return <MainGame2Answer currentGame={6} />;
         }
     };
@@ -131,7 +136,7 @@ const Main = () => {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                background: `linear-gradient(135deg, rgba(118,159,255,1) 0%, rgba(140,249,255,1) 25%, rgba(255,196,161,1) 60%, rgba(202,131,249,1) 85%, rgba(216,74,255,1) 100%)`,
+                // background: `linear-gradient(135deg, rgba(118,159,255,1) 0%, rgba(140,249,255,1) 25%, rgba(255,196,161,1) 60%, rgba(202,131,249,1) 85%, rgba(216,74,255,1) 100%)`,
                 objectFit: 'cover',
                 animation: 'test 20s ease infinite',
                 '@keyframes test': {

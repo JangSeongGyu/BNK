@@ -4,17 +4,13 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 
 const MainGame1Answer = () => {
-    const [testData, setTestData] = useState([]);
+    const [answerData, setAnswerData] = useState([]);
     const [timer, setTimer] = useState(5);
 
     useEffect(() => {
-        axios.get('api/main/answer/1').then((res) => {});
-        let array = [];
-        const al = ['A', 'B', 'C'];
-        for (let i = 1; i <= 40; i++) {
-            array.push({ id: i, answer: al[i % 3] });
-        }
-        setTestData(array);
+        axios.get('api/main/answer/1').then((res) => {
+            setAnswerData(res.data);
+        });
     }, []);
 
     useEffect(() => {
@@ -47,7 +43,7 @@ const MainGame1Answer = () => {
                     flexWrap: 'wrap',
                 }}
             >
-                {testData.map((data) => {
+                {answerData.map((data) => {
                     return (
                         <>
                             <Box
@@ -64,24 +60,47 @@ const MainGame1Answer = () => {
                             >
                                 {timer != 0 && (
                                     <>
-                                        <Typography sx={{ fontSize: 25 }}>
-                                            {data.id}番テーブル
+                                        <Typography
+                                            sx={{
+                                                ml: 10,
+                                                fontSize: 16,
+                                                width: '50%',
+                                            }}
+                                        >
+                                            テーブル：{data.table_no}
                                         </Typography>
-                                        <Typography sx={{ fontSize: 25 }}>
-                                            答え：{data.answer}
+                                        <Typography
+                                            sx={{
+                                                fontSize: 16,
+                                                width: '50%',
+                                            }}
+                                        >
+                                            回答:{data.submit_data}
                                         </Typography>
                                     </>
                                 )}
-                                {timer == 0 && data.answer == 'A' && (
-                                    <>
-                                        <Typography sx={{ fontSize: 25 }}>
-                                            {data.id}番テーブル
-                                        </Typography>
-                                        <Typography sx={{ fontSize: 25 }}>
-                                            答え：{data.answer}
-                                        </Typography>
-                                    </>
-                                )}
+                                {timer == 0 &&
+                                    data.submit_data.includes('A') && (
+                                        <>
+                                            <Typography
+                                                sx={{
+                                                    ml: 10,
+                                                    fontSize: 16,
+                                                    width: '50%',
+                                                }}
+                                            >
+                                                テーブル：{data.table_no}
+                                            </Typography>
+                                            <Typography
+                                                sx={{
+                                                    fontSize: 16,
+                                                    width: '50%',
+                                                }}
+                                            >
+                                                回答:{data.submit_data}
+                                            </Typography>
+                                        </>
+                                    )}
                             </Box>
                         </>
                     );

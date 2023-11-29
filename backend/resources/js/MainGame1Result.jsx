@@ -5,7 +5,16 @@ const MainGame2Result = (props) => {
     const src = props.src;
 
     return (
-        <Box sx={{ width: '100%', height: '100%', position: 'relative' }}>
+        <Box
+            sx={{
+                width: '100%',
+                height: '100%',
+                position: 'relative',
+                display: 'flex',
+                flexDirection: 'column',
+                p: 2,
+            }}
+        >
             <Box
                 sx={{
                     width: '100%',
@@ -15,15 +24,6 @@ const MainGame2Result = (props) => {
                 component={'img'}
                 src={src}
             />
-            <Box
-                sx={{
-                    width: '100%',
-                    height: '100%',
-                    position: 'absolute',
-                    top: 0,
-                    left: 30,
-                }}
-            ></Box>
         </Box>
     );
 };

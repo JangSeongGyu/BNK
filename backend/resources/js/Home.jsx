@@ -21,10 +21,11 @@ function Home() {
     };
 
     const EndGame1 = () => {
-        SetPageTask(2);
+        console.log('endGame1');
+        SetPageTask(0);
     };
     const EndGame2 = () => {
-        SetPageTask(3);
+        SetPageTask(0);
     };
 
     return (
@@ -36,7 +37,7 @@ function Home() {
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    background: `linear-gradient(135deg, rgba(118,159,255,1) 0%, rgba(140,249,255,1) 25%, rgba(255,196,161,1) 60%, rgba(202,131,249,1) 85%, rgba(216,74,255,1) 100%)`,
+                    // background: `linear-gradient(135deg, rgba(118,159,255,1) 0%, rgba(140,249,255,1) 25%, rgba(255,196,161,1) 60%, rgba(202,131,249,1) 85%, rgba(216,74,255,1) 100%)`,
                     objectFit: 'cover',
                     animation: 'test 20s ease infinite',
                     '@keyframes test': {

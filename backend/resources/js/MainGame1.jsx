@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 
 const MainGame1 = (props) => {
     const src = props.src;
+    const nowPage = props.nowPage;
     const currentGame = props.currentGame;
     const [timer, setTimer] = useState(60);
 
@@ -13,37 +14,50 @@ const MainGame1 = (props) => {
         });
     }, []);
 
-    useEffect(() => {
-        const interval = setInterval(() => getTime(), 1000);
-        return () => clearInterval(interval);
-    }, [timer]);
+    // useEffect(() => {
+    //     const interval = setInterval(() => getTime(), 1000);
+    //     return () => clearInterval(interval);
+    // }, [timer]);
 
-    const getTime = () => {
-        if (timer > 0) setTimer(timer - 1);
-    };
+    // const getTime = () => {
+    //     if (timer > 0) setTimer(timer - 1);
+    // };
 
     return (
         <Box sx={{ width: '100%', height: '100%', position: 'relative' }}>
-            <Box
-                sx={{
-                    width: '100%',
-                    height: '100%',
-                    p: 2,
-                }}
-                component={'img'}
-                src={src}
-            />
-            <Box
-                sx={{
-                    width: '100%',
-                    height: '100%',
-                    position: 'absolute',
-                    top: 0,
-                    left: 30,
-                }}
-            >
-                <Typography sx={{ fontSize: 90 }}>{timer}</Typography>
-            </Box>
+            {nowPage >= 0 && (
+                <Box
+                    sx={{
+                        width: '100%',
+                        height: '32%',
+                        p: 2,
+                    }}
+                    component={'img'}
+                    src={src}
+                />
+            )}
+            {nowPage >= 1 && (
+                <Box
+                    sx={{
+                        width: '100%',
+                        height: '32%',
+                        p: 2,
+                    }}
+                    component={'img'}
+                    src={src}
+                />
+            )}
+            {nowPage >= 2 && (
+                <Box
+                    sx={{
+                        width: '100%',
+                        height: '32%',
+                        p: 2,
+                    }}
+                    component={'img'}
+                    src={src}
+                />
+            )}
         </Box>
     );
 };

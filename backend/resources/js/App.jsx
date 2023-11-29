@@ -2,6 +2,7 @@ import React from 'react';
 import Router from './route';
 // import ToasterComp from './components/ToasterComp';
 import axios from 'axios';
+import ToasterComp from './ToasterComp';
 
 axios.defaults.baseURL = import.meta.env.VITE_DOMAIN;
 axios.defaults.headers.post['Content-Type'] = 'application/json';
@@ -13,7 +14,7 @@ axios.defaults.withCredentials = true;
 const App = () => {
     return (
         <>
-            {/* <ToasterComp /> */}
+            <ToasterComp />
             <Router />
         </>
     );

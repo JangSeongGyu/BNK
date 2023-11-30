@@ -44,13 +44,12 @@ const Game2 = (props) => {
     };
 
     return (
-        <Slide direction={'left'} in={pageTask == 2} timeout={1000}>
+        <Slide direction={'right'} in={pageTask == 2} timeout={1000}>
             <Box
                 sx={{
                     width: '100%',
                     height: '100%',
                     position: 'absolute',
-                    p: 1,
                 }}
             >
                 <LoadingBar loading={loading} isBg={true} text={'提出中…'} />

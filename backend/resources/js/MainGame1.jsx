@@ -24,7 +24,25 @@ const MainGame1 = (props) => {
     // };
 
     return (
-        <Box sx={{ width: '100%', height: '100%', position: 'relative' }}>
+        <Box
+            sx={{
+                width: '100%',
+                height: '100%',
+                position: 'relative',
+                overflow: 'hidden',
+            }}
+        >
+            {nowPage == null && (
+                <Box
+                    sx={{
+                        width: '100%',
+                        height: '100%',
+                        p: 4,
+                    }}
+                    component={'img'}
+                    src={src}
+                />
+            )}
             {nowPage >= 0 && (
                 <Box
                     sx={{

@@ -22,9 +22,9 @@ RUN pecl install sqlsrv
 RUN pecl install pdo_sqlsrv
 RUN docker-php-ext-enable sqlsrv
 RUN docker-php-ext-enable pdo_sqlsrv
-RUN docker-php-ext-install pdo_mysql
 RUN curl -fsSL https://deb.nodesource.com/setup_16.x | bash  -
 RUN apt-get -y install nodejs
+RUN docker-php-ext-install pdo_mysql
 
 COPY ./php.ini /usr/local/etc/php/php.ini
 

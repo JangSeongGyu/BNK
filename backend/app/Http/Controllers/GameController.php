@@ -14,7 +14,7 @@ class GameController extends Controller
         $answer = $request->answer;
 
         $current_game = DB::table("current_game")->value("current_game");
-        $current_table = DB::table ("dbo.master_table") -> where("game_no", "=",$current_game)->value("table_name");
+        $current_table = DB::table ("master_table") -> where("game_no", "=",$current_game)->value("table_name");
         DB::table($current_table)->insert(["table_no" => $table_id,"submit_data" =>$answer]);
         // $current_table =  $master_table->table_name;
 
@@ -35,9 +35,9 @@ class GameController extends Controller
 
     public function GetAnswer($current_game){
         if($current_game >= 5){
-            $data = DB::table("dbo.Result_".$current_game)->orderByRaw('Coalesce(id,10000)')->get();
+            $data = DB::table("Result_".$current_game)->orderByRaw('Coalesce(id,10000)')->get();
         }else{
-            $data = DB::table("dbo.Result_".$current_game)->get();
+            $data = DB::table("Result_".$current_game)->get();
         }
         return  $data;  
     }

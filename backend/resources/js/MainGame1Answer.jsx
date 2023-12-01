@@ -6,9 +6,10 @@ import { useEffect, useState } from 'react';
 const MainGame1Answer = () => {
     const [answerData, setAnswerData] = useState([]);
     const [timer, setTimer] = useState(5);
+    const currentGame = props.currentGame;
 
     useEffect(() => {
-        axios.get('api/main/answer/1').then((res) => {
+        axios.get('api/main/answer/' + currentGame).then((res) => {
             setAnswerData(res.data);
         });
     }, []);

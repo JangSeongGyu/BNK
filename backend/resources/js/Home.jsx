@@ -89,7 +89,7 @@ function Home() {
 
                             // boxShadow={1}
                         >
-                            {/* <Typography
+                            <Typography
                                 sx={{
                                     textAlign: 'center',
                                     width: '100%',
@@ -123,7 +123,7 @@ function Home() {
                                 }}
                             >
                                 忘年会
-                            </Typography> */}
+                            </Typography>
                             <Button
                                 sx={{
                                     border: 3,

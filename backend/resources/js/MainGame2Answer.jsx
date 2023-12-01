@@ -38,7 +38,13 @@ const MainGame2Answer = (props) => {
             }}
         >
             {answerData.length > 0 && (
-                <Box width={'100%'} minHeight={'20%'} display={'flex'} gap={2}>
+                <Box
+                    width={'100%'}
+                    minHeight={'20%'}
+                    display={'flex'}
+                    mb={2}
+                    gap={2}
+                >
                     {/* 1 */}
                     <Box
                         width={'33%'}
@@ -197,6 +203,7 @@ const MainGame2Answer = (props) => {
                     </Box>
                 </Box>
             )}
+
             <Box
                 sx={{
                     width: '100%',
@@ -210,7 +217,7 @@ const MainGame2Answer = (props) => {
                 {answerData.map((data, index) => {
                     return (
                         <>
-                            {index >= 39 && (
+                            {index >= 3 && (
                                 <>
                                     <Box
                                         sx={{
@@ -220,8 +227,6 @@ const MainGame2Answer = (props) => {
                                             borderRadius: 2,
                                             display: 'flex',
                                             alignItems: 'center',
-
-                                            justifyContent: 'space-between',
                                         }}
                                     >
                                         <Box sx={GradeOption(index + 1)}>

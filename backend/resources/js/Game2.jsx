@@ -44,7 +44,7 @@ const Game2 = (props) => {
     };
 
     return (
-        <Slide direction={'right'} in={pageTask == 2} timeout={1000}>
+        <Slide direction={'right'} in={pageTask == 2} timeout={500}>
             <Box
                 sx={{
                     width: '100%',
@@ -59,6 +59,8 @@ const Game2 = (props) => {
                         height: '5%',
                         display: 'flex',
                         alignItems: 'center',
+                        borderBottom: 1,
+                        borderColor: grey[400],
                     }}
                     onClick={() => {
                         props.EndGame1();

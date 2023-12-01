@@ -66,7 +66,7 @@ const Game1 = (props) => {
     };
 
     return (
-        <Slide direction={'right'} in={pageTask == 1} timeout={1000}>
+        <Slide direction={'right'} in={pageTask == 1} timeout={500}>
             <Box
                 sx={{
                     width: '100%',
@@ -82,6 +82,8 @@ const Game1 = (props) => {
                         height: '5%',
                         display: 'flex',
                         alignItems: 'center',
+                        borderBottom: 1,
+                        borderColor: grey[400],
                     }}
                     onClick={() => {
                         props.EndGame1();

@@ -1,5 +1,5 @@
 import { Box, Button, Grid, Slide, Typography, colors } from '@mui/material';
-import { red } from '@mui/material/colors';
+import { grey, red } from '@mui/material/colors';
 import { useEffect, useState } from 'react';
 import logo from '../image/white_logo.png';
 import axios from 'axios';
@@ -37,6 +37,7 @@ function Home() {
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
+                    // background: grey[200],
                     background: `linear-gradient(135deg, rgba(118,159,255,1) 0%, rgba(140,249,255,1) 25%, rgba(255,196,161,1) 60%, rgba(202,131,249,1) 85%, rgba(216,74,255,1) 100%)`,
                     objectFit: 'cover',
                     animation: 'test 20s ease infinite',
@@ -88,7 +89,7 @@ function Home() {
 
                             // boxShadow={1}
                         >
-                            <Typography
+                            {/* <Typography
                                 sx={{
                                     textAlign: 'center',
                                     width: '100%',
@@ -122,20 +123,43 @@ function Home() {
                                 }}
                             >
                                 忘年会
-                            </Typography>
+                            </Typography> */}
                             <Button
+                                sx={{
+                                    border: 3,
+                                    borderColor: 'white',
+                                    mb: 2,
+                                }}
                                 onClick={() => {
                                     SetPageTask(1);
                                 }}
                             >
-                                ゲーム１
+                                <Typography
+                                    sx={{
+                                        fontSize: 24,
+                                        fontWeight: 'bold',
+                                    }}
+                                >
+                                    ゲーム１
+                                </Typography>
                             </Button>
                             <Button
+                                sx={{
+                                    border: 3,
+                                    borderColor: 'white',
+                                }}
                                 onClick={() => {
                                     SetPageTask(2);
                                 }}
                             >
-                                ゲーム１
+                                <Typography
+                                    sx={{
+                                        fontSize: 24,
+                                        fontWeight: 'bold',
+                                    }}
+                                >
+                                    ゲーム２
+                                </Typography>
                             </Button>
                         </Box>
                     </Box>

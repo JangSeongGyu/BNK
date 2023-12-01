@@ -3,7 +3,7 @@ import { grey } from '@mui/material/colors';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 
-const MainGame1Answer = () => {
+const MainGame1Answer = (props) => {
     const [answerData, setAnswerData] = useState([]);
     const [timer, setTimer] = useState(5);
     const currentGame = props.currentGame;

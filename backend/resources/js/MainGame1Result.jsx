@@ -1,9 +1,14 @@
 import { Box, Typography } from '@mui/material';
+import axios from 'axios';
 import { useEffect, useState } from 'react';
 
 const MainGame2Result = (props) => {
     const src = props.src;
-
+    useEffect(() => {
+        axios.post('/api/main/change-game', {
+            currentGame: 0,
+        });
+    }, []);
     return (
         <Box
             sx={{

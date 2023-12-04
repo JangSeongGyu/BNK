@@ -32,7 +32,11 @@ const Game2 = (props) => {
                 answer: inputData,
             })
             .then((res) => {
-                toast.success('提出完了');
+                if (res.data != '') {
+                    toast.error('ゲーム1に変えてください。');
+                } else {
+                    toast.success('提出完了');
+                }
                 setInputData('');
                 setLoading(false);
             })
@@ -60,6 +64,7 @@ const Game2 = (props) => {
                         display: 'flex',
                         alignItems: 'center',
                         borderBottom: 1,
+                        bgcolor: 'white',
                         borderColor: grey[400],
                     }}
                     onClick={() => {

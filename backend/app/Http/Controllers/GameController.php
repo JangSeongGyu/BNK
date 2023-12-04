@@ -14,9 +14,20 @@ class GameController extends Controller
         $answer = $request->answer;
 
         $current_game = DB::table("current_game")->value("current_game");
+        if($current_game > 5) {
+            if($answer == "A" || $answer == "B" || $answer == "C" || $answer == "D" ){
+                return "ゲーム２に変えてください。";
+            }
+        }
+        else{
+            if($answer != "A" || $answer != "B" || $answer != "C" || $answer != "D" ){
+                return "ゲーム1に変えてください。";
+            }
+            
+        }
         $current_table = DB::table ("master_table") -> where("game_no", "=",$current_game)->value("table_name");
         DB::table($current_table)->insert(["table_no" => $table_id,"submit_data" =>$answer]);
-        // $current_table =  $master_table->table_name;
+      
 
     }
 

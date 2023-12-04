@@ -35,7 +35,11 @@ const Game1 = (props) => {
                 answer: quizSelected,
             })
             .then((res) => {
-                toast.success('提出完了');
+                if (res.data != '') {
+                    toast.error('ゲーム２に変えてください。');
+                } else {
+                    toast.success('提出完了');
+                }
                 setLoading(false);
             })
             .catch((err) => {

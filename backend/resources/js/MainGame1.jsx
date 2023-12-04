@@ -14,14 +14,14 @@ const MainGame1 = (props) => {
         });
     }, []);
 
-    // useEffect(() => {
-    //     const interval = setInterval(() => getTime(), 1000);
-    //     return () => clearInterval(interval);
-    // }, [timer]);
+    useEffect(() => {
+        const interval = setInterval(() => getTime(), 1000);
+        return () => clearInterval(interval);
+    }, [timer]);
 
-    // const getTime = () => {
-    //     if (timer > 0) setTimer(timer - 1);
-    // };
+    const getTime = () => {
+        if (timer > 0) setTimer(timer - 1);
+    };
 
     return (
         <Box
@@ -32,6 +32,11 @@ const MainGame1 = (props) => {
                 overflow: 'hidden',
             }}
         >
+            <Typography
+                sx={{ position: 'absolute', top: 1, left: 10, fontSize: 40 }}
+            >
+                {timer}
+            </Typography>
             {nowPage == null && (
                 <Box
                     sx={{

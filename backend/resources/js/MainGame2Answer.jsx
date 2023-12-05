@@ -122,7 +122,7 @@ const MainGame2Answer = (props) => {
                             <Typography
                                 sx={{
                                     width: 2,
-                                    fontSize: 30,
+                                    fontSize: 25,
                                     fontWeight: 'bold',
                                 }}
                             >
@@ -140,10 +140,10 @@ const MainGame2Answer = (props) => {
                             }}
                         >
                             <Box>
-                                <Typography sx={{ fontSize: 16 }}>
+                                <Typography sx={{ fontSize: 25 }}>
                                     {answerData[1].id}番テーブル
                                 </Typography>
-                                <Typography sx={{ fontSize: 16 }}>
+                                <Typography sx={{ fontSize: 25 }}>
                                     {answerData[1].submit_data}
                                 </Typography>
                             </Box>
@@ -192,10 +192,10 @@ const MainGame2Answer = (props) => {
                             }}
                         >
                             <Box>
-                                <Typography sx={{ fontSize: 16 }}>
+                                <Typography sx={{ fontSize: 20 }}>
                                     {answerData[2].id}番テーブル
                                 </Typography>
-                                <Typography sx={{ fontSize: 16 }}>
+                                <Typography sx={{ fontSize: 20 }}>
                                     {answerData[2].submit_data}
                                 </Typography>
                             </Box>
@@ -248,7 +248,7 @@ const MainGame2Answer = (props) => {
                                             <Typography
                                                 sx={{
                                                     ml: 10,
-                                                    fontSize: 16,
+                                                    fontSize: 20,
                                                     width: '50%',
                                                 }}
                                             >
@@ -256,7 +256,7 @@ const MainGame2Answer = (props) => {
                                             </Typography>
                                             <Typography
                                                 sx={{
-                                                    fontSize: 16,
+                                                    fontSize: 20,
                                                     width: '50%',
                                                 }}
                                             >

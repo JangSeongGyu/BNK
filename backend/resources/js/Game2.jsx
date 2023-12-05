@@ -86,7 +86,16 @@ const Game2 = (props) => {
                     }}
                 >
                     <Box sx={{ display: 'flex', mb: 1 }}>
-                        <Typography sx={{ fontSize: 20 }}>答えを</Typography>
+                        <Typography
+                            sx={{
+                                fontWeight: 'bold',
+                                fontSize: 20,
+                                color: red[600],
+                            }}
+                        >
+                            名字
+                        </Typography>                        
+                        <Typography sx={{ fontSize: 20 }}>のみを</Typography>
                         <Typography
                             sx={{
                                 fontWeight: 'bold',

@@ -192,10 +192,10 @@ const MainGame2Answer = (props) => {
                             }}
                         >
                             <Box>
-                                <Typography sx={{ fontSize: 22 }}>
+                                <Typography sx={{ fontSize: 26 }}>
                                     {answerData[2].id}番テーブル
                                 </Typography>
-                                <Typography sx={{ fontSize: 22 }}>
+                                <Typography sx={{ fontSize: 26 }}>
                                     {answerData[2].submit_data}
                                 </Typography>
                             </Box>

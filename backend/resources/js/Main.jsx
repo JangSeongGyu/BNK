@@ -43,7 +43,7 @@ import MainGame1Answer from './MainGame1Answer';
 import ShowPicture from './ShowPicture';
 import MainGame2Answer from './MainGame2Answer';
 import Game2Start from './Game2Start';
-import game2_start from '../image/game2_start.jpg';
+import movie_start from '../image/movie_start.jpg';
 import MainGame2Result from './MainGame2Result';
 
 const Main = () => {
@@ -148,7 +148,7 @@ const Main = () => {
         }
         //       Game 2
         else if (params.task == 22) {
-            return <Game2Start currentGame={6} src={game2_start} />;
+            return <Game2Start currentGame={6} src={movie_start} />;
         } else if (params.task == 23) {
             return (
                 <MainGame1
@@ -181,7 +181,7 @@ const Main = () => {
         } else if (params.task == 27) {
             return <MainGame2Answer currentGame={6} />;
         } else if (params.task == 28) {
-            return <Game2Start currentGame={7} src={game2_start} nowPage={0} />;
+            return <Game2Start currentGame={7} src={movie_start} />;
         } else if (params.task == 29) {
             return (
                 <MainGame1
@@ -214,7 +214,7 @@ const Main = () => {
         } else if (params.task == 33) {
             return <MainGame2Answer currentGame={7} />;
         } else if (params.task == 34) {
-            return <Game2Start currentGame={8} src={game2_start} nowPage={0} />;
+            return <Game2Start currentGame={8} src={movie_start} />;
         } else if (params.task == 35) {
             return (
                 <MainGame1
@@ -250,15 +250,17 @@ const Main = () => {
 
         // 景品紹介
         else if (params.task == 40) {
-            return <ShowPicture src={prizeResult1} />;
+            return <ShowPicture src={prizeResult0} />;
         } else if (params.task == 41) {
-            return <ShowPicture src={prizeResult2} />;
+            return <ShowPicture src={prizeResult1} />;
         } else if (params.task == 42) {
-            return <ShowPicture src={prizeResult3} />;
+            return <ShowPicture src={prizeResult2} />;
         } else if (params.task == 43) {
-            return <ShowPicture src={prizeResult4} />;
+            return <ShowPicture src={prizeResult3} />;
         } else if (params.task == 44) {
-            return <ShowPicture ult src={prizeResult5} />;
+            return <ShowPicture src={prizeResult4} />;
+        } else if (params.task == 45) {
+            return <ShowPicture src={prizeResult5} />;
         }
     };
 

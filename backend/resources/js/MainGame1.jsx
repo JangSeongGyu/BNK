@@ -3,10 +3,11 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 
 const MainGame1 = (props) => {
+    const start = props.start;
     const src = props.src;
     const nowPage = props.nowPage;
     const currentGame = props.currentGame;
-    const [timer, setTimer] = useState(60);
+    const [timer, setTimer] = useState(start);
 
     useEffect(() => {
         axios.post('/api/main/change-game', {
@@ -15,8 +16,11 @@ const MainGame1 = (props) => {
     }, []);
 
     useEffect(() => {
-        const interval = setInterval(() => getTime(), 1000);
-        return () => clearInterval(interval);
+        console.log(start);
+        if (start != -1) {
+            const interval = setInterval(() => getTime(), 1000);
+            return () => clearInterval(interval);
+        }
     }, [timer]);
 
     const getTime = () => {
@@ -32,11 +36,19 @@ const MainGame1 = (props) => {
                 overflow: 'hidden',
             }}
         >
-            <Typography
-                sx={{ position: 'absolute', top: 1, left: 10, fontSize: 40 }}
-            >
-                {timer}
-            </Typography>
+            {timer >= 0 && (
+                <Typography
+                    sx={{
+                        position: 'absolute',
+                        top: 1,
+                        left: 10,
+                        fontSize: 40,
+                    }}
+                >
+                    {timer}
+                </Typography>
+            )}
+
             {nowPage == null && (
                 <Box
                     sx={{

@@ -1,7 +1,8 @@
 import { Box, Typography } from '@mui/material';
+import axios from 'axios';
 import { useEffect, useState } from 'react';
 
-const MainGame1Result = (props) => {
+const MainGame2Result = (props) => {
     const src = props.src;
     useEffect(() => {
         axios.post('/api/main/change-game', {
@@ -15,21 +16,14 @@ const MainGame1Result = (props) => {
                 sx={{
                     width: '100%',
                     height: '100%',
+                    display: 'flex',
+                    flexDirection: 'column',
                     p: 2,
                 }}
                 component={'img'}
                 src={src}
             />
-            <Box
-                sx={{
-                    width: '100%',
-                    height: '100%',
-                    position: 'absolute',
-                    top: 0,
-                    left: 30,
-                }}
-            ></Box>
         </Box>
     );
 };
-export default MainGame1Result;
+export default MainGame2Result;

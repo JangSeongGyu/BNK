@@ -2,7 +2,7 @@ import { Box, Typography } from '@mui/material';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 
-const MainGame2Result = (props) => {
+const ShowPicture = (props) => {
     const src = props.src;
     useEffect(() => {
         axios.post('/api/main/change-game', {
@@ -32,4 +32,4 @@ const MainGame2Result = (props) => {
         </Box>
     );
 };
-export default MainGame2Result;
+export default ShowPicture;

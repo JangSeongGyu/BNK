@@ -10,9 +10,8 @@ import game1 from '../image/game1.jpg';
 import game2 from '../image/game2.jpg';
 import game3 from '../image/game3.jpg';
 import game4 from '../image/game4.jpg';
-import game5_0 from '../image/game5_0.jpg';
-import game5_1 from '../image/game5_1.jpg';
-import game5_2 from '../image/game5_2.jpg';
+import game5 from '../image/game5.jpg';
+
 import game6_0 from '../image/game6_0.jpg';
 import game6_1 from '../image/game6_1.jpg';
 import game6_2 from '../image/game6_2.jpg';
@@ -27,7 +26,9 @@ import game1_result from '../image/game1_result.jpg';
 import game2_result from '../image/game2_result.jpg';
 import game3_result from '../image/game3_result.jpg';
 import game4_result from '../image/game4_result.jpg';
-import game5_result from '../image/game5_result.jpg';
+import game5_0_result from '../image/game5_0_result.jpg';
+import game5_1_result from '../image/game5_1_result.jpg';
+import game5_2_result from '../image/game5_2_result.jpg';
 import game6_result from '../image/game6_result.jpg';
 import game7_result from '../image/game7_result.jpg';
 import game8_result from '../image/game8_result.jpg';
@@ -39,11 +40,11 @@ import prizeResult5 from '../image/prizeResult5.jpg';
 
 import MainGame1 from './MainGame1';
 import MainGame1Answer from './MainGame1Answer';
-import MainGame1Result from './MainGame1Result';
-import MainGame2Result from './MainGame1Result';
+import ShowPicture from './ShowPicture';
 import MainGame2Answer from './MainGame2Answer';
 import Game2Start from './Game2Start';
 import game2_start from '../image/game2_start.jpg';
+import MainGame2Result from './MainGame2Result';
 
 const Main = () => {
     const params = useParams();
@@ -98,61 +99,83 @@ const Main = () => {
                             fontWeight: 'bold',
                             color: 'white',
                         }}
+                        game5
                     >
                         お疲れ様でした！
                     </Typography>
                 </Box>
             );
         } else if (params.task == 2) {
-            return <MainGame1Result src={prizeIntro1} />;
+            return <ShowPicture src={prizeIntro1} />;
         } else if (params.task == 3) {
-            return <MainGame1Result src={prizeIntro2} />;
+            return <ShowPicture src={prizeIntro2} />;
         } else if (params.task == 4) {
-            return <MainGame1Result src={prizeIntro1} />;
+            return <ShowPicture src={prizeIntro1} />;
         } else if (params.task == 5) {
-            return <MainGame1 currentGame={1} src={game1} />;
+            return <MainGame1 currentGame={1} src={game1} start={60} />;
         } else if (params.task == 6) {
-            return <MainGame1Result src={game1_result} />;
+            return <ShowPicture src={game1_result} />;
         } else if (params.task == 7) {
             return <MainGame1Answer currentGame={1} />;
         } else if (params.task == 8) {
-            return <MainGame1 currentGame={2} src={game2} />;
+            return <MainGame1 currentGame={2} src={game2} start={60} />;
         } else if (params.task == 9) {
-            return <MainGame1Result src={game2_result} />;
+            return <ShowPicture src={game2_result} />;
         } else if (params.task == 10) {
             return <MainGame1Answer currentGame={2} />;
         } else if (params.task == 11) {
-            return <MainGame1 currentGame={3} src={game3} />;
+            return <MainGame1 currentGame={3} src={game3} start={60} />;
         } else if (params.task == 12) {
-            return <MainGame1Result src={game3_result} />;
+            return <ShowPicture src={game3_result} />;
         } else if (params.task == 13) {
             return <MainGame1Answer currentGame={3} />;
         } else if (params.task == 14) {
-            return <MainGame1 currentGame={4} src={game4} />;
+            return <MainGame1 currentGame={4} src={game4} start={60} />;
         } else if (params.task == 15) {
-            return <MainGame1Result src={game4_result} />;
+            return <ShowPicture src={game4_result} />;
         } else if (params.task == 16) {
             return <MainGame1Answer currentGame={4} />;
         } else if (params.task == 17) {
-            return <MainGame1 currentGame={6} src={game5_0} nowPage={0} />;
+            return <MainGame1 currentGame={5} src={game5} start={60} />;
         } else if (params.task == 18) {
-            return <MainGame1 currentGame={6} src={game5_1} nowPage={1} />;
+            return <ShowPicture src={game5_1_result} />;
         } else if (params.task == 19) {
-            return <MainGame1 currentGame={6} src={game5_2} nowPage={2} />;
+            return <ShowPicture src={game5_1_result} />;
         } else if (params.task == 20) {
-            return <MainGame1Result src={game5_result} />;
+            return <ShowPicture src={game5_2_result} />;
         } else if (params.task == 21) {
             return <MainGame1Answer currentGame={5} />;
         }
         //       Game 2
         else if (params.task == 22) {
-            return <Game2Start currentGame={6} src={game2_start} nowPage={0} />;
+            return <Game2Start currentGame={6} src={game2_start} />;
         } else if (params.task == 23) {
-            return <MainGame1 currentGame={6} src={game6_0} nowPage={0} />;
+            return (
+                <MainGame1
+                    currentGame={6}
+                    src={game6_0}
+                    nowPage={0}
+                    start={-1}
+                />
+            );
         } else if (params.task == 24) {
-            return <MainGame1 currentGame={6} src={game6_1} nowPage={1} />;
+            return (
+                <MainGame1
+                    currentGame={6}
+                    src={game6_1}
+                    nowPage={1}
+                    start={-1}
+                />
+            );
         } else if (params.task == 25) {
-            return <MainGame1 currentGame={6} src={game6_2} nowPage={2} />;
+            return (
+                <MainGame1
+                    currentGame={6}
+                    src={game6_2}
+                    nowPage={2}
+                    start={30}
+                />
+            );
         } else if (params.task == 26) {
             return <MainGame2Result src={game6_result} />;
         } else if (params.task == 27) {
@@ -160,11 +183,32 @@ const Main = () => {
         } else if (params.task == 28) {
             return <Game2Start currentGame={7} src={game2_start} nowPage={0} />;
         } else if (params.task == 29) {
-            return <MainGame1 currentGame={7} src={game7_0} nowPage={0} />;
+            return (
+                <MainGame1
+                    currentGame={7}
+                    src={game7_0}
+                    nowPage={0}
+                    start={-1}
+                />
+            );
         } else if (params.task == 30) {
-            return <MainGame1 currentGame={7} src={game7_1} nowPage={1} />;
+            return (
+                <MainGame1
+                    currentGame={7}
+                    src={game7_1}
+                    nowPage={1}
+                    start={-1}
+                />
+            );
         } else if (params.task == 31) {
-            return <MainGame1 currentGame={7} src={game7_2} nowPage={2} />;
+            return (
+                <MainGame1
+                    currentGame={7}
+                    src={game7_2}
+                    nowPage={2}
+                    start={30}
+                />
+            );
         } else if (params.task == 32) {
             return <MainGame2Result src={game7_result} />;
         } else if (params.task == 33) {
@@ -172,11 +216,32 @@ const Main = () => {
         } else if (params.task == 34) {
             return <Game2Start currentGame={8} src={game2_start} nowPage={0} />;
         } else if (params.task == 35) {
-            return <MainGame1 currentGame={8} src={game8_0} nowPage={0} />;
+            return (
+                <MainGame1
+                    currentGame={8}
+                    src={game8_0}
+                    nowPage={0}
+                    start={-1}
+                />
+            );
         } else if (params.task == 36) {
-            return <MainGame1 currentGame={8} src={game8_1} nowPage={1} />;
+            return (
+                <MainGame1
+                    currentGame={8}
+                    src={game8_1}
+                    nowPage={1}
+                    start={-1}
+                />
+            );
         } else if (params.task == 37) {
-            return <MainGame1 currentGame={8} src={game8_2} nowPage={2} />;
+            return (
+                <MainGame1
+                    currentGame={8}
+                    src={game8_2}
+                    nowPage={2}
+                    start={30}
+                />
+            );
         } else if (params.task == 38) {
             return <MainGame2Result src={game8_result} />;
         } else if (params.task == 39) {
@@ -185,15 +250,15 @@ const Main = () => {
 
         // 景品紹介
         else if (params.task == 40) {
-            return <MainGame1Result src={prizeResult1} />;
+            return <ShowPicture src={prizeResult1} />;
         } else if (params.task == 41) {
-            return <MainGame1Result src={prizeResult2} />;
+            return <ShowPicture src={prizeResult2} />;
         } else if (params.task == 42) {
-            return <MainGame1Result src={prizeResult3} />;
+            return <ShowPicture src={prizeResult3} />;
         } else if (params.task == 43) {
-            return <MainGame1Result src={prizeResult4} />;
+            return <ShowPicture src={prizeResult4} />;
         } else if (params.task == 44) {
-            return <MainGame1Res ult src={prizeResult5} />;
+            return <ShowPicture ult src={prizeResult5} />;
         }
     };
 
@@ -208,7 +273,7 @@ const Main = () => {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                // background: `linear-gradient(135deg, rgba(118,159,255,1) 0%, rgba(140,249,255,1) 25%, rgba(255,196,161,1) 60%, rgba(202,131,249,1) 85%, rgba(216,74,255,1) 100%)`,
+                background: `linear-gradient(135deg, rgba(118,159,255,1) 0%, rgba(140,249,255,1) 25%, rgba(255,196,161,1) 60%, rgba(202,131,249,1) 85%, rgba(216,74,255,1) 100%)`,
                 objectFit: 'cover',
                 animation: 'test 20s ease infinite',
                 '@keyframes test': {

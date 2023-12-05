@@ -112,31 +112,31 @@ const Main = () => {
         } else if (params.task == 4) {
             return <ShowPicture src={prizeIntro1} />;
         } else if (params.task == 5) {
-            return <MainGame1 currentGame={1} src={game1} start={60} />;
+            return <MainGame1 currentGame={1} src={game1} start={80} />;
         } else if (params.task == 6) {
             return <ShowPicture src={game1_result} />;
         } else if (params.task == 7) {
             return <MainGame1Answer currentGame={1} />;
         } else if (params.task == 8) {
-            return <MainGame1 currentGame={2} src={game2} start={60} />;
+            return <MainGame1 currentGame={2} src={game2} start={80} />;
         } else if (params.task == 9) {
             return <ShowPicture src={game2_result} />;
         } else if (params.task == 10) {
             return <MainGame1Answer currentGame={2} />;
         } else if (params.task == 11) {
-            return <MainGame1 currentGame={3} src={game3} start={60} />;
+            return <MainGame1 currentGame={3} src={game3} start={80} />;
         } else if (params.task == 12) {
             return <ShowPicture src={game3_result} />;
         } else if (params.task == 13) {
             return <MainGame1Answer currentGame={3} />;
         } else if (params.task == 14) {
-            return <MainGame1 currentGame={4} src={game4} start={60} />;
+            return <MainGame1 currentGame={4} src={game4} start={80} />;
         } else if (params.task == 15) {
             return <ShowPicture src={game4_result} />;
         } else if (params.task == 16) {
             return <MainGame1Answer currentGame={4} />;
         } else if (params.task == 17) {
-            return <MainGame1 currentGame={5} src={game5} start={60} />;
+            return <MainGame1 currentGame={5} src={game5} start={80} />;
         } else if (params.task == 18) {
             return <ShowPicture src={game5_1_result} />;
         } else if (params.task == 19) {

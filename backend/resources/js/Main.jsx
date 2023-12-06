@@ -264,10 +264,11 @@ const Main = () => {
 
         // 景品紹介
         else if (params.task == 44) {
+            return <ShowPicture src={movie_start} />;
+        
+        } else if (params.task == 45) {
             return <ShowPicture src={toreca} />;
         }
-        // } else if (params.task == 45) {
-        //     return <ShowPicture src={prizeResult1} />;
         // } else if (params.task == 46) {
         //     return <ShowPicture src={prizeResult2} />;
         // } else if (params.task == 47) {

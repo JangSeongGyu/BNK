@@ -49,7 +49,9 @@ class GameController extends Controller
         }else{
             $data = DB::table("Result_".$current_game)->get();
         }
-        return  $data;  
+        $correct_answer = DB::table("answer")->where("game_no","=",$current_game)->value("answer");
+
+        return  ['data' => $data, 'correct_answer' => $correct_answer];  
     }
 
     

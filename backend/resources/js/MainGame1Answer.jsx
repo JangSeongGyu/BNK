@@ -1,16 +1,21 @@
 import { Box, Typography } from '@mui/material';
-import { grey } from '@mui/material/colors';
+import { blue, grey, orange, red } from '@mui/material/colors';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 
 const MainGame1Answer = (props) => {
     const [answerData, setAnswerData] = useState([]);
+    const [correctAnswer, setCorrectAnswer] = useState('');
     const [timer, setTimer] = useState(5);
     const currentGame = props.currentGame;
 
     useEffect(() => {
         axios.get('api/main/answer/' + currentGame).then((res) => {
-            setAnswerData(res.data);
+            setAnswerData(res.data.data);
+            setCorrectAnswer(res.data.correct_answer);
+        });
+        axios.post('/api/main/change-game', {
+            currentGame: 0,
         });
     }, []);
 
@@ -31,13 +36,36 @@ const MainGame1Answer = (props) => {
                 width: '100%',
                 height: '100%',
                 display: 'flex',
-                p: 1,
+                flexDirection: 'column',
             }}
         >
             <Box
                 sx={{
                     width: '100%',
-                    height: '100%',
+                    height: '10%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                }}
+            >
+                <Typography
+                    sx={{
+                        fontSize: 40,
+                        textAlign: 'center',
+                        bgcolor: blue[500],
+                        color: 'white',
+                        py: 1,
+                        px: 10,
+                        borderRadius: 100,
+                    }}
+                >
+                    正解者発表!
+                </Typography>
+            </Box>
+            <Box
+                sx={{
+                    width: '100%',
+                    height: '90%',
                     display: 'flex',
                     flexDirection: 'column',
                     gap: 1,
@@ -56,24 +84,27 @@ const MainGame1Answer = (props) => {
                                     display: 'flex',
                                     alignItems: 'center',
                                     p: 1,
-                                    justifyContent: 'space-around',
                                 }}
                             >
                                 {timer != 0 && (
                                     <>
                                         <Typography
                                             sx={{
-                                                ml: 10,
                                                 fontSize: 25,
-                                                width: '50%',
+                                                bgcolor: orange[100],
+                                                px: 2,
+                                                borderRadius: 20,
+                                                width: '35%',
+                                                textAlign: 'center',
+                                                // border: 1,
                                             }}
                                         >
-                                            テーブル：{data.table_no}
+                                            {data.table_no}番テーブル
                                         </Typography>
                                         <Typography
                                             sx={{
+                                                ml: 4,
                                                 fontSize: 25,
-                                                width: '50%',
                                             }}
                                         >
                                             回答:{data.submit_data}
@@ -81,21 +112,27 @@ const MainGame1Answer = (props) => {
                                     </>
                                 )}
                                 {timer == 0 &&
-                                    data.submit_data.includes('A') && (
+                                    data.submit_data.includes(
+                                        correctAnswer
+                                    ) && (
                                         <>
                                             <Typography
                                                 sx={{
-                                                    ml: 10,
                                                     fontSize: 25,
-                                                    width: '50%',
+                                                    bgcolor: orange[100],
+                                                    px: 2,
+                                                    borderRadius: 20,
+                                                    width: '35%',
+                                                    textAlign: 'center',
+                                                    // border: 1,
                                                 }}
                                             >
-                                                テーブル：{data.table_no}
+                                                {data.table_no}番テーブル
                                             </Typography>
                                             <Typography
                                                 sx={{
+                                                    ml: 4,
                                                     fontSize: 25,
-                                                    width: '50%',
                                                 }}
                                             >
                                                 回答:{data.submit_data}

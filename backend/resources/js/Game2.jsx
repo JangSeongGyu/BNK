@@ -85,7 +85,7 @@ const Game2 = (props) => {
                         p: 2,
                     }}
                 >
-                    <Box sx={{ display: 'flex', mb: 1 }}>
+                    <Box sx={{ display: 'flex', mb: 1, flexWrap: 'wrap' }}>
                         <Typography
                             sx={{
                                 fontWeight: 'bold',
@@ -94,7 +94,7 @@ const Game2 = (props) => {
                             }}
                         >
                             名字
-                        </Typography>                        
+                        </Typography>
                         <Typography sx={{ fontSize: 20 }}>のみを</Typography>
                         <Typography
                             sx={{
@@ -126,7 +126,14 @@ const Game2 = (props) => {
                         }}
                     />
                 </Box>
-                <Box sx={{ width: '100%', height: '20%', p: 1 }}>
+                <Box
+                    sx={{
+                        width: '100%',
+                        height: '20%',
+                        p: 1,
+                        bgcolor: 'white',
+                    }}
+                >
                     <ButtonBase sx={{ width: '100%', height: '100%' }}>
                         <Box
                             sx={{

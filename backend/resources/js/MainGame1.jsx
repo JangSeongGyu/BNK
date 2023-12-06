@@ -49,50 +49,15 @@ const MainGame1 = (props) => {
                 </Typography>
             )}
 
-            {nowPage == null && (
-                <Box
-                    sx={{
-                        width: '100%',
-                        height: '100%',
-                        p: 4,
-                    }}
-                    component={'img'}
-                    src={src}
-                />
-            )}
-            {nowPage >= 0 && (
-                <Box
-                    sx={{
-                        width: '100%',
-                        height: '32%',
-                        p: 2,
-                    }}
-                    component={'img'}
-                    src={src}
-                />
-            )}
-            {nowPage >= 1 && (
-                <Box
-                    sx={{
-                        width: '100%',
-                        height: '32%',
-                        p: 2,
-                    }}
-                    component={'img'}
-                    src={src}
-                />
-            )}
-            {nowPage >= 2 && (
-                <Box
-                    sx={{
-                        width: '100%',
-                        height: '32%',
-                        p: 2,
-                    }}
-                    component={'img'}
-                    src={src}
-                />
-            )}
+            <Box
+                sx={{
+                    width: '100%',
+                    height: '100%',
+                    p: 4,
+                }}
+                component={'img'}
+                src={src}
+            />
         </Box>
     );
 };

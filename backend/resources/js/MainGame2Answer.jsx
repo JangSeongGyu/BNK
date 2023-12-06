@@ -260,17 +260,21 @@ const MainGame2Answer = (props) => {
                                         <Box display={'flex'} width={'100%'}>
                                             <Typography
                                                 sx={{
-                                                    ml: 10,
-                                                    fontSize: 22,
-                                                    width: '50%',
+                                                    fontSize: 20,
+                                                    bgcolor: orange[100],
+                                                    px: 2,
+                                                    borderRadius: 20,
+                                                    width: '35%',
+                                                    textAlign: 'center',
+                                                    // border: 1,
                                                 }}
                                             >
-                                                テーブル：{data.table_no}
+                                                {data.table_no}番テーブル
                                             </Typography>
                                             <Typography
                                                 sx={{
-                                                    fontSize: 22,
-                                                    width: '50%',
+                                                    ml: 4,
+                                                    fontSize: 25,
                                                 }}
                                             >
                                                 回答:{data.submit_data}

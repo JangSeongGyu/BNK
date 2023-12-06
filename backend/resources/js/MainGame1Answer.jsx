@@ -90,7 +90,7 @@ const MainGame1Answer = (props) => {
                                     <>
                                         <Typography
                                             sx={{
-                                                fontSize: 25,
+                                                fontSize: 20,
                                                 bgcolor: orange[100],
                                                 px: 2,
                                                 borderRadius: 20,
@@ -118,7 +118,7 @@ const MainGame1Answer = (props) => {
                                         <>
                                             <Typography
                                                 sx={{
-                                                    fontSize: 25,
+                                                    fontSize: 20,
                                                     bgcolor: orange[100],
                                                     px: 2,
                                                     borderRadius: 20,

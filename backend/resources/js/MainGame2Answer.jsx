@@ -6,11 +6,12 @@ import axios from 'axios';
 const MainGame2Answer = (props) => {
     const [answerData, setAnswerData] = useState([]);
     const [timer, setTimer] = useState(5);
-
+    const [correctAnswer, setCorrectAnswer] = useState('');
     useEffect(() => {
         let array = [];
         axios.get('/api/main/answer/' + props.currentGame).then((res) => {
-            setAnswerData(res.data);
+            setAnswerData(res.data.data);
+            setCorrectAnswer(res.data.correct_answer);
         });
     }, []);
 
@@ -25,7 +26,18 @@ const MainGame2Answer = (props) => {
         }
     };
 
-    const GradeOption = (grade) => {};
+    const GradeOption = (grade) => {
+        return {
+            width: 50,
+            height: '100%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            bgcolor: 'black',
+            p: 1,
+            borderRadius: 2,
+        };
+    };
 
     return (
         <Box
@@ -51,7 +63,9 @@ const MainGame2Answer = (props) => {
                         height={'100%'}
                         position={'relative'}
                         boxShadow={2}
+                        borderRadius={5}
                         overflow={'hidden'}
+                        bgcolor={'white'}
                     >
                         <Box
                             sx={{
@@ -103,7 +117,9 @@ const MainGame2Answer = (props) => {
                         height={'100%'}
                         position={'relative'}
                         boxShadow={2}
+                        borderRadius={5}
                         overflow={'hidden'}
+                        bgcolor={'white'}
                     >
                         <Box
                             sx={{
@@ -155,7 +171,9 @@ const MainGame2Answer = (props) => {
                         height={'100%'}
                         position={'relative'}
                         boxShadow={2}
+                        borderRadius={5}
                         overflow={'hidden'}
+                        bgcolor={'white'}
                     >
                         <Box
                             sx={{
@@ -222,8 +240,8 @@ const MainGame2Answer = (props) => {
                                     <Box
                                         sx={{
                                             width: '33%',
-                                            height: '6%',
-                                            bgcolor: grey[200],
+                                            height: '7%',
+                                            bgcolor: 'white',
                                             borderRadius: 2,
                                             display: 'flex',
                                             alignItems: 'center',
@@ -232,13 +250,8 @@ const MainGame2Answer = (props) => {
                                         <Box sx={GradeOption(index + 1)}>
                                             <Typography
                                                 sx={{
-                                                    backgroundColor: 'black',
                                                     color: 'white',
-                                                    width: 40,
-                                                    height: 40,
                                                     textAlign: 'center',
-                                                    borderRadius: 3,
-                                                    pt: 1,
                                                 }}
                                             >
                                                 #{index + 1}

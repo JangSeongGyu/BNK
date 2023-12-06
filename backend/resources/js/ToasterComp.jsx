@@ -6,7 +6,7 @@ import CancelIcon from '@mui/icons-material/Cancel';
 const ToasterComp = () => {
     return (
         <Toaster
-            position="top-right"
+            position="top-center"
             reverseOrder={false}
             gutter={8}
             toastOptions={{
@@ -63,7 +63,12 @@ const ToasterComp = () => {
                                         minWidth: 100,
                                     }}
                                 >
-                                    <Typography sx={{ wordBreak: 'break-all' }}>
+                                    <Typography
+                                        sx={{
+                                            fontSize: 20,
+                                            wordBreak: 'break-all',
+                                        }}
+                                    >
                                         {String(message.props.children).replace(
                                             /<br>/g,
                                             '\n'

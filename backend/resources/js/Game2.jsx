@@ -109,7 +109,17 @@ const Game2 = (props) => {
                             で書いてください
                         </Typography>
                     </Box>
-
+                    <Box sx={{ display: 'flex', mb: 1, flexWrap: 'wrap' }}>
+                        <Typography
+                            sx={{
+                                fontWeight: 'bold',
+                                fontSize: 20,
+                                color: red[600],
+                            }}
+                        >
+                            さん
+                        </Typography>
+                    </Box>
                     <Input
                         sx={{
                             bgcolor: grey[100],

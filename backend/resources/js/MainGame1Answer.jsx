@@ -94,7 +94,7 @@ const MainGame1Answer = (props) => {
                                                 bgcolor: orange[100],
                                                 px: 2,
                                                 borderRadius: 25,
-                                                width: '35%',
+                                                width: '40%',
                                                 textAlign: 'center',
                                                 // border: 1,
                                             }}
@@ -122,7 +122,7 @@ const MainGame1Answer = (props) => {
                                                     bgcolor: orange[100],
                                                     px: 2,
                                                     borderRadius: 25,
-                                                    width: '35%',
+                                                    width: '40%',
                                                     textAlign: 'center',
                                                     // border: 1,
                                                 }}

@@ -77,8 +77,8 @@ const MainGame1Answer = (props) => {
                         <>
                             <Box
                                 sx={{
-                                    width: '33%',
-                                    height: '6%',
+                                    width: '25%',
+                                    height: '9%',
                                     bgcolor: grey[50],
                                     borderRadius: 2,
                                     display: 'flex',
@@ -99,7 +99,7 @@ const MainGame1Answer = (props) => {
                                                 // border: 1,
                                             }}
                                         >
-                                            {data.table_no}番テーブル
+                                            {data.table_no}番卓
                                         </Typography>
                                         <Typography
                                             sx={{
@@ -127,7 +127,7 @@ const MainGame1Answer = (props) => {
                                                     // border: 1,
                                                 }}
                                             >
-                                                {data.table_no}番テーブル
+                                                {data.table_no}番卓
                                             </Typography>
                                             <Typography
                                                 sx={{

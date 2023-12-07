@@ -9,7 +9,8 @@ import rule from '../image/rule.jpg';
 import rule2 from '../image/rule2.jpg';
 import qrcode from '../image/qrcode.jpg';
 import gamecorner from '../image/gamecorner.jpg';
-import toreca from '../image/toreca.jpg';
+import toreca1 from '../image/toreca1.jpg';
+import toreca2 from '../image/toreca2.jpg';
 import atuatu from '../image/atuatu.jpg';
 import calc from '../image/calc.jpg';
 
@@ -264,10 +265,11 @@ const Main = () => {
         // 景品紹介
         else if (params.task == 45) {
             return <ShowPicture src={calc} />;
-        
         } else if (params.task == 46) {
-            return <ShowPicture src={toreca} />;
-        } else if (params.task >= 47) {
+            return <ShowPicture src={toreca1} />;        
+        } else if (params.task == 47) {
+            return <ShowPicture src={toreca2} />;
+        } else if (params.task >= 48) {
             return (
                 <Box
                     sx={{

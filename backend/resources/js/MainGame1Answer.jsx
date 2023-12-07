@@ -90,12 +90,12 @@ const MainGame1Answer = (props) => {
                                     <>
                                         <Typography
                                             sx={{
-                                                fontSize: 30,
+                                                fontSize: 40,
                                                 fontWeight: 'bold',
                                                 bgcolor: orange[100],
                                                 px: 2,
                                                 borderRadius: 20,
-                                                width: '50%',
+                                                width: '70%',
                                                 textAlign: 'center',
                                                 // border: 1,
                                             }}
@@ -104,8 +104,8 @@ const MainGame1Answer = (props) => {
                                         </Typography>
                                         <Typography
                                             sx={{
-                                                ml: 4,
-                                                fontSize: 30,
+                                                ml: 5,
+                                                fontSize: 40,
                                                 fontWeight: 'bold',
                                             }}
                                         >
@@ -121,12 +121,12 @@ const MainGame1Answer = (props) => {
                                         <>
                                             <Typography
                                                 sx={{
-                                                    fontSize: 30,
+                                                    fontSize: 40,
                                                     fontWeight: 'bold',
                                                     bgcolor: orange[100],
                                                     px: 2,
                                                     borderRadius: 20,
-                                                    width: '50%',
+                                                    width: '70%',
                                                     textAlign: 'center',
                                                     // border: 1,
                                                 }}
@@ -135,8 +135,8 @@ const MainGame1Answer = (props) => {
                                             </Typography>
                                             <Typography
                                                 sx={{
-                                                    ml: 4,
-                                                    fontSize: 30,
+                                                    ml: 5,
+                                                    fontSize: 40,
                                                     fontWeight: 'bold',
                                                 }}
                                             >

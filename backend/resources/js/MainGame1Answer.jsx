@@ -109,7 +109,8 @@ const MainGame1Answer = (props) => {
                                                 fontWeight: 'bold',
                                             }}
                                         >
-                                            回答:{data.submit_data}
+                                            {/* 回答:{data.submit_data} */}
+                                            {data.submit_data}
                                         </Typography>
                                     </>
                                 )}
@@ -139,7 +140,8 @@ const MainGame1Answer = (props) => {
                                                     fontWeight: 'bold',
                                                 }}
                                             >
-                                                回答:{data.submit_data}
+                                                {/* 回答:{data.submit_data} */}
+                                                {data.submit_data}
                                             </Typography>
                                         </>
                                     )}

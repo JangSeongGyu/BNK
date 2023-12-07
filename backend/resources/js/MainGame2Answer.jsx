@@ -103,7 +103,7 @@ const MainGame2Answer = (props) => {
                         >
                             <>
                                 <Typography sx={{ fontSize: 50 }}>
-                                    {answerData[0].table_no}番テーブル
+                                    {answerData[0].table_no}番卓
                                 </Typography>
                                 <Typography sx={{ fontSize: 50 }}>
                                     {answerData[0].submit_data}

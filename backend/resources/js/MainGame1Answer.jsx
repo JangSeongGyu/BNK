@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 const MainGame1Answer = (props) => {
     const [answerData, setAnswerData] = useState([]);
     const [correctAnswer, setCorrectAnswer] = useState('');
-    const [timer, setTimer] = useState(5);
+    const [timer, setTimer] = useState(10);
     const currentGame = props.currentGame;
 
     useEffect(() => {
@@ -94,7 +94,7 @@ const MainGame1Answer = (props) => {
                                                 bgcolor: orange[100],
                                                 px: 2,
                                                 borderRadius: 22,
-                                                width: '35%',
+                                                width: '30%',
                                                 textAlign: 'center',
                                                 // border: 1,
                                             }}
@@ -122,7 +122,7 @@ const MainGame1Answer = (props) => {
                                                     bgcolor: orange[100],
                                                     px: 2,
                                                     borderRadius: 22,
-                                                    width: '35%',
+                                                    width: '30%',
                                                     textAlign: 'center',
                                                     // border: 1,
                                                 }}

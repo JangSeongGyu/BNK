@@ -77,7 +77,7 @@ const MainGame1Answer = (props) => {
                         <>
                             <Box
                                 sx={{
-                                    width: '25%',
+                                    width: '24%',
                                     height: '9%',
                                     bgcolor: grey[50],
                                     borderRadius: 2,
@@ -90,7 +90,8 @@ const MainGame1Answer = (props) => {
                                     <>
                                         <Typography
                                             sx={{
-                                                fontSize: 20,
+                                                fontSize: 25,
+                                                fontWeight: 'bold',
                                                 bgcolor: orange[100],
                                                 px: 2,
                                                 borderRadius: 20,
@@ -105,6 +106,7 @@ const MainGame1Answer = (props) => {
                                             sx={{
                                                 ml: 4,
                                                 fontSize: 25,
+                                                fontWeight: 'bold',
                                             }}
                                         >
                                             回答:{data.submit_data}
@@ -118,7 +120,8 @@ const MainGame1Answer = (props) => {
                                         <>
                                             <Typography
                                                 sx={{
-                                                    fontSize: 20,
+                                                    fontSize: 25,
+                                                    fontWeight: 'bold',
                                                     bgcolor: orange[100],
                                                     px: 2,
                                                     borderRadius: 20,
@@ -132,7 +135,8 @@ const MainGame1Answer = (props) => {
                                             <Typography
                                                 sx={{
                                                     ml: 4,
-                                                    fontSize: 25,
+                                                    fontSize: 30,
+                                                    fontWeight: 'bold',
                                                 }}
                                             >
                                                 回答:{data.submit_data}

@@ -99,6 +99,19 @@ function Home() {
                                     fontFamily: 'Anton',
                                 }}
                             >
+                                {table_id}
+                            </Typography>                            
+                            <Typography
+                                sx={{
+                                    textAlign: 'center',
+                                    width: '100%',
+                                    fontSize: 80,
+                                    color: 'white',
+                                    fontWeight: 'bold',
+                                    mb: -2,
+                                    fontFamily: 'Anton',
+                                }}
+                            >
                                 2023
                             </Typography>
 

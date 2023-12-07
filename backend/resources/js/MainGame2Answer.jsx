@@ -157,7 +157,7 @@ const MainGame2Answer = (props) => {
                         >
                             <Box>
                                 <Typography sx={{ fontSize: 45 }}>
-                                    {answerData[1].table_no}番テーブル
+                                    {answerData[1].table_no}番卓
                                 </Typography>
                                 <Typography sx={{ fontSize: 45 }}>
                                     {answerData[1].submit_data}
@@ -280,7 +280,8 @@ const MainGame2Answer = (props) => {
                                                     fontSize: 30,
                                                 }}
                                             >
-                                                回答:{data.submit_data}
+                                                {/* 回答:{data.submit_data} */}
+                                                {data.submit_data}
                                             </Typography>
                                         </Box>
                                     </Box>

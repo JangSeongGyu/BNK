@@ -77,7 +77,7 @@ const MainGame1Answer = (props) => {
                         <>
                             <Box
                                 sx={{
-                                    width: '23%',
+                                    width: '24%',
                                     height: '9%',
                                     bgcolor: grey[50],
                                     borderRadius: 2,
@@ -95,7 +95,7 @@ const MainGame1Answer = (props) => {
                                                 bgcolor: orange[100],
                                                 px: 2,
                                                 borderRadius: 20,
-                                                width: '35%',
+                                                width: '50%',
                                                 textAlign: 'center',
                                                 // border: 1,
                                             }}
@@ -125,7 +125,7 @@ const MainGame1Answer = (props) => {
                                                     bgcolor: orange[100],
                                                     px: 2,
                                                     borderRadius: 20,
-                                                    width: '35%',
+                                                    width: '50%',
                                                     textAlign: 'center',
                                                     // border: 1,
                                                 }}

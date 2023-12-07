@@ -92,7 +92,7 @@ function Home() {
                                 sx={{
                                     textAlign: 'center',
                                     width: '100%',
-                                    fontSize: 20,
+                                    fontSize: 30,
                                     color: 'white',
                                     fontWeight: 'bold',
                                     mb: -1,

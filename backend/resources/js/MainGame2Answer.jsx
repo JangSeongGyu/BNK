@@ -102,10 +102,10 @@ const MainGame2Answer = (props) => {
                             }}
                         >
                             <>
-                                <Typography sx={{ fontSize: 30 }}>
+                                <Typography sx={{ fontSize: 50 }}>
                                     {answerData[0].table_no}番テーブル
                                 </Typography>
-                                <Typography sx={{ fontSize: 30 }}>
+                                <Typography sx={{ fontSize: 50 }}>
                                     {answerData[0].submit_data}
                                 </Typography>
                             </>
@@ -156,10 +156,10 @@ const MainGame2Answer = (props) => {
                             }}
                         >
                             <Box>
-                                <Typography sx={{ fontSize: 30 }}>
+                                <Typography sx={{ fontSize: 45 }}>
                                     {answerData[1].table_no}番テーブル
                                 </Typography>
-                                <Typography sx={{ fontSize: 30 }}>
+                                <Typography sx={{ fontSize: 45 }}>
                                     {answerData[1].submit_data}
                                 </Typography>
                             </Box>
@@ -210,10 +210,10 @@ const MainGame2Answer = (props) => {
                             }}
                         >
                             <Box>
-                                <Typography sx={{ fontSize: 26 }}>
+                                <Typography sx={{ fontSize: 40 }}>
                                     {answerData[2].table_no}番テーブル
                                 </Typography>
-                                <Typography sx={{ fontSize: 26 }}>
+                                <Typography sx={{ fontSize: 40 }}>
                                     {answerData[2].submit_data}
                                 </Typography>
                             </Box>

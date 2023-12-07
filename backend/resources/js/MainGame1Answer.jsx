@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 const MainGame1Answer = (props) => {
     const [answerData, setAnswerData] = useState([]);
     const [correctAnswer, setCorrectAnswer] = useState('');
-    const [timer, setTimer] = useState(10);
+    const [timer, setTimer] = useState(5);
     const currentGame = props.currentGame;
 
     useEffect(() => {

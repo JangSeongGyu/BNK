@@ -77,7 +77,7 @@ const MainGame1Answer = (props) => {
                         <>
                             <Box
                                 sx={{
-                                    width: '24%',
+                                    width: '23%',
                                     height: '9%',
                                     bgcolor: grey[50],
                                     borderRadius: 2,
@@ -90,7 +90,7 @@ const MainGame1Answer = (props) => {
                                     <>
                                         <Typography
                                             sx={{
-                                                fontSize: 25,
+                                                fontSize: 30,
                                                 fontWeight: 'bold',
                                                 bgcolor: orange[100],
                                                 px: 2,
@@ -105,7 +105,7 @@ const MainGame1Answer = (props) => {
                                         <Typography
                                             sx={{
                                                 ml: 4,
-                                                fontSize: 25,
+                                                fontSize: 30,
                                                 fontWeight: 'bold',
                                             }}
                                         >
@@ -120,7 +120,7 @@ const MainGame1Answer = (props) => {
                                         <>
                                             <Typography
                                                 sx={{
-                                                    fontSize: 25,
+                                                    fontSize: 30,
                                                     fontWeight: 'bold',
                                                     bgcolor: orange[100],
                                                     px: 2,

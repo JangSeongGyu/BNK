@@ -239,8 +239,8 @@ const MainGame2Answer = (props) => {
                                 <>
                                     <Box
                                         sx={{
-                                            width: '33%',
-                                            height: '7%',
+                                            width: '23%',
+                                            height: '9%',
                                             bgcolor: 'white',
                                             borderRadius: 2,
                                             display: 'flex',
@@ -250,6 +250,8 @@ const MainGame2Answer = (props) => {
                                         <Box sx={GradeOption(index + 1)}>
                                             <Typography
                                                 sx={{
+                                                    fontsize:25,
+                                                    fontWeight: 'bold',
                                                     color: 'white',
                                                     textAlign: 'center',
                                                 }}
@@ -260,7 +262,8 @@ const MainGame2Answer = (props) => {
                                         <Box display={'flex'} width={'100%'}>
                                             <Typography
                                                 sx={{
-                                                    fontSize: 20,
+                                                    fontSize: 25,
+                                                    fontWeight: 'bold',
                                                     bgcolor: orange[100],
                                                     px: 2,
                                                     borderRadius: 20,
@@ -274,7 +277,7 @@ const MainGame2Answer = (props) => {
                                             <Typography
                                                 sx={{
                                                     ml: 4,
-                                                    fontSize: 25,
+                                                    fontSize: 30,
                                                 }}
                                             >
                                                 回答:{data.submit_data}

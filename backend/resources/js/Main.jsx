@@ -105,7 +105,7 @@ const Main = () => {
                         }}
                         game5
                     >
-                        お疲れ様でした！
+                        
                     </Typography>
                 </Box>
             );

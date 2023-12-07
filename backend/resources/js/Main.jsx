@@ -40,11 +40,6 @@ import game5_2_result from '../image/game5_2_result.jpg';
 import game6_result from '../image/game6_result.jpg';
 import game7_result from '../image/game7_result.jpg';
 import game8_result from '../image/game8_result.jpg';
-import prizeResult1 from '../image/prizeResult1.jpg';
-import prizeResult2 from '../image/prizeResult2.jpg';
-import prizeResult3 from '../image/prizeResult3.jpg';
-import prizeResult4 from '../image/prizeResult4.jpg';
-import prizeResult5 from '../image/prizeResult5.jpg';
 
 import MainGame1 from './MainGame1';
 import MainGame1Answer from './MainGame1Answer';

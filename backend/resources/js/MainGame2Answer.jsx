@@ -259,7 +259,7 @@ const MainGame2Answer = (props) => {
                                                 #{index + 1}
                                             </Typography>
                                         </Box>
-                                        <Box display={'flex'} width={'100%'}>
+                                        <Box display={'flex'} width={'100%'} alignItems={'center'}>
                                             <Typography
                                                 sx={{
                                                     fontSize: 25,

@@ -276,8 +276,8 @@ const MainGame2Answer = (props) => {
                                             </Typography>
                                             <Typography
                                                 sx={{
-                                                    ml: 4,
-                                                    fontSize: 35,
+                                                    ml: 3,
+                                                    fontSize: 33,
                                                     fontWeight: 'bold',
                                                 }}
                                             >

@@ -43,7 +43,7 @@ const MainGame1 = (props) => {
                         position: 'absolute',
                         top: 1,
                         left: 10,
-                        fontSize: 60,
+                        fontSize: 65,
                         fontWeight: 'bold',
                         color: timer <= 10 ? red[500] : 'black',
                     }}

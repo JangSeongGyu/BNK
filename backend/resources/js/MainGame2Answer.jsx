@@ -277,7 +277,8 @@ const MainGame2Answer = (props) => {
                                             <Typography
                                                 sx={{
                                                     ml: 4,
-                                                    fontSize: 30,
+                                                    fontSize: 35,
+                                                    fontWeight: 'bold',
                                                 }}
                                             >
                                                 {/* 回答:{data.submit_data} */}

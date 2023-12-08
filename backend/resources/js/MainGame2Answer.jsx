@@ -102,10 +102,10 @@ const MainGame2Answer = (props) => {
                             }}
                         >
                             <>
-                                <Typography sx={{ fontSize: 60 }}>
+                                <Typography sx={{ fontSize: 60, fontWeight: 'bold', }}>
                                     {answerData[0].table_no}番卓
                                 </Typography>
-                                <Typography sx={{ fontSize: 60 }}>
+                                <Typography sx={{ fontSize: 60, fontWeight: 'bold',  }}>
                                     {answerData[0].submit_data}
                                 </Typography>
                             </>
@@ -156,10 +156,10 @@ const MainGame2Answer = (props) => {
                             }}
                         >
                             <Box>
-                                <Typography sx={{ fontSize: 55 }}>
+                                <Typography sx={{ fontSize: 55, fontWeight: 'bold',  }}>
                                     {answerData[1].table_no}番卓
                                 </Typography>
-                                <Typography sx={{ fontSize: 55 }}>
+                                <Typography sx={{ fontSize: 55, fontWeight: 'bold',  }}>
                                     {answerData[1].submit_data}
                                 </Typography>
                             </Box>
@@ -210,10 +210,10 @@ const MainGame2Answer = (props) => {
                             }}
                         >
                             <Box>
-                                <Typography sx={{ fontSize: 50 }}>
+                                <Typography sx={{ fontSize: 50, fontWeight: 'bold',  }}>
                                     {answerData[2].table_no}番卓
                                 </Typography>
-                                <Typography sx={{ fontSize: 50 }}>
+                                <Typography sx={{ fontSize: 50, fontWeight: 'bold',  }}>
                                     {answerData[2].submit_data}
                                 </Typography>
                             </Box>

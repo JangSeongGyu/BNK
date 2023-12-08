@@ -267,7 +267,7 @@ const MainGame2Answer = (props) => {
                                                     bgcolor: orange[100],
                                                     px: 2,
                                                     borderRadius: 20,
-                                                    width: '35%',
+                                                    width: '33%',
                                                     textAlign: 'center',
                                                     // border: 1,
                                                 }}

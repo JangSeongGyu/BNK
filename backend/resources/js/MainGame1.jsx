@@ -1,4 +1,5 @@
 import { Box, Typography } from '@mui/material';
+import { red } from '@mui/material/colors';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 
@@ -43,6 +44,7 @@ const MainGame1 = (props) => {
                         top: 1,
                         left: 10,
                         fontSize: 40,
+                        color: timer <= 10 ? red[500] : 'black',
                     }}
                 >
                     {timer}

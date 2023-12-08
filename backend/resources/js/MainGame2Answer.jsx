@@ -103,7 +103,7 @@ const MainGame2Answer = (props) => {
                         >
                             <>
                                 <Typography sx={{ fontSize: 60, fontWeight: 'bold', }}>
-                                    {answerData[0].table_no}番卓
+                                    {answerData[0].table_no}番
                                 </Typography>
                                 <Typography sx={{ fontSize: 60, fontWeight: 'bold',  }}>
                                     {answerData[0].submit_data}
@@ -157,7 +157,7 @@ const MainGame2Answer = (props) => {
                         >
                             <Box>
                                 <Typography sx={{ fontSize: 55, fontWeight: 'bold',  }}>
-                                    {answerData[1].table_no}番卓
+                                    {answerData[1].table_no}番
                                 </Typography>
                                 <Typography sx={{ fontSize: 55, fontWeight: 'bold',  }}>
                                     {answerData[1].submit_data}
@@ -211,7 +211,7 @@ const MainGame2Answer = (props) => {
                         >
                             <Box>
                                 <Typography sx={{ fontSize: 50, fontWeight: 'bold',  }}>
-                                    {answerData[2].table_no}番卓
+                                    {answerData[2].table_no}番
                                 </Typography>
                                 <Typography sx={{ fontSize: 50, fontWeight: 'bold',  }}>
                                     {answerData[2].submit_data}
@@ -272,7 +272,7 @@ const MainGame2Answer = (props) => {
                                                     // border: 1,
                                                 }}
                                             >
-                                                {data.table_no}番卓
+                                                {data.table_no}番
                                             </Typography>
                                             <Typography
                                                 sx={{

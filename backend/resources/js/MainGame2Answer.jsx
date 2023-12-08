@@ -239,7 +239,7 @@ const MainGame2Answer = (props) => {
                                 <>
                                     <Box
                                         sx={{
-                                            width: '23%',
+                                            width: '24%',
                                             height: '9%',
                                             bgcolor: 'white',
                                             borderRadius: 2,

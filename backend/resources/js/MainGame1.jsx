@@ -46,6 +46,8 @@ const MainGame1 = (props) => {
                         fontSize: 60,
                         fontWeight: 'bold',
                         color: timer <= 10 ? red[500] : 'black',
+                        transition: 'transform 30s',
+                        transform: 'scale(2,2);',
                     }}
                 >
                     {timer}

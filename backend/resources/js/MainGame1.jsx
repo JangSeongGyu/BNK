@@ -45,7 +45,7 @@ const MainGame1 = (props) => {
                         left: 10,
                         fontSize: 65,
                         fontWeight: 'bold',
-                        color: timer <= 10 ? red[500] : 'black',
+                        color: timer <= 10 ? red[600] : 'black',
                     }}
                 >
                     {timer}

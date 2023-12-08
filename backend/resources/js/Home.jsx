@@ -92,6 +92,19 @@ function Home() {
                                 sx={{
                                     textAlign: 'center',
                                     width: '100%',
+                                    fontSize: 30,
+                                    color: 'white',
+                                    fontWeight: 'bold',
+                                    mb: -1,
+                                    fontFamily: 'Anton',
+                                }}
+                            >
+                                {table_id}テーブル
+                            </Typography>                            
+                            <Typography
+                                sx={{
+                                    textAlign: 'center',
+                                    width: '100%',
                                     fontSize: 80,
                                     color: 'white',
                                     fontWeight: 'bold',

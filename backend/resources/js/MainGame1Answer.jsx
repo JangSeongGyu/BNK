@@ -77,8 +77,8 @@ const MainGame1Answer = (props) => {
                         <>
                             <Box
                                 sx={{
-                                    width: '33%',
-                                    height: '6%',
+                                    width: '24%',
+                                    height: '9%',
                                     bgcolor: grey[50],
                                     borderRadius: 2,
                                     display: 'flex',
@@ -90,24 +90,27 @@ const MainGame1Answer = (props) => {
                                     <>
                                         <Typography
                                             sx={{
-                                                fontSize: 20,
+                                                fontSize: 40,
+                                                fontWeight: 'bold',
                                                 bgcolor: orange[100],
                                                 px: 2,
                                                 borderRadius: 20,
-                                                width: '35%',
+                                                width: '70%',
                                                 textAlign: 'center',
                                                 // border: 1,
                                             }}
                                         >
-                                            {data.table_no}番テーブル
+                                            {data.table_no}番卓
                                         </Typography>
                                         <Typography
                                             sx={{
-                                                ml: 4,
-                                                fontSize: 25,
+                                                ml: 5,
+                                                fontSize: 40,
+                                                fontWeight: 'bold',
                                             }}
                                         >
-                                            回答:{data.submit_data}
+                                            {/* 回答:{data.submit_data} */}
+                                            {data.submit_data}
                                         </Typography>
                                     </>
                                 )}
@@ -118,24 +121,27 @@ const MainGame1Answer = (props) => {
                                         <>
                                             <Typography
                                                 sx={{
-                                                    fontSize: 20,
+                                                    fontSize: 40,
+                                                    fontWeight: 'bold',
                                                     bgcolor: orange[100],
                                                     px: 2,
                                                     borderRadius: 20,
-                                                    width: '35%',
+                                                    width: '70%',
                                                     textAlign: 'center',
                                                     // border: 1,
                                                 }}
                                             >
-                                                {data.table_no}番テーブル
+                                                {data.table_no}番卓
                                             </Typography>
                                             <Typography
                                                 sx={{
-                                                    ml: 4,
-                                                    fontSize: 25,
+                                                    ml: 5,
+                                                    fontSize: 40,
+                                                    fontWeight: 'bold',
                                                 }}
                                             >
-                                                回答:{data.submit_data}
+                                                {/* 回答:{data.submit_data} */}
+                                                {data.submit_data}
                                             </Typography>
                                         </>
                                     )}

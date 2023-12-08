@@ -8,8 +8,8 @@ const Login = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (localStorage.getItem('table_id') == null)
-            localStorage.setItem('table_id', params.table_id);
+        // if (localStorage.getItem('table_id') == null)
+        localStorage.setItem('table_id', params.table_id);
         axios.post('/api/login/score', {
             table_id: params.table_id,
         });
